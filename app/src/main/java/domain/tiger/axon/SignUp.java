@@ -5,10 +5,14 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.content.Intent;
+import android.widget.EditText;
 
 public class SignUp extends AppCompatActivity {
 
-    private Button done ;
+    private Button submit ;
+
+    String username, email, password, address;
+    EditText usernameInput, emailInput, passwordInput, addressInput;
 
 
     @Override
@@ -16,12 +20,22 @@ public class SignUp extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
-        done = findViewById(R.id.doneButton);
+        submit = findViewById(R.id.doneButton);
+        usernameInput = findViewById(R.id.usernameInput);
+        emailInput = findViewById(R.id.emailInput);
+        passwordInput = findViewById(R.id.passwordInput);
+        addressInput = findViewById(R.id.addressInput);
 
-        done.setOnClickListener(new View.OnClickListener() {
+        submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                backHome();
+
+                username = usernameInput.getText().toString();
+                email = emailInput.getText().toString();
+                password = passwordInput.getText().toString();
+                address = addressInput.getText().toString();
+
+                //backHome();
             }
         });
 
