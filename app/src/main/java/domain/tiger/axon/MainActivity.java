@@ -6,9 +6,12 @@ import android.view.View;
 import android.widget.Button;
 import android.content.Intent;
 
+import com.google.firebase.storage.FirebaseStorage;
+
 public class MainActivity extends AppCompatActivity {
 
     private Button signUp;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
         Intent i = new Intent(this, SignUp.class);
         startActivity(i);
+
     }
 
 }
