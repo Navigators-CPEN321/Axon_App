@@ -10,30 +10,41 @@ import com.google.firebase.storage.FirebaseStorage;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Button signUp;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        signUp = findViewById(R.id.signUpButton);
+        signUp();
+        login();
+    }
+
+    /*Sign up
+
+     */
+    public void signUp(){
+        Button signUp = findViewById(R.id.signUpButton);
 
         signUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                signUp();
+                startActivity(new Intent(MainActivity.this, SignUp.class));
             }
         });
-
     }
 
-    public void signUp(){
+    /*Login
 
-        Intent i = new Intent(this, SignUp.class);
-        startActivity(i);
+     */
+    public void login(){
+        Button btnLogin = findViewById(R.id.btnLogin);
 
+        btnLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, group.class));
+            }
+        });
     }
 
 }
