@@ -26,7 +26,7 @@ public class group_view extends AppCompatActivity {
         btnRecommendations.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(group_view.this, MainActivity.class));
+                startActivity(new Intent(group_view.this, Preference.class));
             }
         });
     }

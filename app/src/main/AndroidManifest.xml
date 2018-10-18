@@ -25,6 +25,9 @@
             android:name=".group_create"
             android:theme="@style/AppTheme.popup" />
         <activity android:name=".group_view"></activity>
+
+        <activity android:name=".Preference"
+                  android:theme="@style/AppTheme.popup"  ></activity>
     </application>
 
 </manifest>

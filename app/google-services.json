@@ -1,35 +1,27 @@
 {
   "project_info": {
-    "project_number": "819783675561",
-    "firebase_url": "https://axon-a1a84.firebaseio.com",
-    "project_id": "axon-a1a84",
-    "storage_bucket": "axon-a1a84.appspot.com"
+    "project_number": "25904186900",
+    "firebase_url": "https://axon-4b339.firebaseio.com",
+    "project_id": "axon-4b339",
+    "storage_bucket": "axon-4b339.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:819783675561:android:070b9dd4f406719e",
+        "mobilesdk_app_id": "1:25904186900:android:070b9dd4f406719e",
         "android_client_info": {
           "package_name": "domain.tiger.axon"
         }
       },
       "oauth_client": [
         {
-          "client_id": "819783675561-uat43lacb8sqqg3p92j49gukn0qjf5ue.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "domain.tiger.axon",
-            "certificate_hash": "26098a421583a2b610842c60143b1ef6346c69d7"
-          }
-        },
-        {
-          "client_id": "819783675561-nqvo2c2cjrkve1fjrnsirr1ug5c1l24b.apps.googleusercontent.com",
+          "client_id": "25904186900-p277mlbeaj7ssqjl2lovcu5rkm54la98.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDRIxgkQ3YUSyohmHq3l1Zvep2TNd38MTE"
+          "current_key": "AIzaSyC48W-EWWB6pcA1_QYRZmjWjzNl4e-2k8Y"
         }
       ],
       "services": {
@@ -37,13 +29,8 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 2,
-          "other_platform_oauth_client": [
-            {
-              "client_id": "819783675561-nqvo2c2cjrkve1fjrnsirr1ug5c1l24b.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "status": 1,
+          "other_platform_oauth_client": []
         },
         "ads_service": {
           "status": 2

@@ -30,7 +30,11 @@ public class SignUp extends AppCompatActivity {
     String username, email, password, address;
     EditText usernameInput, emailInput, passwordInput, addressInput;
 
+
+    //setting up firebase reference
     private DocumentReference mDocRef = FirebaseFirestore.getInstance().document("sampleData/inspiration");
+
+    private DocumentReference userDocRef = FirebaseFirestore.getInstance().document("users/user4");
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,10 +67,10 @@ public class SignUp extends AppCompatActivity {
         password = passwordInput.getText().toString();
         address = addressInput.getText().toString();
 
-        Map<String, Object> dataToSave = new HashMap<String, Object>();
+       Map<String, Object> dataToSave = new HashMap<String, Object>();
         dataToSave.put("username", username);
         dataToSave.put("email", email);
-        mDocRef.set(dataToSave).addOnSuccessListener(new OnSuccessListener<Void>() {
+        userDocRef.set(dataToSave).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 Log.d("firebase","doc has been saved");

@@ -10,10 +10,16 @@ import com.google.firebase.storage.FirebaseStorage;
 
 public class MainActivity extends AppCompatActivity {
 
+
+    private Button signUp;
+    private Button toPreference;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
         signUp();
         login();
@@ -22,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
     /*Sign up
 
      */
-    public void signUp(){
+    public void signUp() {
         Button signUp = findViewById(R.id.signUpButton);
 
         signUp.setOnClickListener(new View.OnClickListener() {
@@ -31,12 +37,13 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this, SignUp.class));
             }
         });
+
     }
 
     /*Login
 
      */
-    public void login(){
+    public void login() {
         Button btnLogin = findViewById(R.id.btnLogin);
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
@@ -46,5 +53,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
 
 }
