@@ -10,9 +10,16 @@ import android.widget.Button;
 import android.view.View;
 import android.content.Intent;
 
-public class group extends AppCompatActivity {
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
+public class group extends AppCompatActivity implements View.OnClickListener {
 
     private TextView mTextMessage;
+
+    private FirebaseAuth auth;
+
+    private Button btnGroupView, btnGroupCreate, btnLogOut;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -43,36 +50,33 @@ public class group extends AppCompatActivity {
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        /*
-        Create a group
-         */
-        goToCreateGroupPage();
-        viewUserGroups();
+        auth = FirebaseAuth.getInstance();
+
+        if (auth.getCurrentUser() == null){
+            finish();
+            startActivity(new Intent(group.this, MainActivity.class));
+        }
+
+        btnGroupCreate = (Button) findViewById(R.id.btnGroupCreate);
+        btnGroupView = (Button) findViewById(R.id.btnGroupView);
+        btnLogOut = (Button) findViewById(R.id.btnLogOut);
+
+        btnGroupCreate.setOnClickListener(this);
+        btnGroupView.setOnClickListener(this);
+        btnLogOut.setOnClickListener(this);
     }
 
-    /*
-    Go to create a group page
-     */
-    public void goToCreateGroupPage(){
-        Button btnGroupCreate = (Button) findViewById(R.id.btnGroupCreate);
-        btnGroupCreate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(group.this, group_create.class));
-            }
-        });
-    }
 
-    /*
-    Go to list of user's groups
-     */
-    public void viewUserGroups(){
-        Button btnGroupView = (Button) findViewById(R.id.btnGroupView);
-        btnGroupView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(group.this, group_view.class));
-            }
-        });
+    public void onClick(View view){
+        if (view == btnGroupCreate){
+            startActivity(new Intent(group.this, group_create.class));
+        }
+        if (view == btnGroupView){
+            startActivity(new Intent(group.this, group_view.class));
+        }
+        if (view == btnLogOut){
+            auth.signOut();
+            startActivity(new Intent(group.this, MainActivity.class));
+        }
     }
 }

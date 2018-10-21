@@ -25,12 +25,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private FirebaseAuth auth;
 
+    private ProgressDialog progressDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         auth = FirebaseAuth.getInstance();
+
+        if (auth.getCurrentUser() != null){
+            finish();
+            startActivity(new Intent(MainActivity.this, group.class));
+        }
 
         emailInput = (EditText) findViewById(R.id.editTextEmail);
         passwordInput = (EditText) findViewById(R.id.editTextPassword);
@@ -63,15 +70,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             passwordInput.requestFocus();
             return;
         }
-        startActivity(new Intent(MainActivity.this, group.class));
+
+        progressDialog.setMessage("Logging in...");
+        progressDialog.show();
 
         auth.signInWithEmailAndPassword(email,password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()){
+                    finish();
                     Toast.makeText(MainActivity.this, "Log in successsful.", Toast.LENGTH_LONG).show();
                     startActivity(new Intent(MainActivity.this, group.class));
+                } else{
+                    Toast.makeText(MainActivity.this, "Log in failed.", Toast.LENGTH_LONG).show();
                 }
+                progressDialog.dismiss();
             }
         });
     }
