@@ -11,8 +11,12 @@ import android.content.Intent;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
@@ -29,14 +33,14 @@ public class SignUp extends AppCompatActivity {
 
     private FirebaseFirestore db;
 
-
+    private FirebaseAuth mAuth;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
+        mAuth = FirebaseAuth.getInstance();
         submit = findViewById(R.id.doneButton);
-
         db = FirebaseFirestore.getInstance();
 
         submit.setOnClickListener(new View.OnClickListener() {
@@ -52,7 +56,7 @@ public class SignUp extends AppCompatActivity {
 
                 Map<String, Object> userInfo = new HashMap<>();
 
-                /*if (email.isEmpty()){
+                if (email.isEmpty()){
                     emailInput.setError("Email is required.");
                     emailInput.requestFocus();
                     return;
@@ -80,9 +84,21 @@ public class SignUp extends AppCompatActivity {
                     addressInput.setError("Address is required.");
                     addressInput.requestFocus();
                     return;
-                }*/
+                }
 
-                userInfo.put("email", email);
+                mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()){
+                            Toast.makeText(SignUp.this, "Account creation succcessful!", Toast.LENGTH_LONG).show();
+                            startActivity(new Intent(SignUp.this, MainActivity.class));
+                        } else {
+                            Toast.makeText(SignUp.this, "Account creation unsuccessful!", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+
+                /*userInfo.put("email", email);
                 userInfo.put("password", password);
                 userInfo.put("location", address);
 
@@ -97,7 +113,7 @@ public class SignUp extends AppCompatActivity {
                     public void onFailure(@NonNull Exception e) {
                         Toast.makeText(SignUp.this, "Sorry unable to create an account.", Toast.LENGTH_LONG).show();
                     }
-                });
+                });*/
 
                 //backHome();
             }
