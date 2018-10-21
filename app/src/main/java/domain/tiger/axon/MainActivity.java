@@ -1,6 +1,5 @@
 package domain.tiger.axon;
 
-import android.app.ProgressDialog;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -24,8 +23,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private String email, password;
 
     private FirebaseAuth auth;
-
-    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,20 +68,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return;
         }
 
-        progressDialog.setMessage("Logging in...");
-        progressDialog.show();
 
         auth.signInWithEmailAndPassword(email,password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()){
                     finish();
-                    Toast.makeText(MainActivity.this, "Log in successsful.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(MainActivity.this, "Log in successful.", Toast.LENGTH_LONG).show();
                     startActivity(new Intent(MainActivity.this, group.class));
                 } else{
                     Toast.makeText(MainActivity.this, "Log in failed.", Toast.LENGTH_LONG).show();
                 }
-                progressDialog.dismiss();
             }
         });
     }

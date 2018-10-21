@@ -1,17 +1,36 @@
 package domain.tiger.axon;
 
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.Toast;
 
-public class Preference extends AppCompatActivity {
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+public class Preference extends AppCompatActivity implements View.OnClickListener {
 
     public Button submitPreferenceButton;
-
+    private EditText cost_max_input;
+    private Spinner categoryInput;
+    private int cost_max;
+    private String category;
+    //private DatabaseReference dbRef;
+    private FirebaseAuth auth;
+    private FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,19 +45,54 @@ public class Preference extends AppCompatActivity {
 
         getWindow().setLayout((int)(width*0.75), (int)(height * 0.75));
 
-        submitPreferenceButton = findViewById(R.id.submitPreference);
+        /*
+        Get preferences
+         */
+        auth = FirebaseAuth.getInstance();
 
-        submitPreferenceButton.setOnClickListener(new View.OnClickListener() {
+        if (auth.getCurrentUser() == null){
+            finish();
+            startActivity(new Intent(Preference.this, group_view.class));
+        }
+
+        db = FirebaseFirestore.getInstance();
+
+        cost_max_input = (EditText) findViewById(R.id.priceInput);
+        categoryInput = (Spinner) findViewById(R.id.spinnerCategory);
+        submitPreferenceButton = (Button) findViewById(R.id.submitPreference);
+
+        category = categoryInput.getSelectedItem().toString();
+
+        submitPreferenceButton.setOnClickListener(this);
+
+    }
+
+    private void submitPreferences() {
+        cost_max = Integer.parseInt(cost_max_input.getText().toString());
+        category = categoryInput.getSelectedItem().toString();
+
+        FirebaseUser user = auth.getCurrentUser();
+
+        userInformation userInfo = new userInformation(cost_max, category, user.getUid());
+
+        db.collection("users").add(userInfo).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
             @Override
-            public void onClick(View v) {
-                uploadPreference();
+            public void onSuccess(DocumentReference documentReference) {
+                Toast.makeText(Preference.this, "Preferences saved", Toast.LENGTH_LONG).show();
+                startActivity(new Intent(Preference.this, group_view.class));
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(Preference.this, "Failed to save your preferences.", Toast.LENGTH_LONG).show();
             }
         });
     }
 
-    private void uploadPreference() {
-
-        Log.d("preference","uploading preference");
+    public void onClick(View view){
+        if (view == submitPreferenceButton){
+            submitPreferences();
+        }
     }
 
 

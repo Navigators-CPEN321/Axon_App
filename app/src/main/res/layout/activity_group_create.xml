@@ -8,7 +8,7 @@
     tools:context=".group_create">
 
     <EditText
-        android:id="@+id/groupName"
+        android:id="@+id/etGroupName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -38,6 +38,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/groupName"
+        app:layout_constraintTop_toBottomOf="@+id/etGroupName"
         app:layout_constraintVertical_bias="0.971" />
 </android.support.constraint.ConstraintLayout>
