@@ -28,7 +28,6 @@ public class Preference extends AppCompatActivity implements View.OnClickListene
     private Spinner categoryInput;
     private int cost_max;
     private String category;
-    //private DatabaseReference dbRef;
     private FirebaseAuth auth;
     private FirebaseFirestore db;
 
@@ -52,7 +51,7 @@ public class Preference extends AppCompatActivity implements View.OnClickListene
 
         if (auth.getCurrentUser() == null){
             finish();
-            startActivity(new Intent(Preference.this, group_view.class));
+            startActivity(new Intent(Preference.this, MainActivity.class));
         }
 
         db = FirebaseFirestore.getInstance();
@@ -60,8 +59,6 @@ public class Preference extends AppCompatActivity implements View.OnClickListene
         cost_max_input = (EditText) findViewById(R.id.priceInput);
         categoryInput = (Spinner) findViewById(R.id.spinnerCategory);
         submitPreferenceButton = (Button) findViewById(R.id.submitPreference);
-
-        category = categoryInput.getSelectedItem().toString();
 
         submitPreferenceButton.setOnClickListener(this);
 
