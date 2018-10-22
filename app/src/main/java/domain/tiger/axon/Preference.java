@@ -92,7 +92,7 @@ public class Preference extends AppCompatActivity implements View.OnClickListene
                         @Override
                         public void onSuccess(Void aVoid) {
                             Toast.makeText(Preference.this, "Preferences saved", Toast.LENGTH_LONG).show();
-                            startActivity(new Intent(Preference.this, group_view.class));
+                            startActivity(new Intent(Preference.this, recommended_activities_list.class));
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
