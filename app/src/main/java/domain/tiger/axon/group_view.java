@@ -14,6 +14,7 @@ public class group_view extends AppCompatActivity {
         setContentView(R.layout.activity_group_view);
 
         goToPreferencesPage();
+        viewRecActivitiesList();
     }
 
 
@@ -27,6 +28,17 @@ public class group_view extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(group_view.this, Preference.class));
+            }
+        });
+    }
+
+    public void viewRecActivitiesList(){
+        Button btnActivities = findViewById(R.id.btnActivities);
+
+        btnActivities.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(group_view.this, recommended_activities_list.class));
             }
         });
     }

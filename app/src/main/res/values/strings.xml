@@ -86,7 +86,7 @@
     </string-array>
 
     <string-array name="categories">
-        <item>food and drink</item>
-        <item>nightlife</item>
+        <item>food-and-drink</item>
+        <item>performing-arts</item>
     </string-array>
 </resources>
