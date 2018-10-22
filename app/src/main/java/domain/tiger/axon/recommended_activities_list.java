@@ -111,7 +111,7 @@ public class recommended_activities_list extends AppCompatActivity {
             }
         });
 
-        ref = db.collection("groups/group1/sel_events").document("event6");
+       /*ref = db.collection("groups/group1/sel_events").document("event6");
         ref.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -161,6 +161,6 @@ public class recommended_activities_list extends AppCompatActivity {
                     event10text.setText(doc.get("name").toString());
                 }
             }
-        });
+        });*/
     }
 }
