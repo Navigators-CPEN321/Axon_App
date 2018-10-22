@@ -19,6 +19,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -74,7 +75,35 @@ public class group_create extends AppCompatActivity{
                     return;
                 }
 
-                db.collection("users").whereEqualTo(user.getUid(), true).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                db.collection("groups").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()){
+                            int count = 1;
+                            for(DocumentSnapshot document : task.getResult()){
+                                count++;
+                            }
+                            Map<String, String> groupNameMap = new HashMap<>();
+                            groupNameMap.put("group_name", groupName);
+                            groupNameMap.put("usid", user.getUid());
+                            db.collection("groups").document("group" + count).set(groupNameMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    Toast.makeText(group_create.this, "Congrats! You created a group. Now invite some friends!", Toast.LENGTH_LONG).show();
+                                    startActivity(new Intent(group_create.this, group_view.class));
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(group_create.this, "Group creation failed.", Toast.LENGTH_LONG).show();
+                                }
+                            });
+
+                        }
+                    }
+                });
+
+                /*db.collection("users").whereEqualTo(user.getUid(), true).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         Map<String, String> groupNameMap = new HashMap<>();
@@ -99,7 +128,7 @@ public class group_create extends AppCompatActivity{
                         });
 
                     }
-                });
+                });*/
 
                 /*db.collection("groups").add(groupNameMap).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
