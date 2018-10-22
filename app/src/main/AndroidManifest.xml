@@ -24,10 +24,11 @@
         <activity
             android:name=".group_create"
             android:theme="@style/AppTheme.popup" />
-        <activity android:name=".group_view"></activity>
-
-        <activity android:name=".Preference"
-                  android:theme="@style/AppTheme.popup"  ></activity>
+        <activity android:name=".group_view" />
+        <activity
+            android:name=".Preference"
+            android:theme="@style/AppTheme.popup" />
+        <activity android:name=".recommended_activities_list"></activity>
     </application>
 
 </manifest>

@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.content.Intent;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -17,6 +18,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
@@ -30,6 +32,9 @@ import java.util.UUID;
 public class SignUp extends AppCompatActivity {
 
     private Button submit ;
+    private EditText emailInput, passwordInput, addressInput;
+    private Spinner dobMonthInput, dobDayInput, dobYearInput;
+    private String email, password, address, dobMonth, dobDay, dobYear;
 
     private FirebaseFirestore db;
 
@@ -46,15 +51,22 @@ public class SignUp extends AppCompatActivity {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EditText emailInput = (EditText) findViewById(R.id.emailInput);
-                EditText passwordInput = (EditText) findViewById(R.id.passwordInput);
-                EditText addressInput = (EditText) findViewById(R.id.addressInput);
+                emailInput = (EditText) findViewById(R.id.emailInput);
+                passwordInput = (EditText) findViewById(R.id.passwordInput);
+                addressInput = (EditText) findViewById(R.id.addressInput);
+                dobMonthInput = (Spinner) findViewById(R.id.spinnerMonth);
+                dobDayInput = (Spinner) findViewById(R.id.spinnerDay);
+                dobYearInput = (Spinner) findViewById(R.id.spinnerYear);
 
-                String email = emailInput.getText().toString();
-                String password = passwordInput.getText().toString();
-                String address = addressInput.getText().toString();
 
-                Map<String, Object> userInfo = new HashMap<>();
+                email = emailInput.getText().toString();
+                password = passwordInput.getText().toString();
+                address = addressInput.getText().toString();
+                dobMonth = dobMonthInput.getSelectedItem().toString();
+                dobDay = dobDayInput.getSelectedItem().toString();
+                dobYear = dobYearInput.getSelectedItem().toString();
+
+                db = FirebaseFirestore.getInstance();
 
                 if (email.isEmpty()){
                     emailInput.setError("Email is required.");
@@ -91,6 +103,14 @@ public class SignUp extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()){
                             Toast.makeText(SignUp.this, "Account creation succcessful!", Toast.LENGTH_LONG).show();
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            userInformation userInfo = new userInformation(email, address, dobMonth, dobDay, dobYear, user.getUid());
+                            db.collection("users").document(email).set(userInfo).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    Toast.makeText(SignUp.this, "Account creation successful!", Toast.LENGTH_LONG).show();
+                                }
+                            });
                             startActivity(new Intent(SignUp.this, MainActivity.class));
                         } else {
                             Toast.makeText(SignUp.this, "Account creation unsuccessful!", Toast.LENGTH_LONG).show();
