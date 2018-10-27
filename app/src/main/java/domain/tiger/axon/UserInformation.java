@@ -1,7 +1,5 @@
 package domain.tiger.axon;
 
-import java.util.List;
-
 public class UserInformation {
 
     public String email, address, dobMonth, dobDay, dobYear, usid;

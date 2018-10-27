@@ -1,7 +1,5 @@
 package domain.tiger.axon;
 
-import java.util.List;
-
 public class Preferences {
 
     public int cost_max;
