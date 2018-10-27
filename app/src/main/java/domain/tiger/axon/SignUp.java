@@ -40,8 +40,6 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
     private FirebaseFirestore db;
     private FirebaseAuth mAuth;
 
-    private String email, password, address, dobMonth, dobDay, dobYear;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,6 +76,8 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
                     a. Display failure message
      */
     private void signUp(){
+
+        String email, password, address, dobMonth, dobDay, dobYear;
 
         //Get the email, password, date of birth, and address
         email = emailInput.getText().toString();

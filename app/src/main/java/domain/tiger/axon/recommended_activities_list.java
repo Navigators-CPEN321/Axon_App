@@ -33,7 +33,6 @@ import java.util.List;
 
 public class recommended_activities_list extends AppCompatActivity {
 
-    private DocumentReference ref;
     private TextView event0text, event1text, event2text, event3text, event4text;
 
     @Override
@@ -114,6 +113,7 @@ public class recommended_activities_list extends AppCompatActivity {
      */
     private void createList(final int eventnum){
         FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference ref;
         ref = db.collection("groups/group1/sel_events").document("event" + eventnum);
         ref.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
