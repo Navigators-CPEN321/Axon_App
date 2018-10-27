@@ -20,8 +20,6 @@ public class RecListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recommended_activities_list);
 
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-
         event0text = (TextView) findViewById(R.id.event1);
         event1text = (TextView) findViewById(R.id.event2);
         event2text = (TextView) findViewById(R.id.event3);
