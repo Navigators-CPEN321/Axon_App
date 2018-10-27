@@ -28,12 +28,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
 
 
-        //If user is already logged in, then go to GroupActivity page
+        //If user is already logged in, then go to GroupNavigationActivity page
         auth = FirebaseAuth.getInstance();
 
         if (auth.getCurrentUser() != null){
             finish();
-            startActivity(new Intent(MainActivity.this, GroupActivity.class));
+            startActivity(new Intent(MainActivity.this, GroupNavigationActivity.class));
         }
 
         //Connecting the EditTexts and Buttons
@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if (task.isSuccessful()){
                     finish();
                     Toast.makeText(MainActivity.this, "Log in successful.", Toast.LENGTH_LONG).show();
-                    startActivity(new Intent(MainActivity.this, GroupActivity.class));
+                    startActivity(new Intent(MainActivity.this, GroupNavigationActivity.class));
                 } else{
                     Toast.makeText(MainActivity.this, "Log in failed.", Toast.LENGTH_LONG).show();
                 }
@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     /*
     App navigation:
-        Redirects the user to the GroupActivity page if login is successful or the sign up page
+        Redirects the user to the GroupNavigationActivity page if login is successful or the sign up page
      */
     public void onClick(View view){
         if (view.equals(btnLogin)){

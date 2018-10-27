@@ -54,17 +54,17 @@ public class GroupCreateActivity extends AppCompatActivity{
             startActivity(new Intent(GroupCreateActivity.this, MainActivity.class));
         }
 
-        //Creates a GroupActivity
+        //Creates a GroupNavigationActivity
         groupCreate();
     }
 
     /*
         groupCreate function:
-            Creates a GroupActivity with the name the user entered
+            Creates a GroupNavigationActivity with the name the user entered
         Procedure:
-            1. Checks the GroupActivity name entered
-            2. Creates the GroupActivity storing on the FireBase database
-            3. Go to personal GroupActivity page
+            1. Checks the GroupNavigationActivity name entered
+            2. Creates the GroupNavigationActivity storing on the FireBase database
+            3. Go to personal GroupNavigationActivity page
      */
     private void groupCreate() {
         db = FirebaseFirestore.getInstance();
@@ -76,7 +76,7 @@ public class GroupCreateActivity extends AppCompatActivity{
             public void onClick(View v) {
                 final FirebaseUser user = auth.getCurrentUser();
 
-                //Checks the GroupActivity name entered
+                //Checks the GroupNavigationActivity name entered
                 EditText groupNameInput= (EditText) findViewById(R.id.etGroupName);
                 final String groupName = groupNameInput.getText().toString();
                 if (groupName.isEmpty()) {
@@ -87,23 +87,23 @@ public class GroupCreateActivity extends AppCompatActivity{
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()){
-                            //Just a way to store the GroupActivity name on FireBase
+                            //Just a way to store the GroupNavigationActivity name on FireBase
                             int count = 1;
                             for(DocumentSnapshot document : task.getResult()){
                                 count++;
                             }
 
-                            ////Creates the GroupActivity storing on the FireBase database
+                            ////Creates the GroupNavigationActivity storing on the FireBase database
                             Map<String, String> groupNameMap = new HashMap<>();
                             groupNameMap.put("group_name", groupName);
                             groupNameMap.put("usid", user.getUid());
 
-                            db.collection("groups").document("GroupActivity" + count).set(groupNameMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            db.collection("groups").document("GroupNavigationActivity" + count).set(groupNameMap).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
 
-                                    //Go to personal GroupActivity page
-                                    Toast.makeText(GroupCreateActivity.this, "Congrats! You created a GroupActivity. Now invite some friends!", Toast.LENGTH_LONG).show();
+                                    //Go to personal GroupNavigationActivity page
+                                    Toast.makeText(GroupCreateActivity.this, "Congrats! You created a GroupNavigationActivity. Now invite some friends!", Toast.LENGTH_LONG).show();
                                     startActivity(new Intent(GroupCreateActivity.this, GroupViewActivity.class));
 
                                 }

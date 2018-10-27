@@ -17,18 +17,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SignUp" />
+        <activity android:name=".SignUpActivity" />
         <activity
-            android:name=".group"
+            android:name=".GroupNavigationActivity"
             android:label="group" />
         <activity
-            android:name=".group_create"
+            android:name=".GroupCreateActivity"
             android:theme="@style/AppTheme.popup" />
-        <activity android:name=".group_view" />
+        <activity android:name=".GroupViewActivity" />
         <activity
-            android:name=".Preference"
+            android:name=".PreferenceActivity"
             android:theme="@style/AppTheme.popup" />
-        <activity android:name=".recommended_activities_list"></activity>
+        <activity android:name=".RecListActivity"></activity>
     </application>
 
 </manifest>

@@ -12,7 +12,7 @@ import android.content.Intent;
 
 import com.google.firebase.auth.FirebaseAuth;
 
-public class GroupActivity extends AppCompatActivity implements View.OnClickListener {
+public class GroupNavigationActivity extends AppCompatActivity implements View.OnClickListener {
 
     private FirebaseAuth auth;
 
@@ -55,7 +55,7 @@ public class GroupActivity extends AppCompatActivity implements View.OnClickList
 
         if (auth.getCurrentUser() == null){
             finish();
-            startActivity(new Intent(GroupActivity.this, MainActivity.class));
+            startActivity(new Intent(GroupNavigationActivity.this, MainActivity.class));
         }
 
         btnGroupCreate = (Button) findViewById(R.id.btnGroupCreate);
@@ -69,18 +69,18 @@ public class GroupActivity extends AppCompatActivity implements View.OnClickList
 
     /*
     App navigation:
-        Redirects the user to the GroupActivity creation, their personal GroupActivity, or the login page
+        Redirects the user to the GroupNavigationActivity creation, their personal GroupNavigationActivity, or the login page
      */
     public void onClick(View view){
         if (view.equals(btnGroupCreate)){
-            startActivity(new Intent(GroupActivity.this, GroupCreateActivity.class));
+            startActivity(new Intent(GroupNavigationActivity.this, GroupCreateActivity.class));
         }
         if (view.equals(btnGroupView)){
-            startActivity(new Intent(GroupActivity.this, GroupViewActivity.class));
+            startActivity(new Intent(GroupNavigationActivity.this, GroupViewActivity.class));
         }
         if (view.equals(btnLogOut)){
             auth.signOut();
-            startActivity(new Intent(GroupActivity.this, MainActivity.class));
+            startActivity(new Intent(GroupNavigationActivity.this, MainActivity.class));
         }
     }
 }
