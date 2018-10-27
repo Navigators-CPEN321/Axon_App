@@ -15,12 +15,12 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class group extends AppCompatActivity implements View.OnClickListener {
 
-    private TextView mTextMessage;
-
     private FirebaseAuth auth;
 
     private Button btnGroupView, btnGroupCreate, btnLogOut;
 
+    //Navigation bar
+    private TextView mTextMessage;
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -46,10 +46,12 @@ public class group extends AppCompatActivity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group);
 
+        //Navigation bar (unused at the moment)
         mTextMessage = (TextView) findViewById(R.id.message);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
+        //Check if a user is logged in. If not redirect them to login page
         auth = FirebaseAuth.getInstance();
 
         if (auth.getCurrentUser() == null){
@@ -66,15 +68,18 @@ public class group extends AppCompatActivity implements View.OnClickListener {
         btnLogOut.setOnClickListener(this);
     }
 
-
+    /*
+    App navigation:
+        Redirects the user to the group creation, their personal group, or the login page
+     */
     public void onClick(View view){
-        if (view == btnGroupCreate){
+        if (view.equals(btnGroupCreate)){
             startActivity(new Intent(group.this, group_create.class));
         }
-        if (view == btnGroupView){
+        if (view.equals(btnGroupView)){
             startActivity(new Intent(group.this, group_view.class));
         }
-        if (view == btnLogOut){
+        if (view.equals(btnLogOut)){
             auth.signOut();
             startActivity(new Intent(group.this, MainActivity.class));
         }

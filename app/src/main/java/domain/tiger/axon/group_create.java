@@ -28,9 +28,6 @@ import java.util.Map;
 
 public class group_create extends AppCompatActivity{
 
-    private Button groupCreateSubmit;
-    private EditText groupNameInput;
-    private String groupName;
     private FirebaseAuth auth;
     private FirebaseFirestore db;
 
@@ -39,9 +36,8 @@ public class group_create extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_create);
 
-
         /*
-        Android UI design
+        Pop-up window display
          */
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
@@ -52,7 +48,7 @@ public class group_create extends AppCompatActivity{
         getWindow().setLayout((int)(width*0.75), (int)(height * 0.75));
 
         /*
-        Create group
+        Checks if user is logged in. If not redirects to login page
          */
         auth = FirebaseAuth.getInstance();
 
@@ -61,16 +57,31 @@ public class group_create extends AppCompatActivity{
             startActivity(new Intent(group_create.this, MainActivity.class));
         }
 
+        //Creates a group
+        groupCreate();
+    }
+
+    /*
+        groupCreate function:
+            Creates a group with the name the user entered
+        Procedure:
+            1. Checks the group name entered
+            2. Creates the group storing on the FireBase database
+            3. Go to personal group page
+     */
+    private void groupCreate() {
         db = FirebaseFirestore.getInstance();
 
-        groupCreateSubmit = (Button) findViewById(R.id.btnGroupCreateSubmit);
+        Button groupCreateSubmit = (Button) findViewById(R.id.btnGroupCreateSubmit);
 
         groupCreateSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                groupNameInput= (EditText) findViewById(R.id.etGroupName);
-                groupName = groupNameInput.getText().toString();
                 final FirebaseUser user = auth.getCurrentUser();
+
+                //Checks the group name entered
+                EditText groupNameInput= (EditText) findViewById(R.id.etGroupName);
+                final String groupName = groupNameInput.getText().toString();
                 if (groupName.isEmpty()) {
                     return;
                 }
@@ -79,18 +90,25 @@ public class group_create extends AppCompatActivity{
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()){
+                            //Just a way to store the group name on FireBase
                             int count = 1;
                             for(DocumentSnapshot document : task.getResult()){
                                 count++;
                             }
+
+                            ////Creates the group storing on the FireBase database
                             Map<String, String> groupNameMap = new HashMap<>();
                             groupNameMap.put("group_name", groupName);
                             groupNameMap.put("usid", user.getUid());
+
                             db.collection("groups").document("group" + count).set(groupNameMap).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
+
+                                    //Go to personal group page
                                     Toast.makeText(group_create.this, "Congrats! You created a group. Now invite some friends!", Toast.LENGTH_LONG).show();
                                     startActivity(new Intent(group_create.this, group_view.class));
+
                                 }
                             }).addOnFailureListener(new OnFailureListener() {
                                 @Override
@@ -103,107 +121,9 @@ public class group_create extends AppCompatActivity{
                     }
                 });
 
-                /*db.collection("users").whereEqualTo(user.getUid(), true).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        Map<String, String> groupNameMap = new HashMap<>();
-                        Map<String, String> userInfoMap = new HashMap<>();
-                        groupNameMap.put("group_name", groupName);
-                        groupNameMap.put("usid", user.getUid());
-                        userInfoMap.put("groups", groupName);
-                        //Update userinformation;
 
-                        //Update group database
-                        db. collection("groups").document(groupName).set(groupNameMap).addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                Toast.makeText(group_create.this, "Congrats! You created a group. Now invite some friends!", Toast.LENGTH_LONG).show();
-                                startActivity(new Intent(group_create.this, group_view.class));
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(group_create.this, "Group creation failed.", Toast.LENGTH_LONG).show();
-                            }
-                        });
-
-                    }
-                });*/
-
-                /*db.collection("groups").add(groupNameMap).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Toast.makeText(group_create.this, "Congrats! You created a group. Now invite some friends!", Toast.LENGTH_LONG).show();
-                        startActivity(new Intent(group_create.this, group_view.class));
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(group_create.this, "Group creation failed.", Toast.LENGTH_LONG).show();
-                    }
-                });*/
             }
         });
     }
 
-    /*private void createGroup(){
-        groupName = groupNameInput.getText().toString();
-        //userInformation userInfo = new userInformation();
-        if (groupName.isEmpty()) {
-            return;
-        }
-        Map<String, String> groupNameMap = new HashMap<>();
-        groupNameMap.put("group_name", groupName);
-        FirebaseUser user = auth.getCurrentUser();
-
-       db.collection("users/" + user.getUid()).add(groupNameMap).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-           @Override
-           public void onSuccess(DocumentReference documentReference) {
-               Toast.makeText(group_create.this, "Group created.", Toast.LENGTH_LONG ).show();
-               startActivity(new Intent(group_create.this, group_view.class));
-           }
-       }).addOnFailureListener(new OnFailureListener() {
-           @Override
-           public void onFailure(@NonNull Exception e) {
-               Toast.makeText(group_create.this, "Failed to create a group.", Toast.LENGTH_LONG).show();
-           }
-       });
-    }
-
-    public void onClick(View view){
-        if (view == groupCreateSubmit){
-            createGroup();
-        }
-    }*/
-
 }
-
-
-
-
-/*groupCreateSubmit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                EditText groupNameView = (EditText) findViewById(R.id.groupName);
-                String groupName = groupNameView.getText().toString();
-                if (groupName.isEmpty()) {
-                    return;
-                }
-
-                Map<String, String> groupNameMap = new HashMap<>();
-                groupNameMap.put("group_name", groupName);
-
-                db.collection("groups").add(groupNameMap).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Toast.makeText(group_create.this, "Congrats! You created a group. Now invite some friends!", Toast.LENGTH_LONG).show();
-                        startActivity(new Intent(group_create.this, group_view.class));
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(group_create.this, "Group creation failed.", Toast.LENGTH_LONG).show();
-                    }
-                });
-            }
-        });*/
