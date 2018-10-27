@@ -73,8 +73,15 @@ public class Preference extends AppCompatActivity implements View.OnClickListene
         submitPreferenceButton.setOnClickListener(this);
 
     }
-
+    /*
+    submitPreferences function:
+        Takes user preferences and stores on FireBase database.
+    Procedure:
+        1. Get user preferences
+        2. Store on database
+     */
     private void submitPreferences() {
+        //Get user preferences
         cost_max = Integer.parseInt(cost_max_input.getText().toString());
         category = categoryInput.getSelectedItem().toString();
 
@@ -86,6 +93,8 @@ public class Preference extends AppCompatActivity implements View.OnClickListene
                     for(DocumentSnapshot document : task.getResult()){
                         count++;
                     }
+
+                    //Store on database
                     FirebaseUser user = auth.getCurrentUser();
                     preferences pref = new preferences(cost_max, category, user.getUid());
                     db.collection("groups/group1/prefs").document("pref" + count).set(pref).addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -107,22 +116,12 @@ public class Preference extends AppCompatActivity implements View.OnClickListene
         });
 
 
-        /*db.collection("groups/group1/prefs").document("pref" + count).set(pref).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                Toast.makeText(Preference.this, "Preferences saved", Toast.LENGTH_LONG).show();
-                startActivity(new Intent(Preference.this, group_view.class));
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(Preference.this, "Failed to save your preferences.", Toast.LENGTH_LONG).show();
-            }
-        });*/
     }
-
+    /*
+    Submits preferences
+     */
     public void onClick(View view){
-        if (view == submitPreferenceButton){
+        if (view.equals(submitPreferenceButton)){
             submitPreferences();
         }
     }
