@@ -33,33 +33,29 @@ import java.util.List;
 
 public class recommended_activities_list extends AppCompatActivity {
 
-    private ListView recActivities;
-    private FirebaseFirestore db;
     private DocumentReference ref;
-    private ArrayList<String> arrayList= new ArrayList<>();
-    private ArrayAdapter<String> adapter;
-    private TextView event1text, event2text, event3text, event4text, event5text, event6text, event7text, event8text, event9text, event10text;
+    private TextView event0text, event1text, event2text, event3text, event4text;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recommended_activities_list);
 
-        db = FirebaseFirestore.getInstance();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        event1text = (TextView) findViewById(R.id.event1);
-        event2text = (TextView) findViewById(R.id.event2);
-        event3text = (TextView) findViewById(R.id.event3);
-        event4text = (TextView) findViewById(R.id.event4);
-        event5text = (TextView) findViewById(R.id.event5);
-        event6text = (TextView) findViewById(R.id.event6);
-        event7text = (TextView) findViewById(R.id.event7);
-        event8text = (TextView) findViewById(R.id.event8);
-        event9text = (TextView) findViewById(R.id.event9);
-        event10text = (TextView) findViewById(R.id.event10);
+        event0text = (TextView) findViewById(R.id.event1);
+        event1text = (TextView) findViewById(R.id.event2);
+        event2text = (TextView) findViewById(R.id.event3);
+        event3text = (TextView) findViewById(R.id.event4);
+        event4text = (TextView) findViewById(R.id.event5);
 
 
-        ref = db.collection("groups/group1/sel_events").document("event1");
+        //create list
+        for (int i = 0; i < 5; i++){
+            createList(i);
+        }
+
+        /*ref = db.collection("groups/group1/sel_events").document("event1");
         ref.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -109,58 +105,35 @@ public class recommended_activities_list extends AppCompatActivity {
                     event5text.setText(doc.get("name").toString());
                 }
             }
-        });
-
-       /*ref = db.collection("groups/group1/sel_events").document("event6");
-        ref.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()){
-                    DocumentSnapshot doc = task.getResult();
-                    event6text.setText(doc.get("name").toString());
-                }
-            }
-        });
-
-        ref = db.collection("groups/group1/sel_events").document("event7");
-        ref.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()){
-                    DocumentSnapshot doc = task.getResult();
-                    event7text.setText(doc.get("name").toString());
-                }
-            }
-        });
-        ref = db.collection("groups/group1/sel_events").document("event8");
-        ref.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()){
-                    DocumentSnapshot doc = task.getResult();
-                    event8text.setText(doc.get("name").toString());
-                }
-            }
-        });
-        ref = db.collection("groups/group1/sel_events").document("event9");
-        ref.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()){
-                    DocumentSnapshot doc = task.getResult();
-                    event9text.setText(doc.get("name").toString());
-                }
-            }
-        });
-        ref = db.collection("groups/group1/sel_events").document("event10");
-        ref.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()){
-                    DocumentSnapshot doc = task.getResult();
-                    event10text.setText(doc.get("name").toString());
-                }
-            }
         });*/
+
+    }
+
+    /*
+    Creates the list by taking eventnum and finding the associated recommended event.
+     */
+    private void createList(final int eventnum){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        ref = db.collection("groups/group1/sel_events").document("event" + eventnum);
+        ref.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()){
+                    DocumentSnapshot doc = task.getResult();
+                    switch (eventnum){
+                        case 0: event0text.setText(doc.get("name").toString());
+                            break;
+                        case 1: event1text.setText(doc.get("name").toString());
+                            break;
+                        case 2: event2text.setText(doc.get("name").toString());
+                            break;
+                        case 3: event3text.setText(doc.get("name").toString());
+                            break;
+                        case 4: event4text.setText(doc.get("name").toString());
+                            break;
+                    }
+                    }
+                }
+            });
     }
 }
