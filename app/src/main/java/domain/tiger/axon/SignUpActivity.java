@@ -3,7 +3,6 @@ package domain.tiger.axon;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
@@ -13,23 +12,14 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
-
-public class SignUp extends AppCompatActivity implements View.OnClickListener {
+public class SignUpActivity extends AppCompatActivity implements View.OnClickListener {
 
     //Buttons, EditText, Spinners
     private Button signUp ;
@@ -128,22 +118,22 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
                     FirebaseUser user = mAuth.getCurrentUser();
 
                     //Display success message
-                    Toast.makeText(SignUp.this, "Account creation succcessful!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(SignUpActivity.this, "Account creation succcessful!", Toast.LENGTH_LONG).show();
 
                     //Create a user document on FireBase for user later
-                    userInformation userInfo = new userInformation(email, address, dobMonth, dobDay, dobYear, user.getUid());
+                    UserInformation userInfo = new UserInformation(email, address, dobMonth, dobDay, dobYear, user.getUid());
                     db.collection("users").document(email).set(userInfo).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
-                            Toast.makeText(SignUp.this, "Account creation successful!", Toast.LENGTH_LONG).show();
+                            Toast.makeText(SignUpActivity.this, "Account creation successful!", Toast.LENGTH_LONG).show();
                         }
                     });
 
                     //Go to the login page
-                    startActivity(new Intent(SignUp.this, MainActivity.class));
+                    startActivity(new Intent(SignUpActivity.this, MainActivity.class));
                 } else {
                     //Display failure message
-                    Toast.makeText(SignUp.this, "Account creation unsuccessful!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(SignUpActivity.this, "Account creation unsuccessful!", Toast.LENGTH_LONG).show();
                 }
             }
         });

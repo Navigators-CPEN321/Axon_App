@@ -13,7 +13,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.storage.FirebaseStorage;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -29,12 +28,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
 
 
-        //If user is already logged in, then go to group page
+        //If user is already logged in, then go to GroupActivity page
         auth = FirebaseAuth.getInstance();
 
         if (auth.getCurrentUser() != null){
             finish();
-            startActivity(new Intent(MainActivity.this, group.class));
+            startActivity(new Intent(MainActivity.this, GroupActivity.class));
         }
 
         //Connecting the EditTexts and Buttons
@@ -88,7 +87,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if (task.isSuccessful()){
                     finish();
                     Toast.makeText(MainActivity.this, "Log in successful.", Toast.LENGTH_LONG).show();
-                    startActivity(new Intent(MainActivity.this, group.class));
+                    startActivity(new Intent(MainActivity.this, GroupActivity.class));
                 } else{
                     Toast.makeText(MainActivity.this, "Log in failed.", Toast.LENGTH_LONG).show();
                 }
@@ -98,14 +97,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     /*
     App navigation:
-        Redirects the user to the group page if login is successful or the sign up page
+        Redirects the user to the GroupActivity page if login is successful or the sign up page
      */
     public void onClick(View view){
         if (view.equals(btnLogin)){
             login();
         }
         if (view.equals(signUp)){
-            startActivity(new Intent(MainActivity.this, SignUp.class));
+            startActivity(new Intent(MainActivity.this, SignUpActivity.class));
         }
     }
 

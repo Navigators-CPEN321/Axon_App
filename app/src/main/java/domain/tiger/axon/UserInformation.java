@@ -2,16 +2,16 @@ package domain.tiger.axon;
 
 import java.util.List;
 
-public class userInformation {
+public class UserInformation {
 
     public String email, address, dobMonth, dobDay, dobYear, usid;
     public String groups;
 
-    public userInformation(){
+    public UserInformation(){
 
     }
 
-    public userInformation(String email, String address, String dobMonth, String dobDay, String dobYear, String usid) {
+    public UserInformation(String email, String address, String dobMonth, String dobDay, String dobYear, String usid) {
         this.email = email;
         this.address = address;
         this.dobMonth = dobMonth;

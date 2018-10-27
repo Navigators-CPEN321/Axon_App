@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".recommended_activities_list">
+    tools:context=".RecListActivity">
 
     <TextView
         android:id="@+id/tvSuggestions"

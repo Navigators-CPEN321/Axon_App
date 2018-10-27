@@ -16,9 +16,6 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -26,7 +23,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.HashMap;
 import java.util.Map;
 
-public class group_create extends AppCompatActivity{
+public class GroupCreateActivity extends AppCompatActivity{
 
     private FirebaseAuth auth;
     private FirebaseFirestore db;
@@ -54,20 +51,20 @@ public class group_create extends AppCompatActivity{
 
         if (auth.getCurrentUser() == null){
             finish();
-            startActivity(new Intent(group_create.this, MainActivity.class));
+            startActivity(new Intent(GroupCreateActivity.this, MainActivity.class));
         }
 
-        //Creates a group
+        //Creates a GroupActivity
         groupCreate();
     }
 
     /*
         groupCreate function:
-            Creates a group with the name the user entered
+            Creates a GroupActivity with the name the user entered
         Procedure:
-            1. Checks the group name entered
-            2. Creates the group storing on the FireBase database
-            3. Go to personal group page
+            1. Checks the GroupActivity name entered
+            2. Creates the GroupActivity storing on the FireBase database
+            3. Go to personal GroupActivity page
      */
     private void groupCreate() {
         db = FirebaseFirestore.getInstance();
@@ -79,7 +76,7 @@ public class group_create extends AppCompatActivity{
             public void onClick(View v) {
                 final FirebaseUser user = auth.getCurrentUser();
 
-                //Checks the group name entered
+                //Checks the GroupActivity name entered
                 EditText groupNameInput= (EditText) findViewById(R.id.etGroupName);
                 final String groupName = groupNameInput.getText().toString();
                 if (groupName.isEmpty()) {
@@ -90,30 +87,30 @@ public class group_create extends AppCompatActivity{
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()){
-                            //Just a way to store the group name on FireBase
+                            //Just a way to store the GroupActivity name on FireBase
                             int count = 1;
                             for(DocumentSnapshot document : task.getResult()){
                                 count++;
                             }
 
-                            ////Creates the group storing on the FireBase database
+                            ////Creates the GroupActivity storing on the FireBase database
                             Map<String, String> groupNameMap = new HashMap<>();
                             groupNameMap.put("group_name", groupName);
                             groupNameMap.put("usid", user.getUid());
 
-                            db.collection("groups").document("group" + count).set(groupNameMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            db.collection("groups").document("GroupActivity" + count).set(groupNameMap).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
 
-                                    //Go to personal group page
-                                    Toast.makeText(group_create.this, "Congrats! You created a group. Now invite some friends!", Toast.LENGTH_LONG).show();
-                                    startActivity(new Intent(group_create.this, group_view.class));
+                                    //Go to personal GroupActivity page
+                                    Toast.makeText(GroupCreateActivity.this, "Congrats! You created a GroupActivity. Now invite some friends!", Toast.LENGTH_LONG).show();
+                                    startActivity(new Intent(GroupCreateActivity.this, GroupViewActivity.class));
 
                                 }
                             }).addOnFailureListener(new OnFailureListener() {
                                 @Override
                                 public void onFailure(@NonNull Exception e) {
-                                    Toast.makeText(group_create.this, "Group creation failed.", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(GroupCreateActivity.this, "Group creation failed.", Toast.LENGTH_LONG).show();
                                 }
                             });
 

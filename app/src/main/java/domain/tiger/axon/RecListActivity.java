@@ -31,7 +31,7 @@ import org.w3c.dom.Text;
 import java.util.ArrayList;
 import java.util.List;
 
-public class recommended_activities_list extends AppCompatActivity {
+public class RecListActivity extends AppCompatActivity {
 
     private TextView event0text, event1text, event2text, event3text, event4text;
 

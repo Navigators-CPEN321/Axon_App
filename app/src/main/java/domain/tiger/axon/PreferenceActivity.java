@@ -5,7 +5,6 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,16 +17,11 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import io.opencensus.tags.Tag;
-
-public class Preference extends AppCompatActivity implements View.OnClickListener {
+public class PreferenceActivity extends AppCompatActivity implements View.OnClickListener {
 
     public Button submitPreferenceButton;
     private EditText cost_max_input;
@@ -55,13 +49,13 @@ public class Preference extends AppCompatActivity implements View.OnClickListene
         getWindow().setLayout((int)(width*0.75), (int)(height * 0.75));
 
         /*
-        Get preferences
+        Get Preferences
          */
         auth = FirebaseAuth.getInstance();
 
         if (auth.getCurrentUser() == null){
             finish();
-            startActivity(new Intent(Preference.this, MainActivity.class));
+            startActivity(new Intent(PreferenceActivity.this, MainActivity.class));
         }
 
         db = FirebaseFirestore.getInstance();
@@ -75,13 +69,13 @@ public class Preference extends AppCompatActivity implements View.OnClickListene
     }
     /*
     submitPreferences function:
-        Takes user preferences and stores on FireBase database.
+        Takes user Preferences and stores on FireBase database.
     Procedure:
-        1. Get user preferences
+        1. Get user Preferences
         2. Store on database
      */
     private void submitPreferences() {
-        //Get user preferences
+        //Get user Preferences
         cost_max = Integer.parseInt(cost_max_input.getText().toString());
         category = categoryInput.getSelectedItem().toString();
 
@@ -96,21 +90,21 @@ public class Preference extends AppCompatActivity implements View.OnClickListene
 
                     //Store on database
                     FirebaseUser user = auth.getCurrentUser();
-                    preferences pref = new preferences(cost_max, category, user.getUid());
+                    Preferences pref = new Preferences(cost_max, category, user.getUid());
                     db.collection("groups/group1/prefs").document("pref" + count).set(pref).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
-                            Toast.makeText(Preference.this, "Preferences saved", Toast.LENGTH_LONG).show();
-                            startActivity(new Intent(Preference.this, group_view.class));
+                            Toast.makeText(PreferenceActivity.this, "Preferences saved", Toast.LENGTH_LONG).show();
+                            startActivity(new Intent(PreferenceActivity.this, GroupViewActivity.class));
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(Preference.this, "Failed to save your preferences.", Toast.LENGTH_LONG).show();
+                            Toast.makeText(PreferenceActivity.this, "Failed to save your Preferences.", Toast.LENGTH_LONG).show();
                         }
                     });
                 } else{
-                    Toast.makeText(Preference.this, "", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(PreferenceActivity.this, "", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -118,7 +112,7 @@ public class Preference extends AppCompatActivity implements View.OnClickListene
 
     }
     /*
-    Submits preferences
+    Submits Preferences
      */
     public void onClick(View view){
         if (view.equals(submitPreferenceButton)){

@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-public class group_view extends AppCompatActivity {
+public class GroupViewActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,7 +27,7 @@ public class group_view extends AppCompatActivity {
         btnRecommendations.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(group_view.this, Preference.class));
+                startActivity(new Intent(GroupViewActivity.this, PreferenceActivity.class));
             }
         });
     }
@@ -38,7 +38,7 @@ public class group_view extends AppCompatActivity {
         btnActivities.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(group_view.this, recommended_activities_list.class));
+                startActivity(new Intent(GroupViewActivity.this, RecListActivity.class));
             }
         });
     }
