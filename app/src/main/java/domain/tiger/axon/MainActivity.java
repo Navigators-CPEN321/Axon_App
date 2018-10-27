@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     Procedure:
         1. Get the email and password the user enters
         2. Check if the login information that entered is acceptable
-        3. Use Firebase authentication to validate their login information
+        3. Use FireBase authentication to validate their login information
      */
     private void login(){
 
@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return;
         }
 
-        //Use Firebase authentication to validate their login information
+        //Use FireBase authentication to validate their login information
         auth.signInWithEmailAndPassword(email,password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
