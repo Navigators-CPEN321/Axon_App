@@ -20,7 +20,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private EditText emailInput, passwordInput;
     private Button signUp, btnLogin;
-    private String email, password;
 
     private FirebaseAuth auth;
 
@@ -29,6 +28,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+        //If user is already logged in, then go to group page
         auth = FirebaseAuth.getInstance();
 
         if (auth.getCurrentUser() != null){
@@ -36,6 +37,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             startActivity(new Intent(MainActivity.this, group.class));
         }
 
+        //Connecting the EditTexts and Buttons
         emailInput = (EditText) findViewById(R.id.editTextEmail);
         passwordInput = (EditText) findViewById(R.id.editTextPassword);
         signUp = (Button) findViewById(R.id.signUpButton);
@@ -45,11 +47,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnLogin.setOnClickListener(this);
     }
 
-
+    /*
+    Login function:
+        User enters their login information and the app validates their credentials
+    Procedure:
+        1. Get the email and password the user enters
+        2. Check if the login information that entered is acceptable
+        3. Use Firebase authentication to validate their login information
+     */
     private void login(){
+
+        //Get the email and password the user enters
+        String email, password;
         email = emailInput.getText().toString();
         password = passwordInput.getText().toString();
 
+        //Check if the login information that entered is acceptable
         if (email.isEmpty()){
             emailInput.setError("Email is required.");
             emailInput.requestFocus();
@@ -68,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return;
         }
 
-
+        //Use Firebase authentication to validate their login information
         auth.signInWithEmailAndPassword(email,password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
@@ -83,11 +96,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
     }
 
+    /*
+    App navigation:
+        Redirects the user to the group page if login is successful or the sign up page
+     */
     public void onClick(View view){
-        if (view == btnLogin){
+        if (view.equals(btnLogin)){
             login();
         }
-        if (view == signUp){
+        if (view.equals(signUp)){
             startActivity(new Intent(MainActivity.this, SignUp.class));
         }
     }
