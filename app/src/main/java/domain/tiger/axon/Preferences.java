@@ -1,5 +1,7 @@
 package domain.tiger.axon;
-
+/*
+Holds user preference information
+ */
 public class Preferences {
 
     public int cost_max;

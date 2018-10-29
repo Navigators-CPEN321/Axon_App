@@ -16,7 +16,7 @@ public class Group {
     }
 
     /*
-    Sets the group name
+    Sets the group name and size
      */
     public Group(String groupName){
         this.group_name = groupName;
@@ -24,17 +24,17 @@ public class Group {
     }
 
     /*
-    Takes the user's id and creates a reference to a preference.
-    Then it stores userid and the preference reference into a map.
-    The userid will be the key and the preference reference will be the value.
+    Takes the creator's id and creates a reference to a preference.
+    Create a new collection in the group, and store creator's id with a field that holds a reference to the user's personal preference.
+    The creator's id will act as the key and the preference reference will act as the value.
 
     Procedure:
-        1. Check to see if groupName is empty. This is needed to make sure that the groupName is on the FireBase database.
+        1. Check to see if group_ame is empty. This is needed to make sure that the group_name is on the FireBase database.
         2. Create a preference for the user and store it on FireBase.
-        3. Add the user's id and a reference to the newly created preference to the map that contains all group member userid and their associated preference references.
-        4. Increment the size
+        3. Create a new collection in the group and create a new documuent using the creator's id and add a field that contains the reference to the creator's personal preference.
+        4. Increment the size and update the FireBase database
      */
-    public void addMember(String userid){
+    public void addCreator(String userid){
 
         //Create Preference and store in group
         Preferences pref = new Preferences();

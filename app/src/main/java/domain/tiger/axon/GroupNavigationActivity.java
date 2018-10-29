@@ -12,6 +12,10 @@ import android.content.Intent;
 
 import com.google.firebase.auth.FirebaseAuth;
 
+/*
+Group Function Navigation Page:
+Allows users to navigate to the different group pages to use that group functionality
+ */
 public class GroupNavigationActivity extends AppCompatActivity implements View.OnClickListener {
 
     private FirebaseAuth auth;
@@ -46,11 +50,15 @@ public class GroupNavigationActivity extends AppCompatActivity implements View.O
         setContentView(R.layout.activity_group);
 
         //Navigation bar (unused at the moment)
+
         mTextMessage = (TextView) findViewById(R.id.message);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
+
+
         //Check if a user is logged in. If not redirect them to login page
+
         auth = FirebaseAuth.getInstance();
 
         if (auth.getCurrentUser() == null){
@@ -58,9 +66,17 @@ public class GroupNavigationActivity extends AppCompatActivity implements View.O
             startActivity(new Intent(GroupNavigationActivity.this, MainActivity.class));
         }
 
+
+
+        //Connecting buttons
+
         btnGroupCreate = (Button) findViewById(R.id.btnGroupCreate);
         btnGroupView = (Button) findViewById(R.id.btnGroupView);
         btnLogOut = (Button) findViewById(R.id.btnLogOut);
+
+
+
+        //Setting up buttons
 
         btnGroupCreate.setOnClickListener(this);
         btnGroupView.setOnClickListener(this);

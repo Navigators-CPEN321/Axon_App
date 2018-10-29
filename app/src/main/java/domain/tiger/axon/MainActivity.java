@@ -13,7 +13,10 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-
+/*
+Login page:
+Allows the user to log in using their login information, or takes the user to the SignUpActivity page if the user wants to create a new account.
+ */
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
     private final int passwordLength = 6;
@@ -29,6 +32,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
         //If user is already logged in, then go to GroupNavigationActivity page
+
         auth = FirebaseAuth.getInstance();
 
         if (auth.getCurrentUser() != null){
@@ -36,11 +40,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             startActivity(new Intent(MainActivity.this, GroupNavigationActivity.class));
         }
 
+
+
         //Connecting the EditTexts and Buttons
+
         emailInput = (EditText) findViewById(R.id.editTextEmail);
         passwordInput = (EditText) findViewById(R.id.editTextPassword);
         signUp = (Button) findViewById(R.id.signUpButton);
         btnLogin = (Button) findViewById(R.id.btnLogin);
+
+
+
+        //Setting up buttons
 
         signUp.setOnClickListener(this);
         btnLogin.setOnClickListener(this);
@@ -57,11 +68,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void login(){
 
         //Get the email and password the user enters
+
         String email, password;
         email = emailInput.getText().toString();
         password = passwordInput.getText().toString();
 
+
+
         //Check if the login information that entered is acceptable
+
         if (email.isEmpty()){
             emailInput.setError("Email is required.");
             emailInput.requestFocus();
@@ -80,16 +95,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return;
         }
 
+
+
         //Use FireBase authentication to validate their login information
+
         auth.signInWithEmailAndPassword(email,password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()){
                     finish();
-                    Toast.makeText(MainActivity.this, "Log in successful.", Toast.LENGTH_LONG).show();
+
+                    Toast.makeText( MainActivity.this,
+                                    "Log in successful.",
+                                    Toast.LENGTH_LONG).show();
+
                     startActivity(new Intent(MainActivity.this, GroupNavigationActivity.class));
+
                 } else{
-                    Toast.makeText(MainActivity.this, "Log in failed.", Toast.LENGTH_LONG).show();
+
+                    Toast.makeText( MainActivity.this,
+                                    "Log in failed.",
+                                    Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -97,7 +123,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     /*
     App navigation:
-        Redirects the user to the GroupNavigationActivity page if login is successful or the sign up page
+        Redirects the user to the GroupNavigationActivity page if login is successful or the SignUpActivity page for sign up
      */
     public void onClick(View view){
         if (view.equals(btnLogin)){

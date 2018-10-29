@@ -11,6 +11,11 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+
+/*
+    RecListActivity Page:
+        Shows the recommended activities list
+ */
 public class RecListActivity extends AppCompatActivity {
 
     private TextView event0text, event1text, event2text, event3text, event4text;
@@ -20,6 +25,10 @@ public class RecListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recommended_activities_list);
 
+
+
+        //Connect TextViews
+
         event0text = (TextView) findViewById(R.id.event1);
         event1text = (TextView) findViewById(R.id.event2);
         event2text = (TextView) findViewById(R.id.event3);
@@ -27,9 +36,8 @@ public class RecListActivity extends AppCompatActivity {
         event4text = (TextView) findViewById(R.id.event5);
 
 
-        //create list
         for (int i = 0; i < 5; i++){
-            createList(i);
+            updateRecActivitiesList(i);
         }
 
     }
@@ -37,7 +45,7 @@ public class RecListActivity extends AppCompatActivity {
     /*
     Creates the list by taking eventnum and finding the associated recommended event.
      */
-    private void createList(final int eventnum){
+    private void updateRecActivitiesList(final int eventnum){
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference ref;
         ref = db.collection("groups/group1/sel_events").document("event" + eventnum);

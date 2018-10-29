@@ -22,6 +22,10 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
+/*
+Preference Page:
+Allows the user to enter their personal preferences. The app then locates the preference associated with that group and that user and updates it.
+ */
 public class PreferenceActivity extends AppCompatActivity implements View.OnClickListener {
 
     //Screen display constants
@@ -77,16 +81,20 @@ public class PreferenceActivity extends AppCompatActivity implements View.OnClic
     }
     /*
     submitPreferences function:
-        Takes user Preferences and stores on FireBase database.
+        Takes user preferences and stores on FireBase database.
     Procedure:
-        1. Get user Preferences
-        2. Store on database
+        1. Get user preferences
+        2. Store a new preference on FireBase database
      */
     private void submitPreferences() {
+
         //Get user Preferences
+
         cost_max = Integer.parseInt(cost_max_input.getText().toString());
         category = categoryInput.getSelectedItem().toString();
 
+
+        //Store a new preference on FireBase database
         db.collection("groups/group1/prefs").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -97,6 +105,7 @@ public class PreferenceActivity extends AppCompatActivity implements View.OnClic
                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                             int size;
                             if (task.isSuccessful()){
+                                //==========Code needs to be re-done==========
                                 DocumentSnapshot doc = task.getResult();
                                 size = Integer.parseInt(doc.get("size").toString());
                                 FirebaseUser user = auth.getCurrentUser();
@@ -104,35 +113,33 @@ public class PreferenceActivity extends AppCompatActivity implements View.OnClic
                                 db.collection("groups/group1/prefs").document("pref" + size).set(pref).addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
-                                        Toast.makeText(PreferenceActivity.this, "Preferences saved", Toast.LENGTH_LONG).show();
+
+                                        Toast.makeText( PreferenceActivity.this,
+                                                        "Preferences saved",
+                                                        Toast.LENGTH_LONG).show();
+
                                         startActivity(new Intent(PreferenceActivity.this, GroupViewActivity.class));
                                     }
+
                                 }).addOnFailureListener(new OnFailureListener() {
                                     @Override
                                     public void onFailure(@NonNull Exception e) {
-                                        Toast.makeText(PreferenceActivity.this, "Failed to save your Preferences.", Toast.LENGTH_LONG).show();
+
+                                        Toast.makeText( PreferenceActivity.this,
+                                                        "Failed to save your Preferences.",
+                                                        Toast.LENGTH_LONG).show();
+
                                     }
                                 });
                             }
                         }
                     });
-                    //Store on database
-                    //FirebaseUser user = auth.getCurrentUser();
-                    //Preferences pref = new Preferences(cost_max, category, user.getUid());
-                    /*db.collection("groups/group1/prefs").document("pref" + count).set(pref).addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            Toast.makeText(PreferenceActivity.this, "Preferences saved", Toast.LENGTH_LONG).show();
-                            startActivity(new Intent(PreferenceActivity.this, GroupViewActivity.class));
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(PreferenceActivity.this, "Failed to save your Preferences.", Toast.LENGTH_LONG).show();
-                        }
-                    });*/
+
                 } else{
-                    Toast.makeText(PreferenceActivity.this, "", Toast.LENGTH_SHORT).show();
+
+                    Toast.makeText( PreferenceActivity.this,
+                                    "Unable to save preferences",
+                                    Toast.LENGTH_SHORT).show();
                 }
             }
         });
