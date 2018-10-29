@@ -16,7 +16,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
-
+    private final int passwordLength = 6;
     private EditText emailInput, passwordInput;
     private Button signUp, btnLogin;
 
@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return;
         }
 
-        if (password.length()<6){
+        if (password.length()< passwordLength){
             passwordInput.setError("Password needs to be longer than 6 characters");
             passwordInput.requestFocus();
             return;

@@ -69,7 +69,7 @@ public class GroupNavigationActivity extends AppCompatActivity implements View.O
 
     /*
     App navigation:
-        Redirects the user to the GroupNavigationActivity creation, their personal GroupNavigationActivity, or the login page
+        Redirects the user to the GroupCreateActivity, GroupViewActivity, or the login page
      */
     public void onClick(View view){
         if (view.equals(btnGroupCreate)){

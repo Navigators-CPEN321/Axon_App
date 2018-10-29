@@ -21,6 +21,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 public class SignUpActivity extends AppCompatActivity implements View.OnClickListener {
 
+    //Constant
+    private final int passwordLength = 6;
+
     //Buttons, EditText, Spinners
     private Button signUp ;
     private EditText emailInput, passwordInput, addressInput;
@@ -98,7 +101,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
             return;
         }
 
-        if (password.length()<6){
+        if (password.length()< passwordLength){
             passwordInput.setError("Password needs to be longer than 6 characters");
             passwordInput.requestFocus();
             return;
