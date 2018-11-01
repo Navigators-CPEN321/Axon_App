@@ -30,9 +30,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         //If user is already logged in, then go to GroupNavigationActivity page
-
         auth = FirebaseAuth.getInstance();
 
         if (auth.getCurrentUser() != null){
@@ -40,19 +38,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             startActivity(new Intent(MainActivity.this, GroupNavigationActivity.class));
         }
 
-
-
         //Connecting the EditTexts and Buttons
-
         emailInput = (EditText) findViewById(R.id.editTextEmail);
         passwordInput = (EditText) findViewById(R.id.editTextPassword);
         signUp = (Button) findViewById(R.id.signUpButton);
         btnLogin = (Button) findViewById(R.id.btnLogin);
 
-
-
         //Setting up buttons
-
         signUp.setOnClickListener(this);
         btnLogin.setOnClickListener(this);
     }
@@ -68,15 +60,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void login(){
 
         //Get the email and password the user enters
-
         String email, password;
         email = emailInput.getText().toString();
         password = passwordInput.getText().toString();
 
-
-
         //Check if the login information that entered is acceptable
-
         if (email.isEmpty()){
             emailInput.setError("Email is required.");
             emailInput.requestFocus();
@@ -95,10 +83,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return;
         }
 
-
-
         //Use FireBase authentication to validate their login information
-
         auth.signInWithEmailAndPassword(email,password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {

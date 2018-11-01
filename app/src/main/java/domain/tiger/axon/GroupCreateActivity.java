@@ -38,9 +38,7 @@ public class GroupCreateActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_create);
 
-
         //Pop-up window display
-
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
 
@@ -49,20 +47,13 @@ public class GroupCreateActivity extends AppCompatActivity{
 
         getWindow().setLayout((int)(width*screenWidthFactor), (int)(height * screenHeightFactor));
 
-
-
         //Checks if user is logged in. If not redirects to login page
-
         auth = FirebaseAuth.getInstance();
 
         if (auth.getCurrentUser() == null){
             finish();
             startActivity(new Intent(GroupCreateActivity.this, MainActivity.class));
         }
-
-
-
-        //Creates a group
 
         groupCreate();
     }
@@ -86,7 +77,6 @@ public class GroupCreateActivity extends AppCompatActivity{
                 final FirebaseUser user = auth.getCurrentUser();
 
                 //Checks the group name entered
-
                 EditText groupNameInput= (EditText) findViewById(R.id.etGroupName);
                 final String groupName = groupNameInput.getText().toString();
                 if (groupName.isEmpty()) {
@@ -94,7 +84,6 @@ public class GroupCreateActivity extends AppCompatActivity{
                     groupNameInput.requestFocus();
                     return;
                 }
-
 
                 //Creates the group storing on the FireBase database and redirects user to the GroupViewActivity page to see their group
                 db.collection("groups").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -109,7 +98,7 @@ public class GroupCreateActivity extends AppCompatActivity{
                                 public void onSuccess(Void aVoid) {
 
                                     Toast.makeText( GroupCreateActivity.this,
-                                                    "Congrats! You created a group. Now invite some friends!",
+                                                    "Group created.",
                                                     Toast.LENGTH_LONG).show();
 
                                 }

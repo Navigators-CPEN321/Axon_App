@@ -45,14 +45,10 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         setContentView(R.layout.activity_sign_up);
 
         //Instantiating FireBase variables
-
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
 
-
-
         //Connecting Buttons, EditTexts, and Spinners
-
         signUp = (Button) findViewById(R.id.doneButton);
         emailInput = (EditText) findViewById(R.id.emailInput);
         passwordInput = (EditText) findViewById(R.id.passwordInput);
@@ -61,10 +57,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         dobDayInput = (Spinner) findViewById(R.id.spinnerDay);
         dobYearInput = (Spinner) findViewById(R.id.spinnerYear);
 
-
-
         //Setting up button
-
         signUp.setOnClickListener(this);
     }
 
@@ -87,7 +80,6 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         String password;
 
         //Get the email, password, date of birth, and address from user
-
         email = emailInput.getText().toString();
         password = passwordInput.getText().toString();
         address = addressInput.getText().toString();
@@ -95,11 +87,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         dobDay = dobDayInput.getSelectedItem().toString();
         dobYear = dobYearInput.getSelectedItem().toString();
 
-
-
-
         //Check if the information entered is acceptable
-
         if (email.isEmpty()){
             emailInput.setError("Email is required.");
             emailInput.requestFocus();
@@ -130,10 +118,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
             return;
         }
 
-
-
         //Use Firebase authentication to create an account by entering email and password (date of birth and address not needed)
-
         mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
@@ -148,7 +133,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                     //Store a copy of the user information on FireBase database excluding password
                     UserInformation userInfo = new UserInformation(email, address, dobMonth, dobDay, dobYear, user.getUid());
 
-                    db.collection("users").document(email).set(userInfo).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    db.collection("users").document(user.getUid()).set(userInfo).addOnSuccessListener(new OnSuccessListener<Void>() {
 
                         @Override
                         public void onSuccess(Void aVoid) {

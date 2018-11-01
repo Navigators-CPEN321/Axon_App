@@ -3,7 +3,6 @@ package domain.tiger.axon;
 public class UserInformation {
 
     public String email, address, dobMonth, dobDay, dobYear, usid;
-    public String groups;
 
     public UserInformation(){
 

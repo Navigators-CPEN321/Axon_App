@@ -105,6 +105,8 @@ public class PreferenceActivity extends AppCompatActivity implements View.OnClic
                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                             int size;
                             if (task.isSuccessful()){
+
+
                                 //==========Code needs to be re-done==========
                                 DocumentSnapshot doc = task.getResult();
                                 size = Integer.parseInt(doc.get("size").toString());

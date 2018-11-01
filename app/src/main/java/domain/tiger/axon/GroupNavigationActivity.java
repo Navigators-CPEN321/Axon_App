@@ -49,16 +49,12 @@ public class GroupNavigationActivity extends AppCompatActivity implements View.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group);
 
-        //Navigation bar (unused at the moment)
-
+        //Navigation bar (========================unused at the moment========================)
         mTextMessage = (TextView) findViewById(R.id.message);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-
-
         //Check if a user is logged in. If not redirect them to login page
-
         auth = FirebaseAuth.getInstance();
 
         if (auth.getCurrentUser() == null){
@@ -66,18 +62,13 @@ public class GroupNavigationActivity extends AppCompatActivity implements View.O
             startActivity(new Intent(GroupNavigationActivity.this, MainActivity.class));
         }
 
-
-
         //Connecting buttons
-
         btnGroupCreate = (Button) findViewById(R.id.btnGroupCreate);
         btnGroupView = (Button) findViewById(R.id.btnGroupVew);
         btnLogOut = (Button) findViewById(R.id.btnLogOut);
         btnGroupAvailable = (Button) findViewById(R.id.btnGroupJoin);
 
-
         //Setting up buttons
-
         btnGroupCreate.setOnClickListener(this);
         btnGroupAvailable.setOnClickListener(this);
         btnGroupView.setOnClickListener(this);
@@ -86,7 +77,7 @@ public class GroupNavigationActivity extends AppCompatActivity implements View.O
 
     /*
     App navigation:
-        Redirects the user to the GroupCreateActivity, GroupViewActivity, or the login page
+        Redirects the user to the GroupCreateActivity, GroupAvailableActivity, GroupViewActivity, or the login page
      */
     public void onClick(View view){
         if (view.equals(btnGroupCreate)){
@@ -96,7 +87,7 @@ public class GroupNavigationActivity extends AppCompatActivity implements View.O
             startActivity(new Intent(GroupNavigationActivity.this, GroupAvailableActivity.class));
         }
         if (view.equals(btnGroupView)){
-            startActivity(new Intent(GroupNavigationActivity.this, GroupAvailableActivity.class));
+            startActivity(new Intent(GroupNavigationActivity.this, GroupViewActivity.class));
         }
         if (view.equals(btnLogOut)){
             auth.signOut();

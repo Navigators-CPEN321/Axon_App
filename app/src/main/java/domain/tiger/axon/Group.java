@@ -1,5 +1,7 @@
 package domain.tiger.axon;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -9,7 +11,6 @@ import java.util.Map;
 public class Group {
     public int size;
     public String group_name;
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     public Group(){
 
@@ -36,21 +37,28 @@ public class Group {
      */
     public void addCreator(String userid){
 
-        //Create Preference and store in group
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        //Create preference and store in group
         Preferences pref = new Preferences();
         db.collection("groups/" + group_name + "/prefs").document("pref"+(size+1)).set(pref);
 
         //Obtain reference to newly created reference
-        DocumentReference ref;
-        ref = db.collection("groups/" + group_name + "/prefs").document("pref"+(size+1));
+        DocumentReference prefRef = db.collection("groups/" + group_name + "/prefs").document("pref"+(size+1));
 
-        //Store preference reference
-        Map<String, DocumentReference> prefref = new HashMap<>();
-        prefref.put("Reference", ref);
-        db.collection("groups/" + group_name + "/prefrefs").document(userid).set(prefref);
+        //Store preference reference in group and attach userid to use a key
+        Map<String, DocumentReference> prefRefMap = new HashMap<>();
+        prefRefMap.put("Reference", prefRef);
+        db.collection("groups/" + group_name + "/prefrefs").document(userid).set(prefRefMap);
 
+        //Increment and update the size of the group;
         size++;
         db.collection("groups").document(group_name).update("size", size);
+
+        //Update user information to include what groups they are in
+        DocumentReference groupRef = db.collection("groups").document(group_name);
+        UserGroup userGroup = new UserGroup(groupRef, group_name);
+        db.collection("users").document(userid).collection("groups").document(group_name).set(userGroup);
 
     }
 
