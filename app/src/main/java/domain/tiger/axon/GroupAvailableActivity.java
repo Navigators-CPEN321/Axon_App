@@ -38,7 +38,7 @@ public class GroupAvailableActivity extends AppCompatActivity {
         setContentView(R.layout.activity_group_available);
 
         listViewAvailableGroups = (ListView) findViewById(R.id.listAvailableGroups);
-        
+
         final AvailableGroupAdapter adapter = new AvailableGroupAdapter(availableGroupsList,this);
         listViewAvailableGroups.setAdapter(adapter);
 

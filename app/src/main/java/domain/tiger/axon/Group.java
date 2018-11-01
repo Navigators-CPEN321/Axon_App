@@ -31,7 +31,7 @@ public class Group {
     Procedure:
         1. Check to see if group_ame is empty. This is needed to make sure that the group_name is on the FireBase database.
         2. Create a preference for the user and store it on FireBase.
-        3. Create a new collection in the group and create a new documuent using the creator's id and add a field that contains the reference to the creator's personal preference.
+        3. Create a new collection in the group and create a new document using the creator's id and add a field that contains the reference to the creator's personal preference.
         4. Increment the size and update the FireBase database
      */
     public void addCreator(String userid){
@@ -44,6 +44,7 @@ public class Group {
         DocumentReference ref;
         ref = db.collection("groups/" + group_name + "/prefs").document("pref"+(size+1));
 
+        //Store preference reference
         Map<String, DocumentReference> prefref = new HashMap<>();
         prefref.put("Reference", ref);
         db.collection("groups/" + group_name + "/prefrefs").document(userid).set(prefref);
