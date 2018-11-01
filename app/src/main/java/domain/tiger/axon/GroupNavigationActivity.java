@@ -20,7 +20,7 @@ public class GroupNavigationActivity extends AppCompatActivity implements View.O
 
     private FirebaseAuth auth;
 
-    private Button btnGroupView, btnGroupCreate, btnLogOut;
+    private Button btnGroupView, btnGroupCreate, btnLogOut, btnGroupAvailable;
 
     //Navigation bar
     private TextView mTextMessage;
@@ -71,14 +71,15 @@ public class GroupNavigationActivity extends AppCompatActivity implements View.O
         //Connecting buttons
 
         btnGroupCreate = (Button) findViewById(R.id.btnGroupCreate);
-        btnGroupView = (Button) findViewById(R.id.btnGroupView);
+        btnGroupView = (Button) findViewById(R.id.btnGroupVew);
         btnLogOut = (Button) findViewById(R.id.btnLogOut);
-
+        btnGroupAvailable = (Button) findViewById(R.id.btnGroupJoin);
 
 
         //Setting up buttons
 
         btnGroupCreate.setOnClickListener(this);
+        btnGroupAvailable.setOnClickListener(this);
         btnGroupView.setOnClickListener(this);
         btnLogOut.setOnClickListener(this);
     }
@@ -91,8 +92,11 @@ public class GroupNavigationActivity extends AppCompatActivity implements View.O
         if (view.equals(btnGroupCreate)){
             startActivity(new Intent(GroupNavigationActivity.this, GroupCreateActivity.class));
         }
+        if(view.equals(btnGroupAvailable)){
+            startActivity(new Intent(GroupNavigationActivity.this, GroupAvailableActivity.class));
+        }
         if (view.equals(btnGroupView)){
-            startActivity(new Intent(GroupNavigationActivity.this, GroupViewActivity.class));
+            startActivity(new Intent(GroupNavigationActivity.this, GroupAvailableActivity.class));
         }
         if (view.equals(btnLogOut)){
             auth.signOut();

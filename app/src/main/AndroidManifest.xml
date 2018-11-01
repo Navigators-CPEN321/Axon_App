@@ -28,7 +28,8 @@
         <activity
             android:name=".PreferenceActivity"
             android:theme="@style/AppTheme.popup" />
-        <activity android:name=".RecListActivity"></activity>
+        <activity android:name=".RecListActivity" />
+        <activity android:name=".GroupAvailableActivity"></activity>
     </application>
 
 </manifest>
