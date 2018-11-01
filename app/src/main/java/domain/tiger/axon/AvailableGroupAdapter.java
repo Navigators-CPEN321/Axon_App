@@ -23,7 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class AvailableGroupAdapter extends BaseAdapter implements ListAdapter {
-    private ArrayList<String> list = new ArrayList<>();
+    private ArrayList<String> list;
     private Context context;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseAuth auth = FirebaseAuth.getInstance();
