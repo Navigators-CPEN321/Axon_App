@@ -39,7 +39,7 @@ public class GroupAvailableActivity extends AppCompatActivity {
         listViewAvailableGroups = (ListView) findViewById(R.id.listAvailableGroups);
 
         listViewAvailableGroups.setAdapter(adapter);
-        
+
         db.collection("groups").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -103,6 +103,12 @@ public class GroupAvailableActivity extends AppCompatActivity {
             }
         }
 
+        while (db_group_names.size() != 0){
+            db_group_names.remove(0);
+        }
+        while (user_group_names.size() != 0){
+            user_group_names.remove(0);
+        }
         Collections.sort(availableGroupsList, String.CASE_INSENSITIVE_ORDER);
         adapter.notifyDataSetChanged();
     }

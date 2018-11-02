@@ -89,6 +89,10 @@ public class AvailableGroupAdapter extends BaseAdapter implements ListAdapter {
                             //Update size
                             size++;
                             db.collection("groups").document(list.get(position)).update("size", size);
+
+                            DocumentReference groupRef = db.collection("groups").document(list.get(position));
+                            UserGroup userGroup = new UserGroup(groupRef, list.get(position));
+                            db.collection("users/" + user.getUid()+ "/groups").document(list.get(position)).set(userGroup);
                         }
                     }
                 });
