@@ -1,8 +1,11 @@
 package domain.tiger.axon;
 
+import com.google.firebase.firestore.DocumentReference;
+
 public class UserInformation {
 
     public String email, address, dobMonth, dobDay, dobYear, usid;
+    public DocumentReference userGroup;
 
     public UserInformation(){
 

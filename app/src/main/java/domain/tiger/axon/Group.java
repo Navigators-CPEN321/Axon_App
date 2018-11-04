@@ -59,7 +59,6 @@ public class Group {
         DocumentReference groupRef = db.collection("groups").document(group_name);
         UserGroup userGroup = new UserGroup(groupRef, group_name);
         db.collection("users").document(userid).collection("groups").document(group_name).set(userGroup);
-
     }
 
 }

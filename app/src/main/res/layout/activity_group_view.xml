@@ -8,6 +8,7 @@
     tools:context=".GroupViewActivity">
 
     <ListView
+        android:id="@+id/listViewGroupMembers"
         android:layout_width="350dp"
         android:layout_height="375dp"
         android:layout_marginStart="8dp"

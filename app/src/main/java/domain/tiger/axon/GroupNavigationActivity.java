@@ -64,7 +64,7 @@ public class GroupNavigationActivity extends AppCompatActivity implements View.O
 
         //Connecting buttons
         btnGroupCreate = (Button) findViewById(R.id.btnGroupCreate);
-        btnGroupView = (Button) findViewById(R.id.btnGroupVew);
+        btnGroupView = (Button) findViewById(R.id.btnGroupView);
         btnLogOut = (Button) findViewById(R.id.btnLogOut);
         btnGroupAvailable = (Button) findViewById(R.id.btnGroupJoin);
 
@@ -87,7 +87,7 @@ public class GroupNavigationActivity extends AppCompatActivity implements View.O
             startActivity(new Intent(GroupNavigationActivity.this, GroupAvailableActivity.class));
         }
         if (view.equals(btnGroupView)){
-            startActivity(new Intent(GroupNavigationActivity.this, GroupViewActivity.class));
+            startActivity(new Intent(GroupNavigationActivity.this, UsersGroupsActivity.class));
         }
         if (view.equals(btnLogOut)){
             auth.signOut();

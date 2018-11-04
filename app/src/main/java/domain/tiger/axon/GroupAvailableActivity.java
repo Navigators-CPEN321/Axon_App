@@ -48,9 +48,9 @@ public class GroupAvailableActivity extends AppCompatActivity {
                     for(DocumentSnapshot doc : task.getResult()){
                         db_group_names.add(doc.get("group_name").toString());
                     }
-                    Toast.makeText(GroupAvailableActivity.this,
+                    /*Toast.makeText(GroupAvailableActivity.this,
                             String.valueOf(db_group_names.size()),
-                            Toast.LENGTH_LONG).show();
+                            Toast.LENGTH_LONG).show();*/
                     compareAndDisplayList(db_group_names, user_group_names);
                 }
 
@@ -65,9 +65,9 @@ public class GroupAvailableActivity extends AppCompatActivity {
                     for(DocumentSnapshot doc : task.getResult()){
                         user_group_names.add(doc.get("group_name").toString());
                     }
-                    Toast.makeText(GroupAvailableActivity.this,
+                    /*Toast.makeText(GroupAvailableActivity.this,
                             String.valueOf(user_group_names.size()),
-                            Toast.LENGTH_LONG).show();
+                            Toast.LENGTH_LONG).show();*/
                 }
             }
         });
@@ -76,26 +76,26 @@ public class GroupAvailableActivity extends AppCompatActivity {
 
     public void compareAndDisplayList(ArrayList<String> db_group_names, ArrayList<String> user_group_names){
 
-        Toast.makeText(GroupAvailableActivity.this,
+        /*Toast.makeText(GroupAvailableActivity.this,
                 "TEST",
-                Toast.LENGTH_LONG).show();
+                Toast.LENGTH_LONG).show();*/
 
 
         for (int dbIt = 0; dbIt < db_group_names.size(); dbIt++){
             boolean userIsPartOfGroup = false;
-            Toast.makeText(GroupAvailableActivity.this,
+            /*Toast.makeText(GroupAvailableActivity.this,
                     "DB:" + db_group_names.get(dbIt),
-                    Toast.LENGTH_LONG).show();
+                    Toast.LENGTH_LONG).show();*/
             for (int userIt = 0; userIt < user_group_names.size(); userIt++){
-                Toast.makeText(GroupAvailableActivity.this,
+                /*Toast.makeText(GroupAvailableActivity.this,
                         "USER:" + user_group_names.get(userIt),
-                        Toast.LENGTH_LONG).show();
+                        Toast.LENGTH_LONG).show();*/
                 if (db_group_names.get(dbIt).equals(user_group_names.get(userIt))){
                     userIsPartOfGroup = true;
                 }
-                Toast.makeText(GroupAvailableActivity.this,
+                /*Toast.makeText(GroupAvailableActivity.this,
                         String.valueOf(userIsPartOfGroup),
-                        Toast.LENGTH_LONG).show();
+                        Toast.LENGTH_LONG).show();*/
             }
 
             if (userIsPartOfGroup == false){
@@ -103,12 +103,6 @@ public class GroupAvailableActivity extends AppCompatActivity {
             }
         }
 
-        while (db_group_names.size() != 0){
-            db_group_names.remove(0);
-        }
-        while (user_group_names.size() != 0){
-            user_group_names.remove(0);
-        }
         Collections.sort(availableGroupsList, String.CASE_INSENSITIVE_ORDER);
         adapter.notifyDataSetChanged();
     }

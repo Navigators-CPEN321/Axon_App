@@ -36,6 +36,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-database:16.0.3'
 
     implementation 'com.google.firebase:firebase-auth:16.0.4'
+    androidTestImplementation 'com.jayway.android.robotium:robotium-solo:5.6.3'
 
 }
 
