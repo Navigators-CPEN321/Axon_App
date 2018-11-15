@@ -30,14 +30,14 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
 
     //Buttons, EditText, Spinners
     private Button signUp ;
-    private EditText emailInput, passwordInput, addressInput;
+    private EditText emailInput, passwordInput, addressInput, displayNameInput;
     private Spinner dobMonthInput, dobDayInput, dobYearInput;
 
     //Auth variables
     private FirebaseFirestore db;
     private FirebaseAuth mAuth;
 
-    private String email, address, dobMonth, dobDay, dobYear;
+    private String email, displayName, password, dobDay, dobMonth, dobYear, address;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,11 +51,12 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         //Connecting Buttons, EditTexts, and Spinners
         signUp = (Button) findViewById(R.id.doneButton);
         emailInput = (EditText) findViewById(R.id.emailInput);
+        displayNameInput = (EditText) findViewById(R.id.etDisplayName);
         passwordInput = (EditText) findViewById(R.id.passwordInput);
-        addressInput = (EditText) findViewById(R.id.addressInput);
         dobMonthInput = (Spinner) findViewById(R.id.spinnerMonth);
         dobDayInput = (Spinner) findViewById(R.id.spinnerDay);
         dobYearInput = (Spinner) findViewById(R.id.spinnerYear);
+        addressInput = (EditText) findViewById(R.id.addressInput);
 
         //Setting up button
         signUp.setOnClickListener(this);
@@ -77,44 +78,17 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
      */
     private void signUp(){
 
-        String password;
-
         //Get the email, password, date of birth, and address from user
         email = emailInput.getText().toString();
         password = passwordInput.getText().toString();
-        address = addressInput.getText().toString();
+        displayName = displayNameInput.getText().toString();
         dobMonth = dobMonthInput.getSelectedItem().toString();
         dobDay = dobDayInput.getSelectedItem().toString();
         dobYear = dobYearInput.getSelectedItem().toString();
+        address = addressInput.getText().toString();
 
-        //Check if the information entered is acceptable
-        if (email.isEmpty()){
-            emailInput.setError("Email is required.");
-            emailInput.requestFocus();
-            return;
-        }
 
-        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
-            emailInput.setError("Invalid email.");
-            emailInput.requestFocus();
-            return;
-        }
-
-        if (password.isEmpty()){
-            passwordInput.setError("Password is required.");
-            passwordInput.requestFocus();
-            return;
-        }
-
-        if (password.length()< passwordLength){
-            passwordInput.setError("Password needs to be longer than 6 characters");
-            passwordInput.requestFocus();
-            return;
-        }
-
-        if (address.isEmpty()){
-            addressInput.setError("Address is required.");
-            addressInput.requestFocus();
+        if (!validateAccountInfo(email, password, displayName, address)){
             return;
         }
 
@@ -126,12 +100,8 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
 
                     FirebaseUser user = mAuth.getCurrentUser();
 
-                    Toast.makeText( SignUpActivity.this,
-                                    "Account creation succcessful!",
-                                    Toast.LENGTH_LONG).show();
-
                     //Store a copy of the user information on FireBase database excluding password
-                    UserInformation userInfo = new UserInformation(email, address, dobMonth, dobDay, dobYear, user.getUid());
+                    UserInformation userInfo = new UserInformation(email, displayName, dobMonth, dobDay, dobYear, address, user.getUid());
 
                     db.collection("users").document(user.getUid()).set(userInfo).addOnSuccessListener(new OnSuccessListener<Void>() {
 
@@ -151,7 +121,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                 } else {
 
                     Toast.makeText( SignUpActivity.this,
-                                    "Account creation unsuccessful!",
+                                    "Account creation unsuccessful.",
                                     Toast.LENGTH_LONG).show();
 
                 }
@@ -169,6 +139,49 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         if (view.equals(signUp)){
             signUp();
         }
+    }
+
+    /*
+    Validate email, password, display name, and address
+     */
+    public boolean validateAccountInfo(String email, String password, String displayName, String address){
+        if (email.isEmpty()){
+            emailInput.setError("Email is required.");
+            emailInput.requestFocus();
+            return false;
+        }
+
+        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+            emailInput.setError("Invalid email.");
+            emailInput.requestFocus();
+            return false;
+        }
+
+        if (displayName.isEmpty()){
+            displayNameInput.setError("Display name is required.");
+            displayNameInput.requestFocus();
+            return false;
+        }
+
+        if (password.isEmpty()){
+            passwordInput.setError("Password is required.");
+            passwordInput.requestFocus();
+            return false;
+        }
+
+        if (password.length()< passwordLength){
+            passwordInput.setError("Password needs to be longer than 6 characters");
+            passwordInput.requestFocus();
+            return false;
+        }
+
+        if (address.isEmpty()){
+            addressInput.setError("Address is required.");
+            addressInput.requestFocus();
+            return false;
+        }
+
+        return true;
     }
 
 }

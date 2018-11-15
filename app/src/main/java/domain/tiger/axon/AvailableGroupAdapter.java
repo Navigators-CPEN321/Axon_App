@@ -27,6 +27,8 @@ public class AvailableGroupAdapter extends BaseAdapter implements ListAdapter {
     private Context context;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseAuth auth = FirebaseAuth.getInstance();
+    private Button btnJoin;
+    private TextView groupName;
 
     public AvailableGroupAdapter(ArrayList<String> list, Context context){
         this.list = list;
@@ -55,10 +57,10 @@ public class AvailableGroupAdapter extends BaseAdapter implements ListAdapter {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = inflater.inflate(R.layout.custom_listview_item, null);
         }
-        final TextView groupName = (TextView) view.findViewById(R.id.list_item_groupName);
+        groupName = (TextView) view.findViewById(R.id.list_item_groupName);
         groupName.setText(list.get(position));
 
-        Button btnJoin = (Button) view.findViewById(R.id.btnJoin);
+        btnJoin = (Button) view.findViewById(R.id.btnJoin);
 
         btnJoin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,6 +95,8 @@ public class AvailableGroupAdapter extends BaseAdapter implements ListAdapter {
                             DocumentReference groupRef = db.collection("groups").document(list.get(position));
                             UserGroup userGroup = new UserGroup(groupRef, list.get(position));
                             db.collection("users/" + user.getUid()+ "/groups").document(list.get(position)).set(userGroup);
+                            list.remove(position);
+                            AvailableGroupAdapter.this.notifyDataSetChanged();
                         }
                     }
                 });
@@ -101,4 +105,6 @@ public class AvailableGroupAdapter extends BaseAdapter implements ListAdapter {
 
         return view;
     }
+
+
 }

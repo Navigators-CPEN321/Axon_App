@@ -4,19 +4,21 @@ import com.google.firebase.firestore.DocumentReference;
 
 public class UserInformation {
 
-    public String email, address, dobMonth, dobDay, dobYear, usid;
-    public DocumentReference userGroup;
+    public String email, displayName, dobMonth, dobDay, dobYear, address, usid, currentGroup;
 
     public UserInformation(){
 
     }
 
-    public UserInformation(String email, String address, String dobMonth, String dobDay, String dobYear, String usid) {
+    public UserInformation(String email, String displayName,
+                           String dobMonth, String dobDay, String dobYear,
+                           String address, String usid) {
         this.email = email;
-        this.address = address;
+        this.displayName = displayName;
         this.dobMonth = dobMonth;
         this.dobDay = dobDay;
         this.dobYear = dobYear;
+        this.address = address;
         this.usid = usid;
     }
 }

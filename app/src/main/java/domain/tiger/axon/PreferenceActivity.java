@@ -90,10 +90,16 @@ public class PreferenceActivity extends AppCompatActivity implements View.OnClic
 
         //Get user Preferences
 
+        String cost_max_string = cost_max_input.getText().toString();
+
+        if (cost_max_string.isEmpty()){
+            cost_max_input.setError("Please enter the most your willing to spend. Enter 0 if you're not willing to spend any money");
+            cost_max_input.requestFocus();
+            return;
+        }
+
         cost_max = Integer.parseInt(cost_max_input.getText().toString());
         category = categoryInput.getSelectedItem().toString();
-
-
         //Store a new preference on FireBase database
         db.collection("groups/group1/prefs").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override

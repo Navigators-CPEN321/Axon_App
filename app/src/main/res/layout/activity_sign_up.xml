@@ -19,17 +19,17 @@
         android:layout_marginBottom="8dp"
         android:paddingTop="5dp"
         android:text="SIGN UP"
+        android:textColor="#000000"
         android:textSize="30dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.448"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.002" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <EditText
         android:id="@+id/emailInput"
-        android:layout_width="300dp"
+        android:layout_width="0dp"
         android:layout_height="60dp"
         android:layout_below="@+id/passwordInput"
         android:layout_centerHorizontal="true"
@@ -39,46 +39,48 @@
         android:layout_marginBottom="8dp"
         android:hint="Email"
         android:inputType="textEmailAddress"
+        android:textColor="#000"
+        android:textColorHint="#000000"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/signUpTitle"
-        app:layout_constraintVertical_bias="0.048" />
+        app:layout_constraintVertical_bias="0.0"
+        tools:text="Email" />
 
     <EditText
         android:id="@+id/passwordInput"
-        android:layout_width="300dp"
+        android:layout_width="0dp"
         android:layout_height="60dp"
         android:layout_below="@id/emailInput"
         android:layout_centerHorizontal="true"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="116dp"
         android:hint="Password"
         android:inputType="textPassword"
+        android:textColorHint="#000000"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/emailInput"
-        app:layout_constraintVertical_bias="0.048" />
+        app:layout_constraintTop_toBottomOf="@+id/etDisplayName"
+        app:layout_constraintVertical_bias="0.054" />
 
     <EditText
         android:id="@+id/addressInput"
-        android:layout_width="300dp"
+        android:layout_width="0dp"
         android:layout_height="60dp"
         android:layout_below="@id/doneButton"
         android:layout_centerHorizontal="true"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
         android:hint="Address"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:textColorHint="#000000"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinnerDay"
-        app:layout_constraintVertical_bias="0.048" />
+        app:layout_constraintTop_toBottomOf="@+id/spinnerDay" />
 
     <Button
         android:id="@+id/doneButton"
@@ -88,7 +90,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginEnd="17dp"
         android:layout_marginBottom="8dp"
         android:text="SUBMIT"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -98,39 +100,33 @@
 
     <Spinner
         android:id="@+id/spinnerMonth"
-        android:layout_width="125dp"
+        android:layout_width="0dp"
         android:layout_height="30dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:entries="@array/months"
         app:layout_constraintBottom_toTopOf="@+id/addressInput"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.139"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/passwordInput"
-        app:layout_constraintVertical_bias="0.777" />
+        app:layout_constraintVertical_bias="0.809" />
 
     <Spinner
         android:id="@+id/spinnerDay"
-        android:layout_width="50dp"
+        android:layout_width="0dp"
         android:layout_height="30dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:entries="@array/days"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.125"
         app:layout_constraintStart_toEndOf="@+id/spinnerMonth"
         app:layout_constraintTop_toBottomOf="@+id/passwordInput"
-        app:layout_constraintVertical_bias="0.098" />
+        app:layout_constraintVertical_bias="0.1" />
 
     <Spinner
         android:id="@+id/spinnerYear"
-        android:layout_width="75dp"
+        android:layout_width="0dp"
         android:layout_height="30dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
@@ -143,6 +139,24 @@
         app:layout_constraintStart_toEndOf="@+id/spinnerDay"
         app:layout_constraintTop_toBottomOf="@+id/passwordInput"
         app:layout_constraintVertical_bias="0.777" />
+
+    <EditText
+        android:id="@+id/etDisplayName"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Display Name"
+        android:textColorHint="#000000"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/emailInput"
+        app:layout_constraintVertical_bias="0.0" />
 
 
 </android.support.constraint.ConstraintLayout>
