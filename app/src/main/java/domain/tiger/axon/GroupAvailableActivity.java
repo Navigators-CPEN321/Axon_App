@@ -19,6 +19,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 public class GroupAvailableActivity extends AppCompatActivity {
 
@@ -27,9 +28,11 @@ public class GroupAvailableActivity extends AppCompatActivity {
     private ArrayList<String> availableGroupsList = new ArrayList<>();
     private FirebaseAuth auth = FirebaseAuth.getInstance();
     private FirebaseUser user = auth.getCurrentUser();
-    private ArrayList<String> db_group_names = new ArrayList<String>();
-    private ArrayList<String> user_group_names = new ArrayList<String>();
+    private List<String> db_group_names = new ArrayList<String>();
+    private List<String> user_group_names = new ArrayList<String>();
     private AvailableGroupAdapter adapter = new AvailableGroupAdapter(availableGroupsList,this);
+    private boolean userListObtained;
+    private boolean groupListObtained;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,47 +43,55 @@ public class GroupAvailableActivity extends AppCompatActivity {
 
         listViewAvailableGroups.setAdapter(adapter);
 
-        db.collection("groups").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        userListObtained = false;
+        groupListObtained = false;
+
+        db.collection("groups").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()){
-                    //Iterate through every group in the database
-                    for(DocumentSnapshot doc : task.getResult()){
-                        db_group_names.add(doc.get("group_name").toString());
-                    }
-                    /*Toast.makeText(GroupAvailableActivity.this,
-                            String.valueOf(db_group_names.size()),
-                            Toast.LENGTH_LONG).show();*/
-                    compareAndDisplayList(db_group_names, user_group_names);
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                db_group_names.clear();
+                List<DocumentSnapshot> qsList = queryDocumentSnapshots.getDocuments();
+                for (int i = 0; i < qsList.size(); i++){
+                    db_group_names.add(qsList.get(i).get("group_name").toString());
                 }
-
-            }
-        });
-
-        db.collection("users/" + user.getUid()+ "/groups").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()){
-                    //Iterate through every group the user is part of
-                    for(DocumentSnapshot doc : task.getResult()){
-                        user_group_names.add(doc.get("group_name").toString());
-                    }
-                    /*Toast.makeText(GroupAvailableActivity.this,
-                            String.valueOf(user_group_names.size()),
-                            Toast.LENGTH_LONG).show();*/
+                groupListObtained = true;
+                /*Toast.makeText(GroupAvailableActivity.this,
+                        String.valueOf(db_group_names.size()),
+                        Toast.LENGTH_LONG).show();*/
+                if (userListObtained){
+                    compareAndDisplayList();
                 }
             }
         });
+
+        db.collection("users/" + user.getUid() + "/groups").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                user_group_names.clear();
+                List<DocumentSnapshot> qsList = queryDocumentSnapshots.getDocuments();
+                for (int i = 0; i < qsList.size(); i++){
+                    user_group_names.add(qsList.get(i).get("group_name").toString());
+                }
+                userListObtained = true;
+                /*Toast.makeText(GroupAvailableActivity.this,
+                        String.valueOf(user_group_names.size()),
+                        Toast.LENGTH_LONG).show();*/
+                if (groupListObtained) {
+                    compareAndDisplayList();
+                }
+            }
+        });
+
 
     }
 
-    public void compareAndDisplayList(ArrayList<String> db_group_names, ArrayList<String> user_group_names){
+    public void compareAndDisplayList(){
 
         /*Toast.makeText(GroupAvailableActivity.this,
                 "TEST",
                 Toast.LENGTH_LONG).show();*/
 
-
+        availableGroupsList.clear();
         for (int dbIt = 0; dbIt < db_group_names.size(); dbIt++){
             boolean userIsPartOfGroup = false;
             /*Toast.makeText(GroupAvailableActivity.this,
@@ -102,7 +113,6 @@ public class GroupAvailableActivity extends AppCompatActivity {
                 availableGroupsList.add(db_group_names.get(dbIt));
             }
         }
-
         Collections.sort(availableGroupsList, String.CASE_INSENSITIVE_ORDER);
         adapter.notifyDataSetChanged();
     }
