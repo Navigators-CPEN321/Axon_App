@@ -1,8 +1,10 @@
 package domain.tiger.axon;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
@@ -64,6 +66,8 @@ public class Group {
         Map<String, String> userMap = new HashMap<>();
         userMap.put("usid", userid);
         db.collection("groups/" + group_name +"/users").document(userid).set(userMap);
+
+        db.collection("users").document(userid).update("currentGroup", group_name);
     }
 
 }
