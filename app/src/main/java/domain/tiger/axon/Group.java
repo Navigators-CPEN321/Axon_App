@@ -59,6 +59,11 @@ public class Group {
         DocumentReference groupRef = db.collection("groups").document(group_name);
         UserGroup userGroup = new UserGroup(groupRef, group_name);
         db.collection("users").document(userid).collection("groups").document(group_name).set(userGroup);
+
+        //Add user to group
+        Map<String, String> userMap = new HashMap<>();
+        userMap.put("usid", userid);
+        db.collection("groups/" + group_name +"/users").document(userid).set(userMap);
     }
 
 }

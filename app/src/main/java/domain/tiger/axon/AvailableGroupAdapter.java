@@ -18,6 +18,8 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import org.w3c.dom.Document;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -92,9 +94,15 @@ public class AvailableGroupAdapter extends BaseAdapter implements ListAdapter {
                             size++;
                             db.collection("groups").document(list.get(position)).update("size", size);
 
+                            //Update user information to include group
                             DocumentReference groupRef = db.collection("groups").document(list.get(position));
                             UserGroup userGroup = new UserGroup(groupRef, list.get(position));
                             db.collection("users/" + user.getUid()+ "/groups").document(list.get(position)).set(userGroup);
+
+                            //Add user to group
+                            Map<String, String> userMap = new HashMap<>();
+                            userMap.put("usid", user.getUid());
+                            db.collection("groups").document(list.get(position)).collection("users").document(user.getUid()).set(userMap);
                             list.remove(position);
                             AvailableGroupAdapter.this.notifyDataSetChanged();
                         }
