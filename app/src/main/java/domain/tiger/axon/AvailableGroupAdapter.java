@@ -81,13 +81,12 @@ public class AvailableGroupAdapter extends BaseAdapter implements ListAdapter {
                             db.collection("groups/" + list.get(position) + "/prefs").document("pref"+(size+1)).set(pref);
 
                             //Obtain reference to newly created reference
-                            DocumentReference prefRef;
-                            prefRef = db.collection("groups/" + list.get(position) + "/prefs").document("pref"+(size+1));
+                            String prefRefStr = "groups/" + list.get(position) + "/prefs/pref" + (size+1);
 
                             //Store preference reference
-                            Map<String, DocumentReference> prefRefMap = new HashMap<>();
+                            Map<String, String> prefRefMap = new HashMap<>();
                             FirebaseUser user = auth.getCurrentUser();
-                            prefRefMap.put("Reference", prefRef);
+                            prefRefMap.put("prefRef", prefRefStr);
                             db.collection("groups/" + list.get(position) + "/prefrefs").document(user.getUid()).set(prefRefMap);
 
                             //Update size

@@ -22,6 +22,9 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /*
 Preference Page:
 Allows the user to enter their personal preferences. The app then locates the preference associated with that group and that user and updates it.
@@ -40,14 +43,20 @@ public class PreferenceActivity extends AppCompatActivity implements View.OnClic
     private String category;
 
     //FireBase Variables
-    private FirebaseAuth auth;
-    private FirebaseFirestore db;
+    private FirebaseAuth auth = FirebaseAuth.getInstance();;
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private FirebaseUser user = auth.getCurrentUser();
+
+    //Random
+    private String currentGroup;
+    private String prefRefStr;
+    private String prefrefFirstPart;
+    private String prefrefSecondPart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_preference);
-
 
         /*
         Display
@@ -63,14 +72,11 @@ public class PreferenceActivity extends AppCompatActivity implements View.OnClic
         /*
         Get Preferences
          */
-        auth = FirebaseAuth.getInstance();
 
         if (auth.getCurrentUser() == null){
             finish();
             startActivity(new Intent(PreferenceActivity.this, MainActivity.class));
         }
-
-        db = FirebaseFirestore.getInstance();
 
         cost_max_input = (EditText) findViewById(R.id.priceInput);
         categoryInput = (Spinner) findViewById(R.id.spinnerCategory);
@@ -100,60 +106,45 @@ public class PreferenceActivity extends AppCompatActivity implements View.OnClic
 
         cost_max = Integer.parseInt(cost_max_input.getText().toString());
         category = categoryInput.getSelectedItem().toString();
-        //Store a new preference on FireBase database
-        db.collection("groups/group1/prefs").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+
+        //Get current group
+        db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()){
-                    DocumentReference ref = db.collection("groups").document("group1");
-                    ref.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                            int size;
-                            if (task.isSuccessful()){
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                currentGroup = documentSnapshot.get("currentGroup").toString();
+                Toast.makeText( PreferenceActivity.this,
+                        "Checkpoint 1 and current group is " + currentGroup,
+                        Toast.LENGTH_LONG).show();
+                db.collection("groups").document(currentGroup)
+                        .collection("prefrefs").document(user.getUid())
+                        .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        prefRefStr = documentSnapshot.get("prefRef").toString();
+                        prefrefFirstPart = prefRefStr.substring(0, prefRefStr.length() - 6);
+                        prefrefSecondPart = prefRefStr.substring(prefRefStr.length() - 5, prefRefStr.length());
+                        Preferences pref = new Preferences(cost_max, category, user.getUid());
+                        Toast.makeText( PreferenceActivity.this,
+                                "Checkpoint 2 and " + prefrefFirstPart + prefrefSecondPart,
+                                Toast.LENGTH_LONG).show();
+                        db.collection(prefrefFirstPart).document(prefrefSecondPart).set(pref).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Toast.makeText( PreferenceActivity.this,
+                                        "Preferences saved",
+                                        Toast.LENGTH_LONG).show();
 
-
-                                //==========Code needs to be re-done==========
-                                DocumentSnapshot doc = task.getResult();
-                                size = Integer.parseInt(doc.get("size").toString());
-                                FirebaseUser user = auth.getCurrentUser();
-                                Preferences pref = new Preferences(cost_max, category, user.getUid());
-                                db.collection("groups/group1/prefs").document("pref" + size).set(pref).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void aVoid) {
-
-                                        Toast.makeText( PreferenceActivity.this,
-                                                        "Preferences saved",
-                                                        Toast.LENGTH_LONG).show();
-
-                                        startActivity(new Intent(PreferenceActivity.this, GroupViewActivity.class));
-                                    }
-
-                                }).addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-
-                                        Toast.makeText( PreferenceActivity.this,
-                                                        "Failed to save your Preferences.",
-                                                        Toast.LENGTH_LONG).show();
-
-                                    }
-                                });
+                                startActivity(new Intent(PreferenceActivity.this, GroupViewActivity.class));
                             }
-                        }
-                    });
+                        });
+                    }
+                });
 
-                } else{
-
-                    Toast.makeText( PreferenceActivity.this,
-                                    "Unable to save preferences",
-                                    Toast.LENGTH_SHORT).show();
-                }
             }
         });
 
-
     }
+
     /*
     Submits Preferences
      */
