@@ -9,6 +9,7 @@ import android.widget.Adapter;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -23,6 +24,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import org.w3c.dom.Document;
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -45,11 +47,14 @@ public class GroupViewActivity extends AppCompatActivity {
     private ArrayList<String> usidList = new ArrayList<>();
     private ArrayList<String> displayNameList = new ArrayList<>();
     private ArrayAdapter<String> adapter;
+    private TextView group_name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_view);
+
+        group_name = (TextView) findViewById(R.id.tvGroupName);
 
         groupMembersListView = (ListView) findViewById(R.id.listViewGroupMembers);
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, displayNameList);
@@ -63,6 +68,7 @@ public class GroupViewActivity extends AppCompatActivity {
                 /*Toast.makeText(GroupViewActivity.this,
                         currentGroup,
                         Toast.LENGTH_LONG).show();*/
+                group_name.setText(currentGroup);
                 AddUsidToUsidList();
 
             }
