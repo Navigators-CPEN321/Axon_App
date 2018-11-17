@@ -48,7 +48,7 @@ public class RecListActivity extends AppCompatActivity {
     private void updateRecActivitiesList(final int eventnum){
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference ref;
-        ref = db.collection("groups/group1/sel_events").document("event" + eventnum);
+        ref = db.collection("events").document("event" + eventnum);
         ref.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
