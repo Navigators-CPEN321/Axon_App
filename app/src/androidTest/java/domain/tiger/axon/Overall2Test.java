@@ -2,7 +2,6 @@ package domain.tiger.axon;
 
 
 import androidx.test.espresso.DataInteraction;
-import androidx.test.espresso.Espresso;
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.filters.LargeTest;
 import androidx.test.rule.ActivityTestRule;
@@ -36,24 +35,15 @@ import static org.hamcrest.Matchers.is;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
-public class OverallTest {
+public class Overall2Test {
 
     @Rule
     public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
 
     @Test
-    public void overallTest() {
-
-try {
- Thread.sleep(1000);
- } catch (InterruptedException e) {
- e.printStackTrace();
- }
-
-    //enter email for login
-
+    public void overall2Test() {
         ViewInteraction appCompatEditText = onView(
-allOf(withId(R.id.editTextEmail), withText("Enter email"),
+allOf(withId(R.id.editTextEmail),
 childAtPosition(
 childAtPosition(
 withId(android.R.id.content),
@@ -63,43 +53,55 @@ isDisplayed()));
         appCompatEditText.perform(click());
         
         ViewInteraction appCompatEditText2 = onView(
-allOf(withId(R.id.editTextEmail), withText("Enter email"),
+allOf(withId(R.id.editTextEmail),
 childAtPosition(
 childAtPosition(
 withId(android.R.id.content),
 0),
 1),
 isDisplayed()));
-        appCompatEditText2.perform(replaceText("bob@ubc.ca"), closeSoftKeyboard());
+        appCompatEditText2.perform(click());
         
-
-        
-
+         // Added a sleep statement to match the app's execution delay.
+ // The recommended way to handle such scenarios is to use Espresso idling resources:
+  // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
 try {
- Thread.sleep(1000);
+ Thread.sleep(7000);
  } catch (InterruptedException e) {
  e.printStackTrace();
  }
-
-
-    //enter password for login
-
-        ViewInteraction appCompatEditText8 = onView(
-allOf(withId(R.id.editTextPassword), withText("Enter password"),
+        
+        ViewInteraction appCompatEditText3 = onView(
+allOf(withId(R.id.editTextEmail),
+childAtPosition(
+childAtPosition(
+withId(android.R.id.content),
+0),
+1),
+isDisplayed()));
+        appCompatEditText3.perform(replaceText("bob@ubc.ca"), closeSoftKeyboard());
+        
+         // Added a sleep statement to match the app's execution delay.
+ // The recommended way to handle such scenarios is to use Espresso idling resources:
+  // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
+try {
+ Thread.sleep(7000);
+ } catch (InterruptedException e) {
+ e.printStackTrace();
+ }
+        
+        ViewInteraction appCompatEditText4 = onView(
+allOf(withId(R.id.editTextPassword),
 childAtPosition(
 childAtPosition(
 withId(android.R.id.content),
 0),
 2),
 isDisplayed()));
-        appCompatEditText8.perform(replaceText("123456"), closeSoftKeyboard());
-
-        Espresso.pressBack();
-        //pressBack();
-
-
-       //click login and wait
-
+        appCompatEditText4.perform(replaceText("123456"), closeSoftKeyboard());
+        
+        pressBack();
+        
         ViewInteraction appCompatButton = onView(
 allOf(withId(R.id.btnLogin), withText("Log in"),
 childAtPosition(
@@ -118,17 +120,15 @@ try {
  } catch (InterruptedException e) {
  e.printStackTrace();
  }
-
-        //test during a group UI
-
+        
         ViewInteraction appCompatButton2 = onView(
-allOf(withId(R.id.btnGroupJoin), withText("JOIN A GROUP"),
+allOf(withId(R.id.btnGroupCreate), withText("CREATE A GROUP"),
 childAtPosition(
 allOf(withId(R.id.container),
 childAtPosition(
 withId(android.R.id.content),
 0)),
-2),
+1),
 isDisplayed()));
         appCompatButton2.perform(click());
         
@@ -140,19 +140,49 @@ try {
  } catch (InterruptedException e) {
  e.printStackTrace();
  }
-
-        //try during a group
-
+        
+        pressBack();
+        
+         // Added a sleep statement to match the app's execution delay.
+ // The recommended way to handle such scenarios is to use Espresso idling resources:
+  // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
+try {
+ Thread.sleep(7000);
+ } catch (InterruptedException e) {
+ e.printStackTrace();
+ }
+        
         ViewInteraction appCompatButton3 = onView(
-allOf(withId(R.id.btnJoin), withText("Join"),
+allOf(withId(R.id.btnGroupJoin), withText("JOIN A GROUP"),
 childAtPosition(
-withParent(withId(R.id.listAvailableGroups)),
+allOf(withId(R.id.container),
+childAtPosition(
+withId(android.R.id.content),
+0)),
 2),
 isDisplayed()));
         appCompatButton3.perform(click());
-
-
-        //test viewing the groups available
+        
+         // Added a sleep statement to match the app's execution delay.
+ // The recommended way to handle such scenarios is to use Espresso idling resources:
+  // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
+try {
+ Thread.sleep(7000);
+ } catch (InterruptedException e) {
+ e.printStackTrace();
+ }
+        
+        pressBack();
+        
+         // Added a sleep statement to match the app's execution delay.
+ // The recommended way to handle such scenarios is to use Espresso idling resources:
+  // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
+try {
+ Thread.sleep(7000);
+ } catch (InterruptedException e) {
+ e.printStackTrace();
+ }
+        
         ViewInteraction appCompatButton4 = onView(
 allOf(withId(R.id.btnGroupView), withText("VIEW YOUR GROUPS"),
 childAtPosition(
@@ -164,33 +194,16 @@ withId(android.R.id.content),
 isDisplayed()));
         appCompatButton4.perform(click());
         
-
+         // Added a sleep statement to match the app's execution delay.
+ // The recommended way to handle such scenarios is to use Espresso idling resources:
+  // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
 try {
  Thread.sleep(7000);
  } catch (InterruptedException e) {
  e.printStackTrace();
  }
         
-        Espresso.pressBack();
-        
-
-try {
- Thread.sleep(7000);
- } catch (InterruptedException e) {
- e.printStackTrace();
- }
-
-        //test UI for create group
-        ViewInteraction appCompatButton5 = onView(
-allOf(withId(R.id.btnGroupCreate), withText("CREATE A GROUP"),
-childAtPosition(
-allOf(withId(R.id.container),
-childAtPosition(
-withId(android.R.id.content),
-0)),
-1),
-isDisplayed()));
-        appCompatButton5.perform(click());
+        pressBack();
         
          // Added a sleep statement to match the app's execution delay.
  // The recommended way to handle such scenarios is to use Espresso idling resources:
@@ -201,7 +214,16 @@ try {
  e.printStackTrace();
  }
         
-        Espresso.pressBack();
+        ViewInteraction appCompatButton5 = onView(
+allOf(withId(R.id.btnLogOut), withText("Log Out"),
+childAtPosition(
+allOf(withId(R.id.container),
+childAtPosition(
+withId(android.R.id.content),
+0)),
+4),
+isDisplayed()));
+        appCompatButton5.perform(click());
         }
     
     private static Matcher<View> childAtPosition(
