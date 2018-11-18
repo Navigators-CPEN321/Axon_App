@@ -71,7 +71,4 @@ public class RecListActivity extends AppCompatActivity {
                 }
             });
     }
-    public void onBackPressed() {
-        startActivity(new Intent(RecListActivity.this, GroupViewActivity.class));
-    }
 }

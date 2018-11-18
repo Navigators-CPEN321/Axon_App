@@ -1,5 +1,6 @@
 package domain.tiger.axon;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -52,7 +53,9 @@ public class GroupAvailableActivity extends AppCompatActivity {
                 db_group_names.clear();
                 List<DocumentSnapshot> qsList = queryDocumentSnapshots.getDocuments();
                 for (int i = 0; i < qsList.size(); i++){
-                    db_group_names.add(qsList.get(i).get("group_name").toString());
+                    if (Integer.parseInt(qsList.get(i).get("size").toString()) < 8){
+                        db_group_names.add(qsList.get(i).get("group_name").toString());
+                    }
                 }
                 groupListObtained = true;
                 /*Toast.makeText(GroupAvailableActivity.this,
