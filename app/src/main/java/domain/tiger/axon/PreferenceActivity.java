@@ -134,7 +134,7 @@ public class PreferenceActivity extends AppCompatActivity implements View.OnClic
                                         "Preferences saved",
                                         Toast.LENGTH_LONG).show();
 
-                                startActivity(new Intent(PreferenceActivity.this, GroupViewActivity.class));
+                                startActivity(new Intent(PreferenceActivity.this, RecListActivity.class));
                             }
                         });
                     }
