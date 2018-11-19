@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -21,6 +22,8 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.functions.FirebaseFunctions;
+import com.google.firebase.functions.HttpsCallableResult;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -46,6 +49,7 @@ public class PreferenceActivity extends AppCompatActivity implements View.OnClic
     private FirebaseAuth auth = FirebaseAuth.getInstance();;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseUser user = auth.getCurrentUser();
+    private FirebaseFunctions functions = FirebaseFunctions.getInstance();
 
     //Random
     private String currentGroup;
@@ -133,8 +137,12 @@ public class PreferenceActivity extends AppCompatActivity implements View.OnClic
                                 Toast.makeText( PreferenceActivity.this,
                                         "Preferences saved",
                                         Toast.LENGTH_LONG).show();
-
-                                startActivity(new Intent(PreferenceActivity.this, GroupViewActivity.class));
+                                Map<String, String> httpMap = new HashMap<>();
+                                httpMap.put("group", currentGroup);
+                                functions.getHttpsCallable("selectEvents").call(httpMap);
+                                functions.getHttpsCallable("writePrefs").call(httpMap);
+                                functions.getHttpsCallable("findGroupEvents").call(httpMap);
+                                startActivity(new Intent(PreferenceActivity.this, RecListActivity.class));
                             }
                         });
                     }
