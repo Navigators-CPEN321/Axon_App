@@ -31,10 +31,9 @@ public class GroupNavigationActivity extends AppCompatActivity implements View.O
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
-                    startActivity(new Intent(GroupNavigationActivity.this, GroupNavigationActivity.class));
                     return true;
                 case R.id.navigation_dashboard:
-                    startActivity(new Intent(GroupNavigationActivity.this, SignUpActivity.class));
+                    startActivity(new Intent(GroupNavigationActivity.this, EventsCatalogActivity.class));
                     return true;
                 case R.id.navigation_notifications:
                     startActivity(new Intent(GroupNavigationActivity.this, SettingsActivity.class));
@@ -49,7 +48,7 @@ public class GroupNavigationActivity extends AppCompatActivity implements View.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group);
 
-        //Navigation bar (========================unused at the moment========================)
+        //Navigation bar
         mTextMessage = (TextView) findViewById(R.id.message);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);

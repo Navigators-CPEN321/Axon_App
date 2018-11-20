@@ -4,7 +4,7 @@ import com.google.firebase.firestore.DocumentReference;
 
 public class UserInformation {
 
-    public String email, displayName, dobMonth, dobDay, dobYear, address, usid, currentGroup;
+    public String email, displayName, dobMonth, dobDay, dobYear, address, usid, currentGroup, mostRecentEventsList;
 
     public UserInformation(){
 
