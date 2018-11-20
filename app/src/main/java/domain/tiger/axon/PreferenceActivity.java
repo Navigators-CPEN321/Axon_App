@@ -138,7 +138,7 @@ public class PreferenceActivity extends AppCompatActivity implements View.OnClic
                                         "Preferences saved",
                                         Toast.LENGTH_LONG).show();
                                 Map<String, String> httpMap = new HashMap<>();
-                                httpMap.put("group", currentGroup);
+                                httpMap.put("group", "group1");
                                 functions.getHttpsCallable("selectEvents").call(httpMap);
                                 functions.getHttpsCallable("writePrefs").call(httpMap);
                                 functions.getHttpsCallable("findGroupEvents").call(httpMap);
