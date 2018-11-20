@@ -46,6 +46,8 @@ dependencies {
     androidTestImplementation 'androidx.test:runner:1.1.0'
     androidTestImplementation 'androidx.test:rules:1.1.0'
 
+    implementation 'com.google.firebase:firebase-functions:16.1.2'
+
 }
 
 apply plugin: 'com.google.gms.google-services'
