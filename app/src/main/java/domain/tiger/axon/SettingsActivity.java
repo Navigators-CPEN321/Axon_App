@@ -6,14 +6,25 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
-public class SettingsActivity extends AppCompatActivity {
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+public class SettingsActivity extends AppCompatActivity implements View.OnClickListener{
 
     private TextView mTextMessage;
-    private TextView tvDisplayName;
+    private EditText etDisplayName;
     private Button submitBtn;
+    private String newDisplayName;
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private FirebaseAuth auth = FirebaseAuth.getInstance();
+    private FirebaseUser user = auth.getCurrentUser();
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -42,6 +53,35 @@ public class SettingsActivity extends AppCompatActivity {
         mTextMessage = (TextView) findViewById(R.id.message);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        submitBtn = (Button) findViewById(R.id.btnDisplayNameChange);
+
+        submitBtn.setOnClickListener(this);
+    }
+
+    public void onClick(View view){
+        if (view.equals(submitBtn)){
+            changeDisplayName();
+        }
+    }
+
+    public void changeDisplayName(){
+        etDisplayName = (EditText) findViewById(R.id.etDisplayName);
+
+        newDisplayName = etDisplayName.getText().toString();
+        /*Toast.makeText(SettingsActivity.this,
+                "newDisplayName is " + newDisplayName,
+                Toast.LENGTH_LONG).show();*/
+
+        if (newDisplayName.isEmpty()){
+            etDisplayName.setError("Display name can't be empty");
+            etDisplayName.requestFocus();
+            return;
+        }
+
+        db.collection("users").document(user.getUid()).update("displayName", newDisplayName);
+        Toast.makeText(SettingsActivity.this,
+                "Display name updated!",
+                Toast.LENGTH_LONG).show();
     }
 
 }

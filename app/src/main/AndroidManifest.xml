@@ -30,7 +30,14 @@
             android:theme="@style/AppTheme.popup" />
         <activity android:name=".RecListActivity" />
         <activity android:name=".GroupAvailableActivity" />
-        <activity android:name=".UsersGroupsActivity"></activity>
+        <activity android:name=".UsersGroupsActivity" />
+        <activity
+            android:name=".SettingsActivity"
+            android:label="@string/title_activity_settings" />
+        <activity
+            android:name=".EventsCatalogActivity"
+            android:label="@string/title_activity_events_catalog" />
+        <activity android:name=".EventListActivity"></activity>
     </application>
 
 </manifest>
