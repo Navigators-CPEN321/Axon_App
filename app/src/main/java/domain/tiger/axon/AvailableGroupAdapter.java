@@ -101,6 +101,14 @@ public class AvailableGroupAdapter extends BaseAdapter implements ListAdapter {
                                         }
                                     }
 
+                                    //Create reference to newly created reference
+                                    String prefRefStr = "groups/" + list.get(position) + "/prefs/pref" + i;
+
+                                    //Store preference reference
+                                    Map<String, String> prefRefMap = new HashMap<>();
+                                    prefRefMap.put("prefRef", prefRefStr);
+                                    db.collection("groups/" + list.get(position) + "/prefrefs").document(user.getUid()).set(prefRefMap);
+
                                     //Add user to group
                                     Map<String, Object> userMap = new HashMap<>();
                                     userMap.put("usid", (String) user.getUid());
@@ -110,14 +118,6 @@ public class AvailableGroupAdapter extends BaseAdapter implements ListAdapter {
                                     AvailableGroupAdapter.this.notifyDataSetChanged();
                                 }
                             });
-
-                            //Obtain reference to newly created reference
-                            String prefRefStr = "groups/" + list.get(position) + "/prefs/pref" + i;
-
-                            //Store preference reference
-                            Map<String, String> prefRefMap = new HashMap<>();
-                            prefRefMap.put("prefRef", prefRefStr);
-                            db.collection("groups/" + list.get(position) + "/prefrefs").document(user.getUid()).set(prefRefMap);
 
                             //Update size
                             size++;

@@ -49,6 +49,7 @@ public class GroupViewActivity extends AppCompatActivity {
     private ArrayAdapter<String> adapter;
     private TextView group_name;
     private boolean admin;
+    private String userPref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -140,7 +141,26 @@ public class GroupViewActivity extends AppCompatActivity {
                        admin = (boolean) (documentSnapshot.get("admin"));
                        Toast.makeText(GroupViewActivity.this, String.valueOf(admin), Toast.LENGTH_LONG).show();
                        if (!admin){
+                            db.collection("groups").document(currentGroup)
+                                    .collection("prefrefs").document(user.getUid())
+                                    .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                @Override
+                                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                    userPref = documentSnapshot.get("prefRef").toString();
+                                    userPref = userPref.substring(userPref.length() - 5, userPref.length());
+                                    System.out.println(userPref);
 
+                                    db.collection("groups").document(currentGroup)
+                                            .collection("prefs").document(userPref).delete();
+
+                                    db.collection("groups").document(currentGroup).update(userPref, false);
+
+                                    db.collection("groups").document(currentGroup)
+                                            .collection("prefrefs").document(user.getUid()).delete();
+
+                                    db.collection("users").document(user.getUid()).collection("groups").document(currentGroup).delete();
+                                }
+                            });
                        }
                     }
                 });
