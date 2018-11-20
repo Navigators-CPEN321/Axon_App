@@ -1,8 +1,10 @@
 package domain.tiger.axon;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
@@ -11,6 +13,15 @@ import java.util.Map;
 public class Group {
     public int size;
     public String group_name;
+    public boolean pref1;
+    public boolean pref2;
+    public boolean pref3;
+    public boolean pref4;
+    public boolean pref5;
+    public boolean pref6;
+    public boolean pref7;
+    public boolean pref8;
+    private boolean prefAvailable;
 
     public Group(){
 
@@ -41,7 +52,8 @@ public class Group {
 
         //Create preference and store in group
         Preferences pref = new Preferences();
-        db.collection("groups/" + group_name + "/prefs").document("pref"+(size+1)).set(pref);
+        db.collection("groups/" + group_name + "/prefs").document("pref1").set(pref);
+        db.collection("groups").document(group_name).update("pref1", true);
 
         //Increment and update the size of the group;
         size++;

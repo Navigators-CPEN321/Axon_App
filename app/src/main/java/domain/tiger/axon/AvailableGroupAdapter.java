@@ -9,8 +9,10 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -31,6 +33,8 @@ public class AvailableGroupAdapter extends BaseAdapter implements ListAdapter {
     private FirebaseAuth auth = FirebaseAuth.getInstance();
     private Button btnJoin;
     private TextView groupName;
+    private int i;
+    private boolean done;
 
     public AvailableGroupAdapter(ArrayList<String> list, Context context){
         this.list = list;
@@ -77,11 +81,29 @@ public class AvailableGroupAdapter extends BaseAdapter implements ListAdapter {
                             int size = Integer.parseInt(size_str);
 
                             //Add personal preference
-                            Preferences pref = new Preferences();
-                            db.collection("groups/" + list.get(position) + "/prefs").document("pref"+(size+1)).set(pref);
+                            i = 1;
+                            done = false;
+
+                            for (; i < 9; i++){
+                                db.collection("groups").document(list.get(position)).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                    @Override
+                                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                        System.out.println("debug " + Boolean.valueOf(documentSnapshot.get("pref"+i).toString()));
+                                        /*if (!((boolean) documentSnapshot.get("pref" + i)) && done == false){
+                                            /*Preferences pref = new Preferences();
+                                            db.collection("groups/" + list.get(position) + "/prefs").document("pref"+i).set(pref);
+                                            db.collection("groups").document(list.get(position)).update("pref"+i, (boolean) true);
+                                            done = true;
+                                        }*/
+                                    }
+                                });
+                                if (done == true){
+                                    break;
+                                }
+                            }
 
                             //Obtain reference to newly created reference
-                            String prefRefStr = "groups/" + list.get(position) + "/prefs/pref" + (size+1);
+                            String prefRefStr = "groups/" + list.get(position) + "/prefs/pref" + i;
 
                             //Store preference reference
                             Map<String, String> prefRefMap = new HashMap<>();
