@@ -47,7 +47,7 @@ public class Group {
         size++;
         db.collection("groups").document(group_name).update("size", size);
 
-        //Obtain reference to newly created reference
+        //Create reference to newly created reference
         String prefRefStr = "groups/" + group_name + "/prefs/pref" + size;
 
         //Store preference reference in group and attach userid to use a key
@@ -61,8 +61,9 @@ public class Group {
         db.collection("users").document(userid).collection("groups").document(group_name).set(userGroup);
 
         //Add user to group
-        Map<String, String> userMap = new HashMap<>();
-        userMap.put("usid", userid);
+        Map<String, Object> userMap = new HashMap<>();
+        userMap.put("usid", (String) userid);
+        userMap.put("admin", (boolean) true);
         db.collection("groups/" + group_name +"/users").document(userid).set(userMap);
 
         db.collection("users").document(userid).update("currentGroup", group_name);

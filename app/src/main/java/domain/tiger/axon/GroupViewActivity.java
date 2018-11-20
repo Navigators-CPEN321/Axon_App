@@ -48,6 +48,7 @@ public class GroupViewActivity extends AppCompatActivity {
     private ArrayList<String> displayNameList = new ArrayList<>();
     private ArrayAdapter<String> adapter;
     private TextView group_name;
+    private boolean admin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +75,7 @@ public class GroupViewActivity extends AppCompatActivity {
             }
         });
 
+        LeaveOrDeleteGroup();
         goToPreferencesPage();
         goToRecActivitiesList();
     }
@@ -123,6 +125,27 @@ public class GroupViewActivity extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    public void LeaveOrDeleteGroup(){
+        Button btnLeaveDeleteGroup = (Button) findViewById(R.id.btnLeaveOrDeleteGroup);
+
+        btnLeaveDeleteGroup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                db.collection("groups").document(currentGroup)
+                        .collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                       admin = (boolean) (documentSnapshot.get("admin"));
+                       Toast.makeText(GroupViewActivity.this, String.valueOf(admin), Toast.LENGTH_LONG).show();
+                       if (!admin){
+
+                       }
+                    }
+                });
+            }
+        });
     }
 
     public void goToPreferencesPage(){
