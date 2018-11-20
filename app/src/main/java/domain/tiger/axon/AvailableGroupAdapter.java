@@ -31,6 +31,7 @@ public class AvailableGroupAdapter extends BaseAdapter implements ListAdapter {
     private Context context;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseAuth auth = FirebaseAuth.getInstance();
+    private FirebaseUser user = auth.getCurrentUser();
     private Button btnJoin;
     private TextView groupName;
     private int i;
@@ -81,33 +82,40 @@ public class AvailableGroupAdapter extends BaseAdapter implements ListAdapter {
                             int size = Integer.parseInt(size_str);
 
                             //Add personal preference
-                            i = 1;
                             done = false;
-
-                            for (; i < 9; i++){
-                                db.collection("groups").document(list.get(position)).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                    @Override
-                                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            db.collection("groups").document(list.get(position)).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                @Override
+                                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                    for (i = 1; i < 9; i++){
+                                        System.out.println("i is" + i);
                                         System.out.println("debug " + Boolean.valueOf(documentSnapshot.get("pref"+i).toString()));
-                                        /*if (!((boolean) documentSnapshot.get("pref" + i)) && done == false){
-                                            /*Preferences pref = new Preferences();
+                                        if (!((boolean) documentSnapshot.get("pref" + i)) && done == false){
+                                            Preferences pref = new Preferences();
                                             db.collection("groups/" + list.get(position) + "/prefs").document("pref"+i).set(pref);
-                                            db.collection("groups").document(list.get(position)).update("pref"+i, (boolean) true);
+                                            db.collection("groups").document(list.get(position)).update("pref"+i,  true);
+
                                             done = true;
-                                        }*/
+                                        }
+                                        if (done == true){
+                                            break;
+                                        }
                                     }
-                                });
-                                if (done == true){
-                                    break;
+
+                                    //Add user to group
+                                    Map<String, Object> userMap = new HashMap<>();
+                                    userMap.put("usid", (String) user.getUid());
+                                    userMap.put("admin", (boolean) false);
+                                    db.collection("groups").document(list.get(position)).collection("users").document(user.getUid()).set(userMap);
+                                    list.remove(position);
+                                    AvailableGroupAdapter.this.notifyDataSetChanged();
                                 }
-                            }
+                            });
 
                             //Obtain reference to newly created reference
                             String prefRefStr = "groups/" + list.get(position) + "/prefs/pref" + i;
 
                             //Store preference reference
                             Map<String, String> prefRefMap = new HashMap<>();
-                            FirebaseUser user = auth.getCurrentUser();
                             prefRefMap.put("prefRef", prefRefStr);
                             db.collection("groups/" + list.get(position) + "/prefrefs").document(user.getUid()).set(prefRefMap);
 
@@ -119,14 +127,6 @@ public class AvailableGroupAdapter extends BaseAdapter implements ListAdapter {
                             DocumentReference groupRef = db.collection("groups").document(list.get(position));
                             UserGroup userGroup = new UserGroup(groupRef, list.get(position));
                             db.collection("users/" + user.getUid()+ "/groups").document(list.get(position)).set(userGroup);
-
-                            //Add user to group
-                            Map<String, Object> userMap = new HashMap<>();
-                            userMap.put("usid", (String) user.getUid());
-                            userMap.put("admin", (boolean) false);
-                            db.collection("groups").document(list.get(position)).collection("users").document(user.getUid()).set(userMap);
-                            list.remove(position);
-                            AvailableGroupAdapter.this.notifyDataSetChanged();
                         }
                     }
                 });
