@@ -6,11 +6,14 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.TextView;
 
 public class SettingsActivity extends AppCompatActivity {
 
     private TextView mTextMessage;
+    private TextView tvDisplayName;
+    private Button submitBtn;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {

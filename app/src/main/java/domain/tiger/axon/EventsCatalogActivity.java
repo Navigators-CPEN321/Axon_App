@@ -6,9 +6,16 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -19,6 +26,9 @@ public class EventsCatalogActivity extends AppCompatActivity {
     private ListView lvEvents;
     private ArrayList<String> eventsArrayList = new ArrayList<>();
     private ArrayAdapter adapter;
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private FirebaseAuth auth = FirebaseAuth.getInstance();
+    private FirebaseUser user = auth.getCurrentUser();
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -68,6 +78,15 @@ public class EventsCatalogActivity extends AppCompatActivity {
 
         Collections.sort(eventsArrayList, String.CASE_INSENSITIVE_ORDER);
         adapter.notifyDataSetChanged();
+
+        lvEvents.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                db.collection("users").document(user.getUid()).update("mostRecentEventsList", eventsArrayList.get(position));
+                Toast.makeText(EventsCatalogActivity.this, eventsArrayList.get(position), Toast.LENGTH_LONG).show();
+                startActivity(new Intent(EventsCatalogActivity.this, EventListActivity.class));
+            }
+        });
 
     }
 
