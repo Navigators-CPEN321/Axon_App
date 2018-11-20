@@ -89,4 +89,8 @@
         <item>food-and-drink</item>
         <item>performing-arts</item>
     </string-array>
+    <string name="title_activity_event_catalog">EventCatalogActivity</string>
+    <string name="title_activity_base">BaseActivity</string>
+    <string name="title_activity_settings">SettingsActivity</string>
+    <string name="title_activity_events_catalog">EventsCatalogActivity</string>
 </resources>
