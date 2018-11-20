@@ -159,6 +159,8 @@ public class GroupViewActivity extends AppCompatActivity {
                                             .collection("prefrefs").document(user.getUid()).delete();
 
                                     db.collection("users").document(user.getUid()).collection("groups").document(currentGroup).delete();
+
+                                    db.collection("users").document(user.getUid()).update("currentGroup", null);
                                 }
                             });
                        }
