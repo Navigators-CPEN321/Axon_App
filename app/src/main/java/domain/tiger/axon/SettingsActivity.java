@@ -12,19 +12,23 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class SettingsActivity extends AppCompatActivity implements View.OnClickListener{
 
     private TextView mTextMessage;
+    private TextView userIdTextview;
     private EditText etDisplayName;
     private Button submitBtn;
     private String newDisplayName;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseAuth auth = FirebaseAuth.getInstance();
     private FirebaseUser user = auth.getCurrentUser();
+    private String userID;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -54,6 +58,17 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         submitBtn = (Button) findViewById(R.id.btnDisplayNameChange);
+        userIdTextview = (TextView) findViewById(R.id.userIdTV);
+
+
+
+        db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                userID = documentSnapshot.get("displayName").toString();
+                userIdTextview.setText(userID);
+            }
+        });
 
         submitBtn.setOnClickListener(this);
     }

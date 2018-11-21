@@ -70,4 +70,19 @@
         app:layout_constraintTop_toBottomOf="@+id/tvSettings"
         app:layout_constraintVertical_bias="0.089" />
 
+    <TextView
+        android:id="@+id/userIdTV"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="68dp"
+        android:layout_marginEnd="16dp"
+        android:gravity="center_horizontal"
+        android:text="TextView"
+        android:textSize="25dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.487"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etDisplayName" />
+
 </android.support.constraint.ConstraintLayout>
