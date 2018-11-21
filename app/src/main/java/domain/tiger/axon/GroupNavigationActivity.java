@@ -10,7 +10,11 @@ import android.widget.Button;
 import android.view.View;
 import android.content.Intent;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 /*
 Group Function Navigation Page:
@@ -18,9 +22,21 @@ Allows users to navigate to the different group pages to use that group function
  */
 public class GroupNavigationActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private FirebaseAuth auth;
+
+
+
 
     private Button btnGroupView, btnGroupCreate, btnLogOut, btnGroupAvailable;
+    private TextView usernameTextView;
+    private String userDisplayName;
+
+    private FirebaseAuth auth = FirebaseAuth.getInstance();
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private FirebaseUser user = auth.getCurrentUser();
+
+
+
+
 
     //Navigation bar
     private TextView mTextMessage;
@@ -66,12 +82,27 @@ public class GroupNavigationActivity extends AppCompatActivity implements View.O
         btnGroupView = (Button) findViewById(R.id.btnGroupView);
         btnLogOut = (Button) findViewById(R.id.btnLogOut);
         btnGroupAvailable = (Button) findViewById(R.id.btnGroupJoin);
+        usernameTextView = (TextView) findViewById(R.id.usernameTV);
 
         //Setting up buttons
         btnGroupCreate.setOnClickListener(this);
         btnGroupAvailable.setOnClickListener(this);
         btnGroupView.setOnClickListener(this);
         btnLogOut.setOnClickListener(this);
+
+        //set username in the text box
+        db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+               userDisplayName = documentSnapshot.get("displayName").toString();
+                System.out.println("debug: " + userDisplayName);
+                usernameTextView.setText(userDisplayName);
+
+            }
+        });
+
+
+
     }
 
     /*
