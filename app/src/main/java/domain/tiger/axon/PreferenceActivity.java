@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -25,6 +26,9 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.functions.FirebaseFunctions;
 import com.google.firebase.functions.HttpsCallableResult;
 
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -56,6 +60,7 @@ public class PreferenceActivity extends AppCompatActivity implements View.OnClic
     private String prefRefStr;
     private String prefrefFirstPart;
     private String prefrefSecondPart;
+    private String firstURL;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,11 +142,6 @@ public class PreferenceActivity extends AppCompatActivity implements View.OnClic
                                 Toast.makeText( PreferenceActivity.this,
                                         "Preferences saved",
                                         Toast.LENGTH_LONG).show();
-                                Map<String, String> httpMap = new HashMap<>();
-                                httpMap.put("group", "group1");
-                                functions.getHttpsCallable("selectEvents").call(httpMap);
-                                functions.getHttpsCallable("writePrefs").call(httpMap);
-                                functions.getHttpsCallable("findGroupEvents").call(httpMap);
                                 startActivity(new Intent(PreferenceActivity.this, RecListActivity.class));
                             }
                         });

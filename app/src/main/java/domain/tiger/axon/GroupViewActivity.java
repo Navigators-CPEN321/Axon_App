@@ -46,6 +46,7 @@ public class GroupViewActivity extends AppCompatActivity {
     private String currentGroup;
     private ArrayList<String> usidList = new ArrayList<>();
     private ArrayList<String> displayNameList = new ArrayList<>();
+    private ArrayList<String> deleteUsersList = new ArrayList<>();
     private ArrayAdapter<String> adapter;
     private TextView group_name;
     private boolean admin;
@@ -150,19 +151,52 @@ public class GroupViewActivity extends AppCompatActivity {
                                     userPref = userPref.substring(userPref.length() - 5, userPref.length());
                                     System.out.println(userPref);
 
+                                    //Delete pref
                                     db.collection("groups").document(currentGroup)
                                             .collection("prefs").document(userPref).delete();
 
+                                    //Update free pref map
                                     db.collection("groups").document(currentGroup).update(userPref, false);
 
+                                    //Delete prefref
                                     db.collection("groups").document(currentGroup)
                                             .collection("prefrefs").document(user.getUid()).delete();
 
+                                    //Delete user from group information
+                                    db.collection("groups").document(currentGroup)
+                                            .collection("users").document(user.getUid()).delete();
+
+                                    //Delete group from user information
                                     db.collection("users").document(user.getUid()).collection("groups").document(currentGroup).delete();
 
+                                    //Update currentGroup to be null
                                     db.collection("users").document(user.getUid()).update("currentGroup", null);
                                 }
                             });
+                       } else {
+                           db.collection("groups").document(currentGroup)
+                                   .collection("users").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                               @Override
+                               public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                   List<DocumentSnapshot> qsList = queryDocumentSnapshots.getDocuments();
+                                   deleteUsersList.clear();
+                                   for (int i = 0; i < qsList.size(); i++){
+                                       //Update all the users' information
+                                       db.collection("users").document(qsList.get(i).get("usid").toString())
+                                               .collection("groups").document(currentGroup).delete();
+                                       //Delete all the prefrefs in the group
+                                       db.collection("groups").document(currentGroup)
+                                               .collection("prefrefs").document(qsList.get(i).get("usid").toString()).delete();
+                                       //Delete all the prefs in the group
+                                       db.collection("groups").document(currentGroup)
+                                               .collection("prefs").document("pref"+(i+1)).delete();
+                                       //Delete all the users in the group
+                                       db.collection("groups").document(currentGroup)
+                                               .collection("users").document(qsList.get(i).get("usid").toString()).delete();
+                                   }
+                                   db.collection("groups").document(currentGroup).delete();
+                               }
+                           });
                        }
                     }
                 });
