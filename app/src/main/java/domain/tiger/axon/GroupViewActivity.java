@@ -1,14 +1,18 @@
 package domain.tiger.axon;
 
+import android.app.ActionBar;
 import android.content.Intent;
+import android.drm.DrmStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.View;
 import android.widget.Adapter;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -52,6 +56,12 @@ public class GroupViewActivity extends AppCompatActivity {
     private boolean admin;
     private String userPref;
     private int size;
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.group_menu, menu);
+        return true;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

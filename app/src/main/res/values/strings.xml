@@ -93,4 +93,9 @@
     <string name="title_activity_base">BaseActivity</string>
     <string name="title_activity_settings">SettingsActivity</string>
     <string name="title_activity_events_catalog">EventsCatalogActivity</string>
+    <string name="plan_event">Plan an event</string>
+    <string name="invite_friends">Invite friends</string>
+    <string name="leave_delete_group">Leave/delete group</string>
+    <string name="change_group_name">Change group name</string>
+
 </resources>
