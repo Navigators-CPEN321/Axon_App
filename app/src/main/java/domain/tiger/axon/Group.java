@@ -21,7 +21,8 @@ public class Group {
     public boolean pref6;
     public boolean pref7;
     public boolean pref8;
-    private boolean prefAvailable;
+    public boolean hidden;
+
 
     public Group(){
 
@@ -33,6 +34,15 @@ public class Group {
     public Group(String groupName){
         this.group_name = groupName;
         size = 0;
+        pref1 = false;
+        pref2 = false;
+        pref3 = false;
+        pref4 = false;
+        pref5 = false;
+        pref6 = false;
+        pref7 = false;
+        pref8 = false;
+        hidden = false;
     }
 
     /*

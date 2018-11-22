@@ -5,14 +5,14 @@
     <item android:id="@+id/plan_event"
         android:title="@string/plan_event"
         app:showAsAction="never"/>
-    <item android:id="@+id/invte_friends"
+    <item android:id="@+id/invite_friends"
         android:title="@string/invite_friends"
         app:showAsAction="never"/>
     <item android:id="@+id/leave_delete_group"
         android:title="@string/leave_delete_group"
         app:showAsAction="never"/>
-    <item android:id="@+id/group_settings"
-        android:title="@string/change_group_name"
+    <item android:id="@+id/hide_group"
+        android:title="@string/hide_group"
         app:showAsAction="never"/>
 
 </menu>

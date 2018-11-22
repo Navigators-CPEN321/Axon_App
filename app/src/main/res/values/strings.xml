@@ -96,6 +96,6 @@
     <string name="plan_event">Plan an event</string>
     <string name="invite_friends">Invite friends</string>
     <string name="leave_delete_group">Leave/delete group</string>
-    <string name="change_group_name">Change group name</string>
+    <string name="hide_group">Hide group</string>
 
 </resources>

@@ -53,7 +53,8 @@ public class GroupAvailableActivity extends AppCompatActivity {
                 db_group_names.clear();
                 List<DocumentSnapshot> qsList = queryDocumentSnapshots.getDocuments();
                 for (int i = 0; i < qsList.size(); i++){
-                    if (Integer.parseInt(qsList.get(i).get("size").toString()) < 8){
+                    if (Integer.parseInt(qsList.get(i).get("size").toString()) < 8 &&
+                            Boolean.valueOf(qsList.get(i).get("hidden").toString()) == false){
                         db_group_names.add(qsList.get(i).get("group_name").toString());
                     }
                 }

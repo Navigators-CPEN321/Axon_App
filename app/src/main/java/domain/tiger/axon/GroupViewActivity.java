@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Adapter;
 import android.widget.ArrayAdapter;
@@ -64,6 +65,37 @@ public class GroupViewActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.plan_event:
+                Toast.makeText(GroupViewActivity.this,
+                        "PLAN EVENT",
+                        Toast.LENGTH_LONG).show();
+                break;
+            case R.id.invite_friends:
+                Toast.makeText(GroupViewActivity.this,
+                        "INVITE FRIENDS",
+                        Toast.LENGTH_LONG).show();
+                break;
+            case R.id.leave_delete_group:
+                Toast.makeText(GroupViewActivity.this,
+                        "LEAVE/DELETE GROUP",
+                        Toast.LENGTH_LONG).show();
+                LeaveOrDeleteGroup();
+                break;
+            case R.id.hide_group:
+                Toast.makeText(GroupViewActivity.this,
+                        "HIDE GROUP",
+                        Toast.LENGTH_LONG).show();
+                ChangeHidden();
+                break;
+            default:
+                break;
+        }
+        return true;
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_view);
@@ -88,7 +120,7 @@ public class GroupViewActivity extends AppCompatActivity {
             }
         });
 
-        LeaveOrDeleteGroup();
+        //LeaveOrDeleteGroup();
         goToPreferencesPage();
         goToRecActivitiesList();
     }
@@ -141,11 +173,11 @@ public class GroupViewActivity extends AppCompatActivity {
     }
 
     public void LeaveOrDeleteGroup(){
-        Button btnLeaveDeleteGroup = (Button) findViewById(R.id.btnLeaveOrDeleteGroup);
+        //Button btnLeaveDeleteGroup = (Button) findViewById(R.id.btnLeaveOrDeleteGroup);
 
-        btnLeaveDeleteGroup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        //btnLeaveDeleteGroup.setOnClickListener(new View.OnClickListener() {
+            //@Override
+            //public void onClick(View v) {
                 db.collection("groups").document(currentGroup)
                         .collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
@@ -221,6 +253,26 @@ public class GroupViewActivity extends AppCompatActivity {
                        }
                     }
                 });
+            //}
+        //});
+    }
+
+    public void ChangeHidden(){
+        db.collection("groups").document(currentGroup).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if (Boolean.valueOf(documentSnapshot.get("hidden").toString())){
+                    db.collection("groups").document(currentGroup).update("hidden", false);
+                    Toast.makeText(GroupViewActivity.this,
+                            "YOUR GROUP IS PUBLIC",
+                            Toast.LENGTH_LONG).show();
+                } else {
+                    db.collection("groups").document(currentGroup).update("hidden", true);
+                    Toast.makeText(GroupViewActivity.this,
+                            "YOUR GROUP IS PRIVATE",
+                            Toast.LENGTH_LONG).show();
+                }
+
             }
         });
     }
