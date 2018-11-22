@@ -1,6 +1,9 @@
 package domain.tiger.axon;
 
+import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -25,18 +28,29 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.functions.FirebaseFunctions;
 import com.google.firebase.functions.HttpsCallableResult;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
+import cz.msebera.android.httpclient.Header;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
 /*
 Preference Page:
 Allows the user to enter their personal preferences. The app then locates the preference associated with that group and that user and updates it.
  */
-public class PreferenceActivity extends AppCompatActivity implements View.OnClickListener {
+public class PreferenceActivity extends AppCompatActivity implements View.OnClickListener  {
 
     //Screen display constants
     private final double screenWidthFactor = 0.75;
@@ -61,6 +75,10 @@ public class PreferenceActivity extends AppCompatActivity implements View.OnClic
     private String prefrefFirstPart;
     private String prefrefSecondPart;
     private String firstURL;
+    private String secondURL;
+    private Request request1;
+    private Request request2;
+    private OkHttpClient client = new OkHttpClient();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -142,6 +160,42 @@ public class PreferenceActivity extends AppCompatActivity implements View.OnClic
                                 Toast.makeText( PreferenceActivity.this,
                                         "Preferences saved",
                                         Toast.LENGTH_LONG).show();
+
+                                firstURL = "https://us-central1-axon-4b339.cloudfunctions.net/selectEvents?text=" +
+                                        currentGroup +
+                                        "&fbclid=IwAR1LFo3LQgiX4_DNgLx77fcqIHJTwYkZbNfaWzUkBE71DGz3ZKqZhXyXdcM";
+                                secondURL = "https://us-central1-axon-4b339.cloudfunctions.net/findGroupEvents?text=" +
+                                        currentGroup + "&fbclid=IwAR3Q7v04ixkn6Pf2RaotU_UvbdxFndeo9K-L1KyiN-CLjEXXXq2INdIpFiM";
+
+                                OkHttpClient client = new OkHttpClient();
+
+                                request1 = new Request.Builder().url(firstURL).build();
+                                request2 = new Request.Builder().url(secondURL).build();
+
+                                client.newCall(request1).enqueue(new Callback() {
+                                    @Override
+                                    public void onFailure(Call call, IOException e) {
+                                        System.out.println("Function 1: FAILED");
+                                    }
+
+                                    @Override
+                                    public void onResponse(Call call, Response response) throws IOException {
+                                        System.out.println("Function 1: SUCCESS");
+                                    }
+                                });
+
+                                client.newCall(request2).enqueue(new Callback() {
+                                    @Override
+                                    public void onFailure(Call call, IOException e) {
+                                        System.out.println("Function 2: FAILED");
+                                    }
+
+                                    @Override
+                                    public void onResponse(Call call, Response response) throws IOException {
+                                        System.out.println("Function 2: SUCCESS");
+                                    }
+                                });
+
                                 startActivity(new Intent(PreferenceActivity.this, RecListActivity.class));
                             }
                         });

@@ -51,6 +51,7 @@ public class GroupViewActivity extends AppCompatActivity {
     private TextView group_name;
     private boolean admin;
     private String userPref;
+    private int size;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -166,11 +167,21 @@ public class GroupViewActivity extends AppCompatActivity {
                                     db.collection("groups").document(currentGroup)
                                             .collection("users").document(user.getUid()).delete();
 
+
+
                                     //Delete group from user information
                                     db.collection("users").document(user.getUid()).collection("groups").document(currentGroup).delete();
 
                                     //Update currentGroup to be null
                                     db.collection("users").document(user.getUid()).update("currentGroup", null);
+
+                                    db.collection("groups").document(currentGroup).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                        @Override
+                                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                            size = Integer.parseInt(documentSnapshot.get("size").toString()) - 1;
+                                            db.collection("groups").document(currentGroup).update("size", size);
+                                        }
+                                    });
                                 }
                             });
                        } else {
