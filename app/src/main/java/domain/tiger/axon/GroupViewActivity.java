@@ -261,18 +261,32 @@ public class GroupViewActivity extends AppCompatActivity {
         db.collection("groups").document(currentGroup).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
-                if (Boolean.valueOf(documentSnapshot.get("hidden").toString())){
-                    db.collection("groups").document(currentGroup).update("hidden", false);
-                    Toast.makeText(GroupViewActivity.this,
-                            "YOUR GROUP IS PUBLIC",
-                            Toast.LENGTH_LONG).show();
-                } else {
-                    db.collection("groups").document(currentGroup).update("hidden", true);
-                    Toast.makeText(GroupViewActivity.this,
-                            "YOUR GROUP IS PRIVATE",
-                            Toast.LENGTH_LONG).show();
-                }
+                db.collection("groups").document(currentGroup)
+                        .collection("users").document(user.getUid())
+                        .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        admin = Boolean.valueOf(documentSnapshot.get("admin").toString());
+                        if (admin){
+                            if (Boolean.valueOf(documentSnapshot.get("hidden").toString())){
+                                db.collection("groups").document(currentGroup).update("hidden", false);
+                                Toast.makeText(GroupViewActivity.this,
+                                        "YOUR GROUP IS PUBLIC",
+                                        Toast.LENGTH_LONG).show();
+                            } else {
+                                db.collection("groups").document(currentGroup).update("hidden", true);
+                                Toast.makeText(GroupViewActivity.this,
+                                        "YOUR GROUP IS PRIVATE",
+                                        Toast.LENGTH_LONG).show();
+                            }
 
+                        } else {
+                            Toast.makeText(GroupViewActivity.this,
+                                    "Sorry only the group creator(admin) has the ability to do this",
+                                    Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
             }
         });
     }
