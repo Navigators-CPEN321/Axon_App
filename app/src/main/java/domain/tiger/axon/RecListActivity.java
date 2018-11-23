@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,6 +39,7 @@ public class RecListActivity extends AppCompatActivity {
     private ArrayList<String> selEventsList = new ArrayList<>();
     private String currentGroup;
     private ArrayAdapter<String> adapter;
+    private RatingBar rbEventList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +50,7 @@ public class RecListActivity extends AppCompatActivity {
         lvRecList = (ListView) findViewById(R.id.lvRecList);
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, selEventsList);
         lvRecList.setAdapter(adapter);
+        rbEventList = (RatingBar) findViewById(R.id.rbEventList);
 
         db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
@@ -78,6 +81,16 @@ public class RecListActivity extends AppCompatActivity {
                                 Toast.LENGTH_LONG).show();
                     }
                 });
+            }
+        });
+
+        rbEventList.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            @Override
+            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                Toast.makeText(RecListActivity.this,
+                        "Thanks for the feedback!",
+                        Toast.LENGTH_LONG).show();
+                db.collection("groups").document(currentGroup).update("rating", rating);
             }
         });
     }

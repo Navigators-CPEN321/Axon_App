@@ -26,7 +26,7 @@
     <ListView
         android:id="@+id/lvRecList"
         android:layout_width="317dp"
-        android:layout_height="297dp"
+        android:layout_height="224dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
@@ -36,6 +36,20 @@
         app:layout_constraintHorizontal_bias="0.529"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvSuggestions"
-        app:layout_constraintVertical_bias="0.286" />
+        app:layout_constraintVertical_bias="0.082" />
+
+    <RatingBar
+        android:id="@+id/rbEventList"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lvRecList"
+        app:layout_constraintVertical_bias="0.469" />
 
 </android.support.constraint.ConstraintLayout>
