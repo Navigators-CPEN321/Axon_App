@@ -13,6 +13,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 /*
 Login page:
 Allows the user to log in using their login information, or takes the user to the SignUpActivity page if the user wants to create a new account.
@@ -88,13 +90,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()){
-                    finish();
+                    FirebaseUser user = auth.getCurrentUser();
 
-                    Toast.makeText( MainActivity.this,
-                                    "Log in successful.",
-                                    Toast.LENGTH_LONG).show();
-
-                    startActivity(new Intent(MainActivity.this, GroupNavigationActivity.class));
+                    if (user.isEmailVerified()){
+                        Toast.makeText( MainActivity.this,
+                                "Log in successful.",
+                                Toast.LENGTH_LONG).show();
+                        startActivity(new Intent(MainActivity.this, GroupNavigationActivity.class));
+                        finish();
+                    } else {
+                        auth.signOut();
+                        Toast.makeText( MainActivity.this,
+                                "Please verify your email.",
+                                Toast.LENGTH_LONG).show();
+                    }
 
                 } else{
 
