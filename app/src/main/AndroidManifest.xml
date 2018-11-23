@@ -40,7 +40,8 @@
             android:name=".EventsCatalogActivity"
             android:label="@string/title_activity_events_catalog" />
         <activity android:name=".EventListActivity" />
-        <activity android:name=".ResetPasswordActivity"></activity>
+        <activity android:name=".ResetPasswordActivity" />
+        <activity android:name=".GroupInviteActivity"></activity>
     </application>
 
 </manifest>

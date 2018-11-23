@@ -76,6 +76,7 @@ public class GroupViewActivity extends AppCompatActivity {
                 Toast.makeText(GroupViewActivity.this,
                         "INVITE FRIENDS",
                         Toast.LENGTH_LONG).show();
+                startActivity(new Intent(GroupViewActivity.this, GroupInviteActivity.class));
                 break;
             case R.id.leave_delete_group:
                 Toast.makeText(GroupViewActivity.this,
