@@ -94,6 +94,8 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         }
 
         db.collection("users").document(user.getUid()).update("displayName", newDisplayName);
+        finish();
+        startActivity(getIntent());
         Toast.makeText(SettingsActivity.this,
                 "Display name updated!",
                 Toast.LENGTH_LONG).show();
