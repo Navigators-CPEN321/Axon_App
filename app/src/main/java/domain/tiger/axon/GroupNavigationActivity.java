@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Button;
@@ -34,9 +35,25 @@ public class GroupNavigationActivity extends AppCompatActivity implements View.O
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseUser user = auth.getCurrentUser();
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
+    }
 
-
-
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.invitations:
+                startActivity(new Intent(GroupNavigationActivity.this, InvitationsActivity.class));
+                break;
+            case R.id.logout:
+                auth.signOut();
+                startActivity(new Intent(GroupNavigationActivity.this, MainActivity.class));
+                break;
+        }
+        return true;
+    }
 
     //Navigation bar
     private TextView mTextMessage;
@@ -54,6 +71,8 @@ public class GroupNavigationActivity extends AppCompatActivity implements View.O
                 case R.id.navigation_notifications:
                     startActivity(new Intent(GroupNavigationActivity.this, SettingsActivity.class));
                     return true;
+                default:
+                    break;
             }
             return false;
         }
@@ -118,6 +137,7 @@ public class GroupNavigationActivity extends AppCompatActivity implements View.O
      */
     public void onClick(View view){
         if (view.equals(btnGroupCreate)){
+            //
             startActivity(new Intent(GroupNavigationActivity.this, GroupCreateActivity.class));
         }
         if(view.equals(btnGroupAvailable)){
@@ -127,8 +147,8 @@ public class GroupNavigationActivity extends AppCompatActivity implements View.O
             startActivity(new Intent(GroupNavigationActivity.this, UsersGroupsActivity.class));
         }
         if (view.equals(btnLogOut)){
-            auth.signOut();
-            startActivity(new Intent(GroupNavigationActivity.this, MainActivity.class));
+            //auth.signOut();
+            //startActivity(new Intent(GroupNavigationActivity.this, MainActivity.class));
         }
     }
 }

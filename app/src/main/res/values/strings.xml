@@ -97,5 +97,7 @@
     <string name="invite_friends">Invite friends</string>
     <string name="leave_delete_group">Leave/delete group</string>
     <string name="hide_group">Hide group</string>
+    <string name="invitations">Invitations</string>
+    <string name="logout">Log out</string>
 
 </resources>

@@ -2,6 +2,7 @@ package domain.tiger.axon;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
@@ -22,6 +23,10 @@ import java.util.Map;
 
 public class GroupInviteActivity extends AppCompatActivity implements View.OnClickListener{
 
+    //Screen display constants
+    private final double screenWidthFactor = 0.85;
+    private final double screenHeightFactor = 0.50;
+
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseAuth auth = FirebaseAuth.getInstance();
     private FirebaseUser user = auth.getCurrentUser();
@@ -37,6 +42,8 @@ public class GroupInviteActivity extends AppCompatActivity implements View.OnCli
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_invite);
+
+        popUpWindow();
 
         etInviteFriend = (EditText) findViewById(R.id.etInviteFriend);
         btnSubmit = (Button) findViewById(R.id.btnInviteFriend);
@@ -138,4 +145,13 @@ public class GroupInviteActivity extends AppCompatActivity implements View.OnCli
     }
 
 
+    public void popUpWindow(){
+        DisplayMetrics dm = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(dm);
+
+        int width = dm.widthPixels;
+        int height = dm.heightPixels;
+
+        getWindow().setLayout((int)(width*screenWidthFactor), (int)(height * screenHeightFactor));
+    }
 }

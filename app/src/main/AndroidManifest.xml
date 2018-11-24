@@ -41,7 +41,10 @@
             android:label="@string/title_activity_events_catalog" />
         <activity android:name=".EventListActivity" />
         <activity android:name=".ResetPasswordActivity" />
-        <activity android:name=".GroupInviteActivity"></activity>
+        <activity
+            android:name=".GroupInviteActivity"
+            android:theme="@style/AppTheme.popup" />
+        <activity android:name=".InvitationsActivity"></activity>
     </application>
 
 </manifest>
