@@ -56,7 +56,7 @@ public class Group {
         3. Create a new collection in the group and create a new document using the creator's id and add a field that contains the reference to the creator's personal preference.
         4. Increment the size and update the FireBase database
      */
-    public void addCreator(String userid){
+    public void addCreator(String userid, String email){
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -86,6 +86,7 @@ public class Group {
         Map<String, Object> userMap = new HashMap<>();
         userMap.put("usid", (String) userid);
         userMap.put("admin", (boolean) true);
+        userMap.put("email", (String) email);
         db.collection("groups/" + group_name +"/users").document(userid).set(userMap);
 
         db.collection("users").document(userid).update("currentGroup", group_name);

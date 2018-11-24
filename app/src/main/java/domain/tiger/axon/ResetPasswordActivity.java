@@ -75,7 +75,7 @@ public class ResetPasswordActivity extends AppCompatActivity implements View.OnC
         }
 
         if (!Patterns.EMAIL_ADDRESS.matcher(emailAddress).matches()){
-            emailTV.setError("Invaid email");
+            emailTV.setError("Invalid email");
             emailTV.requestFocus();
             return false;
         }

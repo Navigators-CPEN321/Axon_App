@@ -5,6 +5,7 @@ import com.google.firebase.firestore.DocumentReference;
 public class UserInformation {
 
     public String email, displayName, dobMonth, dobDay, dobYear, address, usid, currentGroup, mostRecentEventsList;
+    public int invitations;
 
     public UserInformation(){
 
@@ -20,5 +21,6 @@ public class UserInformation {
         this.dobYear = dobYear;
         this.address = address;
         this.usid = usid;
+        this.invitations = 0;
     }
 }

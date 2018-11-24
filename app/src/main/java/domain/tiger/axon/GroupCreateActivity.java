@@ -114,7 +114,7 @@ public class GroupCreateActivity extends AppCompatActivity{
                             });
 
                             //Add the creator of the group to the group
-                            newGroup.addCreator(user.getUid());
+                            newGroup.addCreator(user.getUid(), user.getEmail());
                             startActivity(new Intent(GroupCreateActivity.this, GroupViewActivity.class));
 
                         }

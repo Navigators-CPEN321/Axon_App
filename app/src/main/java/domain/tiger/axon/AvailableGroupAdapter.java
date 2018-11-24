@@ -113,6 +113,7 @@ public class AvailableGroupAdapter extends BaseAdapter implements ListAdapter {
                                     Map<String, Object> userMap = new HashMap<>();
                                     userMap.put("usid", (String) user.getUid());
                                     userMap.put("admin", (boolean) false);
+                                    userMap.put("email", (String) user.getEmail());
                                     db.collection("groups").document(list.get(position)).collection("users").document(user.getUid()).set(userMap);
                                     list.remove(position);
                                     AvailableGroupAdapter.this.notifyDataSetChanged();

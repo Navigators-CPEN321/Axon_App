@@ -115,11 +115,11 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                         }
 
                     });
-                    user.sendEmailVerification();
+                    /*user.sendEmailVerification();
                     Toast.makeText( SignUpActivity.this,
                             "Verification email sent.",
                             Toast.LENGTH_LONG).show();
-                    mAuth.signOut();
+                    mAuth.signOut();*/
                     startActivity(new Intent(SignUpActivity.this, MainActivity.class));
 
                 } else {
