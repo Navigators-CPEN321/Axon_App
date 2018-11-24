@@ -37,6 +37,7 @@ public class GroupInviteActivity extends AppCompatActivity implements View.OnCli
     private String email;
     private String friendUSID;
     private int invitationSize;
+    private boolean full;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,35 +82,53 @@ public class GroupInviteActivity extends AppCompatActivity implements View.OnCli
             return false;
         }
 
+        //Check if group is full
+        db.collection("groups").document(currentGroup).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                full = false;
+                if (Integer.valueOf(documentSnapshot.get("size").toString()) >= 8){
+                    Toast.makeText(GroupInviteActivity.this,
+                            "Size: " + documentSnapshot.get("size").toString(),
+                            Toast.LENGTH_LONG).show();
+                    full = true;
+                }
+            }
+        });
+
+
         //Check if user is in database (verified registered account)
         db.collection("users").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                List<DocumentSnapshot> qsList = queryDocumentSnapshots.getDocuments();
-                emailFound = false;
+                if (!full) {
+                    List<DocumentSnapshot> qsList = queryDocumentSnapshots.getDocuments();
+                    emailFound = false;
 
-                for (int k = 0; k < qsList.size(); k++) {
-                    if (qsList.get(k).get("email").equals(email)) {
-                        friendUSID = qsList.get(k).get("usid").toString();
-                        emailFound = true;
-                        invitationSize = Integer.valueOf(qsList.get(k).get("invitations").toString());
-                        break;
+                    for (int k = 0; k < qsList.size(); k++) {
+                        if (qsList.get(k).get("email").equals(email)) {
+                            friendUSID = qsList.get(k).get("usid").toString();
+                            emailFound = true;
+                            invitationSize = Integer.valueOf(qsList.get(k).get("invitations").toString());
+                            break;
+                        }
+
                     }
 
-                }
-
-                if (emailFound){
+                    if (emailFound) {
+                        Toast.makeText(GroupInviteActivity.this,
+                                "Checkpoint 1: Email is a verified user.",
+                                Toast.LENGTH_LONG).show();
+                        checkIfPartOfGroup();
+                    } else {
+                        Toast.makeText(GroupInviteActivity.this,
+                                "Sorry that account isn't registered with Axon!",
+                                Toast.LENGTH_LONG).show();
+                    }
+                } else {
                     Toast.makeText(GroupInviteActivity.this,
-                            "Checkpoint 1: Email is a verified user.",
+                            "Sorry your group is full!",
                             Toast.LENGTH_LONG).show();
-                    checkIfPartOfGroup();
-                }
-
-                else{
-                    Toast.makeText(GroupInviteActivity.this,
-                            "Sorry that account isn't registered with Axon!",
-                            Toast.LENGTH_LONG).show();
-
                 }
             }
         });
@@ -132,10 +151,10 @@ public class GroupInviteActivity extends AppCompatActivity implements View.OnCli
                                 Toast.LENGTH_LONG).show();
 
                         Map<String, Object> invMap = new HashMap<>();
-                        invMap.put("friendEmail", (String) user.getEmail());
+                        //invMap.put("friendEmail", (String) user.getEmail());
                         invMap.put("group_name", (String) currentGroup);
                         db.collection("users").document(friendUSID)
-                                .collection("invitations").document().set(invMap);
+                                .collection("invitations").document(currentGroup).set(invMap);
                         db.collection("users").document(friendUSID)
                                 .update("invitations", String.valueOf(invitationSize + 1));
                     }

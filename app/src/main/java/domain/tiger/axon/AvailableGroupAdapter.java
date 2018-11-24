@@ -86,6 +86,7 @@ public class AvailableGroupAdapter extends BaseAdapter implements ListAdapter {
                             db.collection("groups").document(list.get(position)).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                 @Override
                                 public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                    //Check smallest pref available
                                     for (i = 1; i < 9; i++){
                                         System.out.println("i is" + i);
                                         System.out.println("debug " + Boolean.valueOf(documentSnapshot.get("pref"+i).toString()));
@@ -95,8 +96,6 @@ public class AvailableGroupAdapter extends BaseAdapter implements ListAdapter {
                                             db.collection("groups").document(list.get(position)).update("pref"+i,  true);
 
                                             done = true;
-                                        }
-                                        if (done == true){
                                             break;
                                         }
                                     }
@@ -120,7 +119,7 @@ public class AvailableGroupAdapter extends BaseAdapter implements ListAdapter {
                                 }
                             });
 
-                            //Update size
+                            //Update group size
                             size++;
                             db.collection("groups").document(list.get(position)).update("size", size);
 

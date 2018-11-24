@@ -39,9 +39,9 @@ public class InvitationsActivity extends AppCompatActivity {
                 List<DocumentSnapshot> qsList = queryDocumentSnapshots.getDocuments();
                 invitationsList.clear();
                 for (int i = 0; i <qsList.size(); i++){
-                    String email = qsList.get(i).get("friendEmail").toString();
+                    //String email = qsList.get(i).get("friendEmail").toString();
                     String group = qsList.get(i).get("group_name").toString();
-                    invitationsList.add(email + " invited you to " + group);
+                    invitationsList.add(group);
                 }
                 adapter.notifyDataSetChanged();
             }
