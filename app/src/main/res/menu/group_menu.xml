@@ -2,9 +2,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item android:id="@+id/plan_event"
-        android:title="@string/plan_event"
-        app:showAsAction="never"/>
     <item android:id="@+id/invite_friends"
         android:title="@string/invite_friends"
         app:showAsAction="never"/>
@@ -13,6 +10,12 @@
         app:showAsAction="never"/>
     <item android:id="@+id/hide_group"
         android:title="@string/hide_group"
+        app:showAsAction="never"/>
+    <item android:id="@+id/invitations"
+        android:title="@string/invitations"
+        app:showAsAction="never"/>
+    <item android:id="@+id/logout"
+        android:title="@string/logout"
         app:showAsAction="never"/>
 
 </menu>

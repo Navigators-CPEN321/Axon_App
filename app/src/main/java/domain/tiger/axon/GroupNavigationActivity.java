@@ -48,8 +48,12 @@ public class GroupNavigationActivity extends AppCompatActivity implements View.O
                 startActivity(new Intent(GroupNavigationActivity.this, InvitationsActivity.class));
                 break;
             case R.id.logout:
+                Intent intent = new Intent(GroupNavigationActivity.this, MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 auth.signOut();
-                startActivity(new Intent(GroupNavigationActivity.this, MainActivity.class));
+                startActivity(intent);
+                break;
+            default:
                 break;
         }
         return true;

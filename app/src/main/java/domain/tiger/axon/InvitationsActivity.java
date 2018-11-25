@@ -1,8 +1,11 @@
 package domain.tiger.axon;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ListView;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -24,6 +27,27 @@ public class InvitationsActivity extends AppCompatActivity {
     private ArrayList<String> invitationsList = new ArrayList<String>();
     private InvitationsAdapter adapter = new InvitationsAdapter(invitationsList, this);
     private ListView lvInvitations;
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.invitations_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.logout:
+                Intent intent = new Intent(InvitationsActivity.this, MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                auth.signOut();
+                startActivity(intent);
+                break;
+            default:
+                break;
+        }
+        return true;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

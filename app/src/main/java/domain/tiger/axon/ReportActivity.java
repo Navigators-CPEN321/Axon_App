@@ -42,10 +42,15 @@ public class ReportActivity extends AppCompatActivity {
             public void onClick(View v) {
                 reportMsg = etReport.getText().toString();
 
-                Map<String, String> reportMap = new HashMap<>();
-                reportMap.put("Report", reportMsg);
-                db.collection("reports").document().set(reportMap);
-                onBackPressed();
+                if (reportMsg.length() < 250){
+                    Map<String, String> reportMap = new HashMap<>();
+                    reportMap.put("Report", reportMsg);
+                    db.collection("reports").document().set(reportMap);
+                    onBackPressed();
+                } else {
+                    etReport.setError("Please shorten your report");
+                    etReport.requestFocus();
+                }
             }
         });
     }

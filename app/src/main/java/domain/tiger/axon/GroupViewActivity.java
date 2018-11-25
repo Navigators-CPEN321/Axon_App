@@ -68,28 +68,35 @@ public class GroupViewActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
-            case R.id.plan_event:
-                Toast.makeText(GroupViewActivity.this,
-                        "PLAN EVENT",
-                        Toast.LENGTH_LONG).show();
-                break;
             case R.id.invite_friends:
-                Toast.makeText(GroupViewActivity.this,
+                /*Toast.makeText(GroupViewActivity.this,
                         "INVITE FRIENDS",
-                        Toast.LENGTH_LONG).show();
+                        Toast.LENGTH_LONG).show();*/
                 startActivity(new Intent(GroupViewActivity.this, GroupInviteActivity.class));
                 break;
             case R.id.leave_delete_group:
-                Toast.makeText(GroupViewActivity.this,
+                /*Toast.makeText(GroupViewActivity.this,
                         "LEAVE/DELETE GROUP",
-                        Toast.LENGTH_LONG).show();
+                        Toast.LENGTH_LONG).show();*/
                 LeaveOrDeleteGroup();
                 break;
             case R.id.hide_group:
-                Toast.makeText(GroupViewActivity.this,
+                /*Toast.makeText(GroupViewActivity.this,
                         "HIDE GROUP",
-                        Toast.LENGTH_LONG).show();
+                        Toast.LENGTH_LONG).show();*/
                 ChangeHidden();
+                break;
+            case R.id.invitations:
+                startActivity(new Intent(GroupViewActivity.this, InvitationsActivity.class));
+                break;
+            case R.id.logout:
+                Intent intent = new Intent(GroupViewActivity.this, MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                auth.signOut();
+                Toast.makeText(GroupViewActivity.this,
+                        "LOG OUT",
+                        Toast.LENGTH_LONG).show();
+                startActivity(intent);
                 break;
             default:
                 break;
@@ -112,9 +119,9 @@ public class GroupViewActivity extends AppCompatActivity {
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 group_name = (TextView) findViewById(R.id.tvGroupViewGroupNameTitle);
                 currentGroup = documentSnapshot.get("currentGroup").toString();
-                Toast.makeText(GroupViewActivity.this,
+                /*Toast.makeText(GroupViewActivity.this,
                         currentGroup,
-                        Toast.LENGTH_LONG).show();
+                        Toast.LENGTH_LONG).show();*/
                 group_name.setText(currentGroup);
                 AddUsidToUsidList();
 

@@ -1,9 +1,12 @@
 package domain.tiger.axon;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -46,15 +49,39 @@ public class UsersGroupsActivity extends AppCompatActivity {
                 userGroupsList.clear();
                 for (int i = 0; i < qsList.size(); i++){
                     userGroupsList.add(qsList.get(i).get("group_name").toString());
-                    Toast.makeText(UsersGroupsActivity.this,
+                    /*Toast.makeText(UsersGroupsActivity.this,
                             String.valueOf(i),
-                            Toast.LENGTH_SHORT).show();
+                            Toast.LENGTH_SHORT).show();*/
                     Collections.sort(userGroupsList, String.CASE_INSENSITIVE_ORDER);
                     adapter.notifyDataSetChanged();
                 }
             }
         });
         super.onResume();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.invitations:
+                startActivity(new Intent(UsersGroupsActivity.this, InvitationsActivity.class));
+                break;
+            case R.id.logout:
+                Intent intent = new Intent(UsersGroupsActivity.this, MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                auth.signOut();
+                startActivity(intent);
+                break;
+            default:
+                break;
+        }
+        return true;
     }
 
     @Override

@@ -37,6 +37,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     private FirebaseFirestore db;
     private FirebaseAuth mAuth;
 
+    //User information
     private String email, displayName, password, dobDay, dobMonth, dobYear, address;
 
     @Override
@@ -64,11 +65,11 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
 
 
     /*
-    Login function:
+    Signup function:
         User enters their personal information to create an account
     Procedure:
-        1. Get the email, password, date of birth, and address from user
-        2. Check if the information entered is acceptable
+        1. Get the email, a display name, a password, a date of birth, and an address from user
+        2. Validate user input
         3. Use FireBase authentication to create an account by entering email and password (date of birth and address not needed)
             Success:
                     a. Create a user document on FireBase for user later
@@ -115,11 +116,11 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                         }
 
                     });
-                    /*user.sendEmailVerification();
+                    user.sendEmailVerification();
                     Toast.makeText( SignUpActivity.this,
                             "Verification email sent.",
                             Toast.LENGTH_LONG).show();
-                    mAuth.signOut();*/
+                    mAuth.signOut();
                     startActivity(new Intent(SignUpActivity.this, MainActivity.class));
 
                 } else {

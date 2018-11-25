@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -34,6 +36,30 @@ public class GroupAvailableActivity extends AppCompatActivity {
     private AvailableGroupAdapter adapter = new AvailableGroupAdapter(availableGroupsList,this);
     private boolean userListObtained;
     private boolean groupListObtained;
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.invitations:
+                startActivity(new Intent(GroupAvailableActivity.this, InvitationsActivity.class));
+                break;
+            case R.id.logout:
+                Intent intent = new Intent(GroupAvailableActivity.this, MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                auth.signOut();
+                startActivity(intent);
+                break;
+            default:
+                break;
+        }
+        return true;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
