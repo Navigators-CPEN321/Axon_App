@@ -25,7 +25,7 @@ public class ResetPasswordActivity extends AppCompatActivity implements View.OnC
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private String emailAddress;
     private TextView emailTV;
-    private Button buttonEamilChange;
+    private Button buttonEmailChange;
     public boolean emailFound;
 
     @Override
@@ -34,50 +34,38 @@ public class ResetPasswordActivity extends AppCompatActivity implements View.OnC
         setContentView(R.layout.activity_reset_password);
 
         emailTV = (TextView) findViewById(R.id.resetPasswordText);
-        buttonEamilChange = (Button) findViewById(R.id.resetPasswordButton);
+        buttonEmailChange = (Button) findViewById(R.id.resetPasswordButton);
 
-        buttonEamilChange.setOnClickListener(this);
+        buttonEmailChange.setOnClickListener(this);
     }
 
 
     public void onClick(View view) {
 
-        if (view.equals(buttonEamilChange)) {
-            changePasword();
+        if (view.equals(buttonEmailChange)) {
+            changePassword();
         }
     }
 
-    public void changePasword() {
+    public void changePassword() {
         emailAddress = emailTV.getText().toString();
 
-        if(validateEmail(emailAddress)){
-
-            auth.sendPasswordResetEmail(emailAddress).addOnCompleteListener(new OnCompleteListener<Void>() {
-                @Override
-                public void onComplete(@NonNull Task<Void> task) {
-                    if (task.isSuccessful()){
-                        Toast.makeText(ResetPasswordActivity.this, "Email sent", Toast.LENGTH_LONG).show();
-
-                    }
-                }
-            });
-
-        }
+        validateEmail(emailAddress);
 
     }
 
-    public boolean validateEmail(final String emailAddress) {
+    public void validateEmail(final String emailAddress) {
 
         if(emailAddress.isEmpty()){
             emailTV.setError("Email is required");
             emailTV.requestFocus();
-            return false;
+            return;
         }
 
         if (!Patterns.EMAIL_ADDRESS.matcher(emailAddress).matches()){
             emailTV.setError("Invalid email");
             emailTV.requestFocus();
-            return false;
+            return;
         }
 
         db.collection("users").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -93,19 +81,38 @@ public class ResetPasswordActivity extends AppCompatActivity implements View.OnC
                     }
 
                 }
+                if (emailFound) {
+                    auth.sendPasswordResetEmail(emailAddress).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(ResetPasswordActivity.this,
+                                        "Email sent",
+                                        Toast.LENGTH_LONG).show();
 
-                if (emailFound){
-                    Toast.makeText(ResetPasswordActivity.this, "email found in db", Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    });
+                } else {
+                    Toast.makeText(ResetPasswordActivity.this,
+                            "The email you entered is not registered with Axon",
+                            Toast.LENGTH_LONG).show();
                 }
 
+                /*if (emailFound){
+                    Toast.makeText(ResetPasswordActivity.this,
+                            "email found in db",
+                            Toast.LENGTH_LONG).show();
+                }
                 else{
-                    Toast.makeText(ResetPasswordActivity.this, "email NOT FOUND in db", Toast.LENGTH_LONG).show();
+                    Toast.makeText(ResetPasswordActivity.this,
+                            "email NOT FOUND in db",
+                            Toast.LENGTH_LONG).show();
 
-                }
+                }*/
             }
         });
-
-        return emailFound;
     }
+
 }
 
