@@ -93,9 +93,9 @@ public class GroupViewActivity extends AppCompatActivity {
                 Intent intent = new Intent(GroupViewActivity.this, MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 auth.signOut();
-                Toast.makeText(GroupViewActivity.this,
+                /*Toast.makeText(GroupViewActivity.this,
                         "LOG OUT",
-                        Toast.LENGTH_LONG).show();
+                        Toast.LENGTH_LONG).show();*/
                 startActivity(intent);
                 break;
             default:
@@ -191,7 +191,9 @@ public class GroupViewActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                        admin = (boolean) (documentSnapshot.get("admin"));
-                       Toast.makeText(GroupViewActivity.this, String.valueOf(admin), Toast.LENGTH_LONG).show();
+                       /*Toast.makeText(GroupViewActivity.this,
+                       String.valueOf(admin),
+                       Toast.LENGTH_LONG).show();*/
                        if (!admin){
                             db.collection("groups").document(currentGroup)
                                     .collection("prefrefs").document(user.getUid())
@@ -268,25 +270,31 @@ public class GroupViewActivity extends AppCompatActivity {
     }
 
     public void ChangeHidden(){
+        //Get current group information
         db.collection("groups").document(currentGroup).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
+                //Get user information to check if admin
+                final boolean hidden = Boolean.valueOf(documentSnapshot.get("hidden").toString());
                 db.collection("groups").document(currentGroup)
                         .collection("users").document(user.getUid())
                         .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        //Check if admin
                         admin = Boolean.valueOf(documentSnapshot.get("admin").toString());
                         if (admin){
-                            if (Boolean.valueOf(documentSnapshot.get("hidden").toString())){
+                            if (hidden){
+                                //Make public
                                 db.collection("groups").document(currentGroup).update("hidden", false);
                                 Toast.makeText(GroupViewActivity.this,
-                                        "YOUR GROUP IS PUBLIC",
+                                        "Your group is now public for others to join.",
                                         Toast.LENGTH_LONG).show();
                             } else {
+                                //Make private
                                 db.collection("groups").document(currentGroup).update("hidden", true);
                                 Toast.makeText(GroupViewActivity.this,
-                                        "YOUR GROUP IS PRIVATE",
+                                        "Your group is now private. Other can't see your group under available groups.",
                                         Toast.LENGTH_LONG).show();
                             }
 

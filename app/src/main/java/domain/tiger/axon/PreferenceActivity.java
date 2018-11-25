@@ -1,6 +1,7 @@
 package domain.tiger.axon;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -8,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -166,9 +168,9 @@ public class PreferenceActivity extends AppCompatActivity implements View.OnClic
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 currentGroup = documentSnapshot.get("currentGroup").toString();
-                Toast.makeText( PreferenceActivity.this,
+                /*Toast.makeText( PreferenceActivity.this,
                         "Checkpoint 1 and current group is " + currentGroup,
-                        Toast.LENGTH_LONG).show();
+                        Toast.LENGTH_LONG).show();*/
                 db.collection("groups").document(currentGroup)
                         .collection("prefrefs").document(user.getUid())
                         .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -178,9 +180,9 @@ public class PreferenceActivity extends AppCompatActivity implements View.OnClic
                         prefrefFirstPart = prefRefStr.substring(0, prefRefStr.length() - 6);
                         prefrefSecondPart = prefRefStr.substring(prefRefStr.length() - 5, prefRefStr.length());
                         Preferences pref = new Preferences(cost_max, category, user.getUid(), longitude, latitude);
-                        Toast.makeText( PreferenceActivity.this,
+                        /*Toast.makeText( PreferenceActivity.this,
                                 "Checkpoint 2 and " + prefrefFirstPart + prefrefSecondPart,
-                                Toast.LENGTH_LONG).show();
+                                Toast.LENGTH_LONG).show();*/
                         db.collection(prefrefFirstPart).document(prefrefSecondPart).set(pref).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
@@ -188,8 +190,23 @@ public class PreferenceActivity extends AppCompatActivity implements View.OnClic
                                         "Preferences saved",
                                         Toast.LENGTH_LONG).show();
 
+                                final ProgressDialog dialog = new ProgressDialog(PreferenceActivity.this);
+                                dialog.setTitle("Loading...");
+                                dialog.setMessage("Please wait. We are generating your recommended activities list. :)");
+                                dialog.setIndeterminate(true);
+                                dialog.setCancelable(false);
+                                dialog.show();
 
-                                startActivity(new Intent(PreferenceActivity.this, RecListActivity.class));
+                                final Handler handler = new Handler();
+                                handler.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        // Do something after 5s = 5000ms
+                                        dialog.dismiss();
+                                        startActivity(new Intent(PreferenceActivity.this, RecListActivity.class));
+                                    }
+                                }, 10000);
+
                             }
                         });
                     }

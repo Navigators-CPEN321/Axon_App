@@ -2,9 +2,11 @@ package domain.tiger.axon;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -20,6 +22,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 public class SettingsActivity extends AppCompatActivity implements View.OnClickListener{
 
+    private int displayNameLength = 15;
     private TextView mTextMessage;
     private TextView userIdTextview;
     private EditText etDisplayName;
@@ -51,6 +54,30 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
             return false;
         }
     };
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.invitations:
+                startActivity(new Intent(SettingsActivity.this, InvitationsActivity.class));
+                break;
+            case R.id.logout:
+                Intent intent = new Intent(SettingsActivity.this, MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                auth.signOut();
+                startActivity(intent);
+                break;
+            default:
+                break;
+        }
+        return true;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +119,12 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
         if (newDisplayName.isEmpty()){
             etDisplayName.setError("Display name can't be empty");
+            etDisplayName.requestFocus();
+            return;
+        }
+
+        if (newDisplayName.length() > displayNameLength){
+            etDisplayName.setError("Display name can only be " + String.valueOf(displayNameLength) + " characters long");
             etDisplayName.requestFocus();
             return;
         }

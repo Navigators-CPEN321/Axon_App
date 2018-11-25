@@ -1,7 +1,10 @@
 package domain.tiger.axon;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -30,6 +33,30 @@ public class EventListActivity extends AppCompatActivity {
     private ListView lvEvents;
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.invitations:
+                startActivity(new Intent(EventListActivity.this, InvitationsActivity.class));
+                break;
+            case R.id.logout:
+                Intent intent = new Intent(EventListActivity.this, MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                auth.signOut();
+                startActivity(intent);
+                break;
+            default:
+                break;
+        }
+        return true;
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_list);
@@ -44,7 +71,9 @@ public class EventListActivity extends AppCompatActivity {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 category = documentSnapshot.get("mostRecentEventsList").toString();
-                Toast.makeText(EventListActivity.this, category, Toast.LENGTH_LONG).show();
+                /*Toast.makeText(EventListActivity.this,
+                        category,
+                        Toast.LENGTH_LONG).show();*/
                 categoryName.setText(category);
                 switch (category){
                     case "Music":
@@ -138,9 +167,9 @@ public class EventListActivity extends AppCompatActivity {
     }
 
     public void FillEventList(String category){
-        Toast.makeText(EventListActivity.this,
+        /*Toast.makeText(EventListActivity.this,
                 "Checkpoint1",
-                Toast.LENGTH_LONG).show();
+                Toast.LENGTH_LONG).show();*/
         db.collection(category).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {

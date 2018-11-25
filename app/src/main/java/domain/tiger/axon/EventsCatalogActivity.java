@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -53,6 +54,30 @@ public class EventsCatalogActivity extends AppCompatActivity {
     };
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.invitations:
+                startActivity(new Intent(EventsCatalogActivity.this, InvitationsActivity.class));
+                break;
+            case R.id.logout:
+                Intent intent = new Intent(EventsCatalogActivity.this, MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                auth.signOut();
+                startActivity(intent);
+                break;
+            default:
+                break;
+        }
+        return true;
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_events_catalog);
@@ -85,7 +110,9 @@ public class EventsCatalogActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 db.collection("users").document(user.getUid()).update("mostRecentEventsList", eventsArrayList.get(position));
-                Toast.makeText(EventsCatalogActivity.this, eventsArrayList.get(position), Toast.LENGTH_LONG).show();
+                /*Toast.makeText(EventsCatalogActivity.this,
+                        eventsArrayList.get(position),
+                        Toast.LENGTH_LONG).show();*/
                 startActivity(new Intent(EventsCatalogActivity.this, EventListActivity.class));
             }
         });

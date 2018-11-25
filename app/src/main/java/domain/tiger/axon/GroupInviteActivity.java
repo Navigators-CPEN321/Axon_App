@@ -88,9 +88,9 @@ public class GroupInviteActivity extends AppCompatActivity implements View.OnCli
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 full = false;
                 if (Integer.valueOf(documentSnapshot.get("size").toString()) >= 8){
-                    Toast.makeText(GroupInviteActivity.this,
+                    /*Toast.makeText(GroupInviteActivity.this,
                             "Size: " + documentSnapshot.get("size").toString(),
-                            Toast.LENGTH_LONG).show();
+                            Toast.LENGTH_LONG).show();*/
                     full = true;
                 }
             }
@@ -116,9 +116,9 @@ public class GroupInviteActivity extends AppCompatActivity implements View.OnCli
                     }
 
                     if (emailFound) {
-                        Toast.makeText(GroupInviteActivity.this,
+                       /*Toast.makeText(GroupInviteActivity.this,
                                 "Checkpoint 1: Email is a verified user.",
-                                Toast.LENGTH_LONG).show();
+                                Toast.LENGTH_LONG).show();*/
                         checkIfPartOfGroup();
                     } else {
                         Toast.makeText(GroupInviteActivity.this,
@@ -126,9 +126,9 @@ public class GroupInviteActivity extends AppCompatActivity implements View.OnCli
                                 Toast.LENGTH_LONG).show();
                     }
                 } else {
-                    Toast.makeText(GroupInviteActivity.this,
+                    /*Toast.makeText(GroupInviteActivity.this,
                             "Sorry your group is full!",
-                            Toast.LENGTH_LONG).show();
+                            Toast.LENGTH_LONG).show();*/
                 }
             }
         });
@@ -143,11 +143,11 @@ public class GroupInviteActivity extends AppCompatActivity implements View.OnCli
                 for (int i = 0; i < qsList.size(); i++){
                     if(qsList.get(i).get("email").toString().equalsIgnoreCase(email)){
                         Toast.makeText(GroupInviteActivity.this,
-                                "Checkpoint 2: User is already part of the group",
+                                "User is already part of the group",
                                 Toast.LENGTH_LONG).show();
                     } else {
                         Toast.makeText(GroupInviteActivity.this,
-                                "Checkpoint 2: User is NOT part of the group",
+                                "Invitation sent!",
                                 Toast.LENGTH_LONG).show();
 
                         Map<String, Object> invMap = new HashMap<>();

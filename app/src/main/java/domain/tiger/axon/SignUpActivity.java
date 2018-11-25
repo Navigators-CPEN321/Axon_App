@@ -27,6 +27,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
 
     //Constant
     private final int passwordLength = 6;
+    private final int displayNameLength = 15;
 
     //Buttons, EditText, Spinners
     private Button signUp ;
@@ -104,21 +105,10 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                     //Store a copy of the user information on FireBase database excluding password
                     UserInformation userInfo = new UserInformation(email, displayName, dobMonth, dobDay, dobYear, address, user.getUid());
 
-                    db.collection("users").document(user.getUid()).set(userInfo).addOnSuccessListener(new OnSuccessListener<Void>() {
-
-                        @Override
-                        public void onSuccess(Void aVoid) {
-
-                            Toast.makeText( SignUpActivity.this,
-                                            "Account creation successful!",
-                                             Toast.LENGTH_LONG).show();
-
-                        }
-
-                    });
+                    db.collection("users").document(user.getUid()).set(userInfo);
                     user.sendEmailVerification();
                     Toast.makeText( SignUpActivity.this,
-                            "Verification email sent.",
+                            "Verification email sent to your email. Please verify your account before logging in.",
                             Toast.LENGTH_LONG).show();
                     mAuth.signOut();
                     startActivity(new Intent(SignUpActivity.this, MainActivity.class));
@@ -164,6 +154,12 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
 
         if (displayName.isEmpty()){
             displayNameInput.setError("Display name is required.");
+            displayNameInput.requestFocus();
+            return false;
+        }
+
+        if (displayName.length() > displayNameLength){
+            displayNameInput.setError("Display name can only be " + String.valueOf(displayNameLength) + " characters long");
             displayNameInput.requestFocus();
             return false;
         }
