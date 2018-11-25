@@ -52,7 +52,7 @@ public class GroupViewActivity extends AppCompatActivity {
     private ArrayList<String> usidList = new ArrayList<>();
     private ArrayList<String> displayNameList = new ArrayList<>();
     private ArrayList<String> deleteUsersList = new ArrayList<>();
-    private ArrayAdapter<String> adapter;
+    private GroupViewAdapter adapter;
     private TextView group_name;
     private boolean admin;
     private String userPref;
@@ -104,7 +104,7 @@ public class GroupViewActivity extends AppCompatActivity {
         group_name = (TextView) findViewById(R.id.tvGroupName);
 
         groupMembersListView = (ListView) findViewById(R.id.listViewGroupMembers);
-        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, displayNameList);
+        adapter = new GroupViewAdapter(displayNameList, this);
         groupMembersListView.setAdapter(adapter);
 
         //Go to users and get the latest group they viewed "currentGroup"

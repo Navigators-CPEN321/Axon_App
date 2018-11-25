@@ -13,7 +13,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         android:name="android.support.multidex.MultiDexApplication" >
-        <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version"/>
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -46,8 +49,9 @@
         <activity
             android:name=".GroupInviteActivity"
             android:theme="@style/AppTheme.popup" />
-        <activity android:name=".InvitationsActivity"></activity>
+        <activity android:name=".InvitationsActivity" />
+        <activity android:name=".ReportActivity"
+            android:theme="@style/AppTheme.popup"></activity>
     </application>
-
 
 </manifest>
