@@ -49,6 +49,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-functions:16.1.2'
     implementation 'com.squareup.okhttp3:okhttp:3.9.1'
     implementation 'com.loopj.android:android-async-http:1.4.9'
+    implementation 'com.google.android.gms:play-services-location:15.0.1'
 
 }
 

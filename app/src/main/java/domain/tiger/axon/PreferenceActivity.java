@@ -2,9 +2,15 @@ package domain.tiger.axon;
 
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -15,6 +21,10 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -45,12 +55,16 @@ import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
+import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
+
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
 /*
 Preference Page:
 Allows the user to enter their personal preferences. The app then locates the preference associated with that group and that user and updates it.
  */
-public class PreferenceActivity extends AppCompatActivity implements View.OnClickListener  {
+public class PreferenceActivity extends AppCompatActivity implements View.OnClickListener, ConnectionCallbacks, OnConnectionFailedListener  {
 
     //Screen display constants
     private final double screenWidthFactor = 0.75;
@@ -74,11 +88,13 @@ public class PreferenceActivity extends AppCompatActivity implements View.OnClic
     private String prefRefStr;
     private String prefrefFirstPart;
     private String prefrefSecondPart;
-    private String firstURL;
-    private String secondURL;
-    private Request request1;
-    private Request request2;
-    private OkHttpClient client = new OkHttpClient();
+
+    //Google vars
+    protected GoogleApiClient googleApiClient;
+    private FusedLocationProviderClient fusedLocationProviderClient;
+    public static final int RequestPermissionCode = 1;
+    private double longitude;
+    private double latitude;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +111,17 @@ public class PreferenceActivity extends AppCompatActivity implements View.OnClic
         int height = dm.heightPixels;
 
         getWindow().setLayout((int)(width*screenWidthFactor), (int)(height * screenHeightFactor));
+
+        /*
+        Get Location data
+         */
+        googleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
+
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
         /*
         Get Preferences
@@ -150,7 +177,7 @@ public class PreferenceActivity extends AppCompatActivity implements View.OnClic
                         prefRefStr = documentSnapshot.get("prefRef").toString();
                         prefrefFirstPart = prefRefStr.substring(0, prefRefStr.length() - 6);
                         prefrefSecondPart = prefRefStr.substring(prefRefStr.length() - 5, prefRefStr.length());
-                        Preferences pref = new Preferences(cost_max, category, user.getUid());
+                        Preferences pref = new Preferences(cost_max, category, user.getUid(), longitude, latitude);
                         Toast.makeText( PreferenceActivity.this,
                                 "Checkpoint 2 and " + prefrefFirstPart + prefrefSecondPart,
                                 Toast.LENGTH_LONG).show();
@@ -161,40 +188,6 @@ public class PreferenceActivity extends AppCompatActivity implements View.OnClic
                                         "Preferences saved",
                                         Toast.LENGTH_LONG).show();
 
-                                firstURL = "https://us-central1-axon-4b339.cloudfunctions.net/selectEvents?text=" +
-                                        currentGroup +
-                                        "&fbclid=IwAR1LFo3LQgiX4_DNgLx77fcqIHJTwYkZbNfaWzUkBE71DGz3ZKqZhXyXdcM";
-                                secondURL = "https://us-central1-axon-4b339.cloudfunctions.net/findGroupEvents?text=" +
-                                        currentGroup + "&fbclid=IwAR3Q7v04ixkn6Pf2RaotU_UvbdxFndeo9K-L1KyiN-CLjEXXXq2INdIpFiM";
-
-                                OkHttpClient client = new OkHttpClient();
-
-                                request1 = new Request.Builder().url(firstURL).build();
-                                request2 = new Request.Builder().url(secondURL).build();
-
-                                client.newCall(request1).enqueue(new Callback() {
-                                    @Override
-                                    public void onFailure(Call call, IOException e) {
-                                        System.out.println("Function 1: FAILED");
-                                    }
-
-                                    @Override
-                                    public void onResponse(Call call, Response response) throws IOException {
-                                        System.out.println("Function 1: SUCCESS");
-                                    }
-                                });
-
-                                client.newCall(request2).enqueue(new Callback() {
-                                    @Override
-                                    public void onFailure(Call call, IOException e) {
-                                        System.out.println("Function 2: FAILED");
-                                    }
-
-                                    @Override
-                                    public void onResponse(Call call, Response response) throws IOException {
-                                        System.out.println("Function 2: SUCCESS");
-                                    }
-                                });
 
                                 startActivity(new Intent(PreferenceActivity.this, RecListActivity.class));
                             }
@@ -215,6 +208,56 @@ public class PreferenceActivity extends AppCompatActivity implements View.OnClic
             submitPreferences();
         }
     }
+    @Override
+    protected void onStart() {
+        super.onStart();
+        googleApiClient.connect();
+    }
 
+    @Override
+    protected void onStop() {
+        if (googleApiClient.isConnected()) {
+            googleApiClient.disconnect();
+        }
+        super.onStop();
+    }
 
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+
+        if (ActivityCompat.checkSelfPermission(this, ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            requestPermission();
+        } else {
+            fusedLocationProviderClient.getLastLocation()
+                    .addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                        @Override
+                        public void onSuccess(Location location) {
+                            // Got last known location. In some rare situations this can be null.
+                            if (location != null) {
+                                // Logic to handle location object
+                                longitude = location.getLongitude();
+                                latitude = location.getLatitude();
+                            } else {
+                                longitude = 0;
+                                latitude = 0;
+                            }
+                        }
+                    });
+        }
+    }
+
+    private void requestPermission() {
+        ActivityCompat.requestPermissions(PreferenceActivity.this, new
+                String[]{ACCESS_FINE_LOCATION}, RequestPermissionCode);
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        Log.e("MainActivity", "Connection failed: " + connectionResult.getErrorCode());
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+        Log.e("MainActivity", "Connection suspended");
+    }
 }
