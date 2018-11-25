@@ -16,8 +16,11 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.List;
 
 
 /*
@@ -32,6 +35,8 @@ public class GroupCreateActivity extends AppCompatActivity{
     //Firebase variables
     private FirebaseAuth auth;
     private FirebaseFirestore db;
+
+    private boolean dup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,31 +96,50 @@ public class GroupCreateActivity extends AppCompatActivity{
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()){
 
-                            //Create group and store on Firebase
-                            Group newGroup = new Group(groupName);
-                            db.collection("groups").document(groupName).set(newGroup).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            //Check if group is already created
+                            db.collection("groups").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                                 @Override
-                                public void onSuccess(Void aVoid) {
+                                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                    List<DocumentSnapshot> qsList = queryDocumentSnapshots.getDocuments();
+                                    dup = false;
+                                    for (int i = 0; i < qsList.size(); i++){
+                                        if (qsList.get(i).get("group_name").toString().equalsIgnoreCase(groupName)){
+                                            dup = true;
+                                        }
+                                    }
+                                    if (!dup){
+                                        //Create group and store on Firebase
+                                        Group newGroup = new Group(groupName);
+                                        db.collection("groups").document(groupName).set(newGroup).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
 
-                                    Toast.makeText( GroupCreateActivity.this,
-                                                    "Group created.",
-                                                    Toast.LENGTH_LONG).show();
+                                                Toast.makeText( GroupCreateActivity.this,
+                                                        "Group created.",
+                                                        Toast.LENGTH_LONG).show();
 
-                                }
-                            }).addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
+                                            }
+                                        }).addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
 
-                                    Toast.makeText( GroupCreateActivity.this,
-                                                    "Group creation failed.",
-                                                    Toast.LENGTH_LONG).show();
+                                                Toast.makeText( GroupCreateActivity.this,
+                                                        "Group creation failed.",
+                                                        Toast.LENGTH_LONG).show();
 
+                                            }
+                                        });
+
+                                        //Add the creator of the group to the group
+                                        newGroup.addCreator(user.getUid(), user.getEmail());
+                                        startActivity(new Intent(GroupCreateActivity.this, GroupViewActivity.class));
+                                    } else {
+                                        Toast.makeText( GroupCreateActivity.this,
+                                                "Sorry that group name is taken.",
+                                                Toast.LENGTH_LONG).show();
+                                    }
                                 }
                             });
-
-                            //Add the creator of the group to the group
-                            newGroup.addCreator(user.getUid(), user.getEmail());
-                            startActivity(new Intent(GroupCreateActivity.this, GroupViewActivity.class));
 
                         }
                     }
