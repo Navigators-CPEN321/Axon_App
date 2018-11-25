@@ -2,6 +2,7 @@ package domain.tiger.axon;
 
 import android.app.ActionBar;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.drm.DrmStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -223,6 +224,7 @@ public class GroupViewActivity extends AppCompatActivity {
                                         public void onSuccess(DocumentSnapshot documentSnapshot) {
                                             size = Integer.parseInt(documentSnapshot.get("size").toString()) - 1;
                                             db.collection("groups").document(currentGroup).update("size", size);
+                                            onBackPressed();
                                         }
                                     });
                                 }
@@ -249,6 +251,7 @@ public class GroupViewActivity extends AppCompatActivity {
                                                .collection("users").document(qsList.get(i).get("usid").toString()).delete();
                                    }
                                    db.collection("groups").document(currentGroup).delete();
+                                   onBackPressed();
                                }
                            });
                        }
