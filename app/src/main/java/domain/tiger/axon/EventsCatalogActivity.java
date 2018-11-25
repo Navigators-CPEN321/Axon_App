@@ -40,7 +40,9 @@ public class EventsCatalogActivity extends AppCompatActivity {
                     startActivity(new Intent(EventsCatalogActivity.this, GroupNavigationActivity.class));
                     return true;
                 case R.id.navigation_dashboard:
-                    startActivity(new Intent(EventsCatalogActivity.this, EventsCatalogActivity.class));
+                    Intent i = new Intent(EventsCatalogActivity.this, EventsCatalogActivity.class);
+                    i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(i);
                     return true;
                 case R.id.navigation_notifications:
                     startActivity(new Intent(EventsCatalogActivity.this, SettingsActivity.class));

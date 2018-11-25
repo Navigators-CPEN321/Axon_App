@@ -64,6 +64,9 @@ public class GroupNavigationActivity extends AppCompatActivity implements View.O
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
+                    Intent i = new Intent(GroupNavigationActivity.this, GroupNavigationActivity.class);
+                    i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(i);
                     return true;
                 case R.id.navigation_dashboard:
                     startActivity(new Intent(GroupNavigationActivity.this, EventsCatalogActivity.class));

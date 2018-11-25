@@ -102,8 +102,6 @@ public class GroupViewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_view);
 
-        group_name = (TextView) findViewById(R.id.tvGroupName);
-
         groupMembersListView = (ListView) findViewById(R.id.listViewGroupMembers);
         adapter = new GroupViewAdapter(displayNameList, this);
         groupMembersListView.setAdapter(adapter);
@@ -112,10 +110,11 @@ public class GroupViewActivity extends AppCompatActivity {
         db.collection("users/").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
+                group_name = (TextView) findViewById(R.id.tvGroupViewGroupNameTitle);
                 currentGroup = documentSnapshot.get("currentGroup").toString();
-                /*Toast.makeText(GroupViewActivity.this,
+                Toast.makeText(GroupViewActivity.this,
                         currentGroup,
-                        Toast.LENGTH_LONG).show();*/
+                        Toast.LENGTH_LONG).show();
                 group_name.setText(currentGroup);
                 AddUsidToUsidList();
 

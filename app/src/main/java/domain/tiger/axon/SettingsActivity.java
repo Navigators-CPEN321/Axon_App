@@ -43,6 +43,9 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                     startActivity(new Intent(SettingsActivity.this, EventsCatalogActivity.class));
                     return true;
                 case R.id.navigation_notifications:
+                    Intent i = new Intent(SettingsActivity.this, SettingsActivity.class);
+                    i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(i);
                     return true;
             }
             return false;
