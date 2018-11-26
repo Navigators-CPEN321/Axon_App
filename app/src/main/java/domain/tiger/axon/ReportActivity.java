@@ -14,9 +14,11 @@ import java.util.Map;
 
 public class ReportActivity extends AppCompatActivity {
 
+    //Constants
     private double screenWidthFactor = 0.75;
     private double screenHeightFactor = 0.75;
 
+    //Other vars
     private EditText  etReport;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private String reportMsg;
@@ -30,9 +32,11 @@ public class ReportActivity extends AppCompatActivity {
 
         popUpWindow();
 
+        //Set up widgets
         etReport = (EditText) findViewById(R.id.etReportMsg);
         btnReport = (Button) findViewById(R.id.btnReport);
 
+        //Store report message
         btnReport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
