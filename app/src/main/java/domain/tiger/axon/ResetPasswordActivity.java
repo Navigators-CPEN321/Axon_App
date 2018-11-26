@@ -10,14 +10,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
-
-import java.util.List;
 
 public class ResetPasswordActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -53,14 +48,14 @@ public class ResetPasswordActivity extends AppCompatActivity implements View.OnC
     public void changePassword() {
         emailAddress = emailTV.getText().toString();
 
-        validateEmail(emailAddress);
+        validateAndSendEmail(emailAddress);
 
     }
 
     /*
-    Check if email is empty, a valid email, and registered Axon
+    Check if email is empty and valid email. Sends email
      */
-    public void validateEmail(final String emailAddress) {
+    public void validateAndSendEmail(final String emailAddress) {
 
         if(emailAddress.isEmpty()){
             emailTV.setError("Email is required");
@@ -74,8 +69,43 @@ public class ResetPasswordActivity extends AppCompatActivity implements View.OnC
             return;
         }
 
-        //Get all the Axon emails and check if the email entered is registered with Axon
-        db.collection("users").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+        auth.sendPasswordResetEmail(emailAddress).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    Toast.makeText(ResetPasswordActivity.this,
+                            "Email sent",
+                            Toast.LENGTH_LONG).show();
+
+                } else{
+                    Toast.makeText(ResetPasswordActivity.this,
+                            "Was unable to send email.",
+                            Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+    }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//Get all the Axon emails and check if the email entered is registered with Axon
+        /*db.collection("users").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 List<DocumentSnapshot> qsList = queryDocumentSnapshots.getDocuments();
@@ -105,8 +135,5 @@ public class ResetPasswordActivity extends AppCompatActivity implements View.OnC
                             Toast.LENGTH_LONG).show();
                 }
             }
-        });
-    }
-
-}
+        });*/
 

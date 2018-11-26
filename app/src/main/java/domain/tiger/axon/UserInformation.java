@@ -1,6 +1,8 @@
 package domain.tiger.axon;
 
-
+/*
+The user's information. Password is not stored.
+ */
 public class UserInformation {
 
     public String email, displayName, dobMonth, dobDay, dobYear, address, usid, currentGroup, mostRecentEventsList;

@@ -24,11 +24,14 @@ import java.util.List;
 
 public class UsersGroupsActivity extends AppCompatActivity {
 
+    //Firebase vars
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private ListView listViewUserGroups;
-    private ArrayList<String> userGroupsList = new ArrayList<>();
     private FirebaseAuth auth = FirebaseAuth.getInstance();
     private FirebaseUser user = auth.getCurrentUser();
+
+    //ListView vars
+    private ListView listViewUserGroups;
+    private ArrayList<String> userGroupsList = new ArrayList<>();
     private UserGroupsAdapter adapter = new UserGroupsAdapter(userGroupsList,this);
 
     @Override
@@ -38,9 +41,13 @@ public class UsersGroupsActivity extends AppCompatActivity {
         startActivity(getIntent());
     }
 
+    /*
+    Update ListView whenever the user resume the activity in case the user joins or leaves a group.
+     */
     @Override
     protected void onResume() {
 
+        //Update ListView
         db.collection("users").document(user.getUid()).collection("groups").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
@@ -48,9 +55,6 @@ public class UsersGroupsActivity extends AppCompatActivity {
                 userGroupsList.clear();
                 for (int i = 0; i < qsList.size(); i++){
                     userGroupsList.add(qsList.get(i).get("group_name").toString());
-                    /*Toast.makeText(UsersGroupsActivity.this,
-                            String.valueOf(i),
-                            Toast.LENGTH_SHORT).show();*/
                     Collections.sort(userGroupsList, String.CASE_INSENSITIVE_ORDER);
                     adapter.notifyDataSetChanged();
                 }
@@ -59,12 +63,18 @@ public class UsersGroupsActivity extends AppCompatActivity {
         super.onResume();
     }
 
+    /*
+    Displays drop-down menu on actionbar
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
         return true;
     }
 
+    /*
+    Provides functionality to drop-down menu on actionbar
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
@@ -91,6 +101,7 @@ public class UsersGroupsActivity extends AppCompatActivity {
         listViewUserGroups = (ListView) findViewById(R.id.listViewUserGroups);
         listViewUserGroups.setAdapter(adapter);
 
+        //Display the groups the user is in
         db.collection("users/").document(user.getUid()).collection("groups").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {

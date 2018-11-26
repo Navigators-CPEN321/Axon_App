@@ -17,8 +17,12 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 
 public class UserGroupsAdapter extends BaseAdapter implements ListAdapter {
+
+    //Adapter vars
     private ArrayList<String> list;
     private Context context;
+
+    //Firebase vars
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseAuth auth = FirebaseAuth.getInstance();
     private FirebaseUser user = auth.getCurrentUser();
@@ -55,6 +59,7 @@ public class UserGroupsAdapter extends BaseAdapter implements ListAdapter {
 
         Button btnView = (Button) view.findViewById(R.id.btnViewGroup);
 
+        //Update currentGroup and go to GroupViewActivity
         btnView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

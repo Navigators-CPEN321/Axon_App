@@ -25,21 +25,33 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 public class SettingsActivity extends AppCompatActivity implements View.OnClickListener{
 
+    //Constants
     private int displayNameLength = 15;
     private int minPasswordLength = 6;
-    private TextView mTextMessage;
-    private TextView userIdTextview;
-    private EditText etDisplayName;
-    private Button submitBtn;
-    private String newDisplayName;
+
+    //Firebase vars
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseAuth auth = FirebaseAuth.getInstance();
     private FirebaseUser user = auth.getCurrentUser();
-    private String userID;
-    private Button btnChangePassword;
+
+    //EditTexts
+    private EditText etDisplayName;
     private EditText etOldPassword;
     private EditText etNewPassword;
 
+    //Buttons
+    private Button btnChangePassword;
+    private Button submitBtn;
+
+    //TextViews
+    private TextView mTextMessage;
+    private TextView userIdTextview;
+
+    //Strings
+    private String newDisplayName;
+    private String userID;
+
+    //Bottom navigation bar
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -62,12 +74,18 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         }
     };
 
+    /*
+    Displays drop-down menu on actionbar
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
         return true;
     }
 
+    /*
+    Provides functionality to drop-down menu on actionbar
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
@@ -94,13 +112,15 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         mTextMessage = (TextView) findViewById(R.id.message);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
+        //Setup widgets
         submitBtn = (Button) findViewById(R.id.btnDisplayNameChange);
         userIdTextview = (TextView) findViewById(R.id.userIdTV);
         btnChangePassword = (Button) findViewById(R.id.btnPasswordChangeSubmit);
         etOldPassword = (EditText) findViewById(R.id.etOldPassword);
         etNewPassword = (EditText) findViewById(R.id.etNewPassword);
 
-
+        //Display display name
         db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -122,13 +142,17 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
+    /*
+    Changes display name
+    Procedure:
+        1. Obtains new desired display name
+        2. Checks if display name is valid (empty and proper length in that order)
+        3. Updates display name if valid
+     */
     public void changeDisplayName(){
         etDisplayName = (EditText) findViewById(R.id.etDisplayName);
 
         newDisplayName = etDisplayName.getText().toString();
-        /*Toast.makeText(SettingsActivity.this,
-                "newDisplayName is " + newDisplayName,
-                Toast.LENGTH_LONG).show();*/
 
         if (newDisplayName.isEmpty()){
             etDisplayName.setError("Display name can't be empty");
@@ -150,6 +174,15 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                 Toast.LENGTH_LONG).show();
     }
 
+    /*
+     User enters old password and a new password.
+     Checks if both are valid (empty and long enough).
+     If old password is correct update password to be new password.
+     Procedure:
+        1. Checks if old and new password are valid
+        2. If valid, check if old password is correct
+        3. If old password is correct, update password to be new password
+     */
     public void changePassword(){
         if (etOldPassword.getText().toString().isEmpty()){
             etOldPassword.setError("Password is empty");
