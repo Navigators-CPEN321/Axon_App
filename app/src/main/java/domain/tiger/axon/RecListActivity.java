@@ -27,13 +27,18 @@ import java.util.List;
  */
 public class RecListActivity extends AppCompatActivity {
 
+    //Firebase vars
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseAuth auth = FirebaseAuth.getInstance();
     private FirebaseUser user = auth.getCurrentUser();
+
+    //ListView vars
     private ListView lvRecList;
     private ArrayList<String> selEventsList = new ArrayList<>();
-    private String currentGroup;
     private ArrayAdapter<String> adapter;
+
+    //Other vars
+    private String currentGroup;
     private RatingBar rbEventList;
 
     @Override
@@ -47,6 +52,7 @@ public class RecListActivity extends AppCompatActivity {
         lvRecList.setAdapter(adapter);
         rbEventList = (RatingBar) findViewById(R.id.rbEventList);
 
+        //Display recommended activities list
         db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -79,6 +85,7 @@ public class RecListActivity extends AppCompatActivity {
             }
         });
 
+        //Rating bar
         rbEventList.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             @Override
             public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
