@@ -8,7 +8,6 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
@@ -22,7 +21,6 @@ public class ReportActivity extends AppCompatActivity {
     private EditText  etReport;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseAuth auth = FirebaseAuth.getInstance();
-    private FirebaseUser user = auth.getCurrentUser();
     private String reportMsg;
     private Button btnReport;
 

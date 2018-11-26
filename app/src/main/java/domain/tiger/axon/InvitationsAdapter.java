@@ -30,7 +30,6 @@ public class InvitationsAdapter extends BaseAdapter implements ListAdapter {
     private FirebaseAuth auth = FirebaseAuth.getInstance();
     private FirebaseUser user = auth.getCurrentUser();
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private String group_name;
     private boolean partOfGroup;
     private int i;
     private boolean done;

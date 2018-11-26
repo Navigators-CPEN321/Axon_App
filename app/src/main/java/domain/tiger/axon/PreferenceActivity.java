@@ -55,7 +55,6 @@ public class PreferenceActivity extends AppCompatActivity implements View.OnClic
     private FirebaseAuth auth = FirebaseAuth.getInstance();;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseUser user = auth.getCurrentUser();
-    private FirebaseFunctions functions = FirebaseFunctions.getInstance();
 
     //Random
     private String currentGroup;
