@@ -138,9 +138,6 @@ public class PreferenceActivity extends AppCompatActivity implements View.OnClic
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 currentGroup = documentSnapshot.get("currentGroup").toString();
-                /*Toast.makeText( PreferenceActivity.this,
-                        "Checkpoint 1 and current group is " + currentGroup,
-                        Toast.LENGTH_LONG).show();*/
                 db.collection("groups").document(currentGroup)
                         .collection("prefrefs").document(user.getUid())
                         .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -150,9 +147,6 @@ public class PreferenceActivity extends AppCompatActivity implements View.OnClic
                         prefrefFirstPart = prefRefStr.substring(0, prefRefStr.length() - 6);
                         prefrefSecondPart = prefRefStr.substring(prefRefStr.length() - 5, prefRefStr.length());
                         Preferences pref = new Preferences(cost_max, category, user.getUid(), longitude, latitude);
-                        /*Toast.makeText( PreferenceActivity.this,
-                                "Checkpoint 2 and " + prefrefFirstPart + prefrefSecondPart,
-                                Toast.LENGTH_LONG).show();*/
                         db.collection(prefrefFirstPart).document(prefrefSecondPart).set(pref).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
@@ -160,13 +154,13 @@ public class PreferenceActivity extends AppCompatActivity implements View.OnClic
                                         "Preferences saved",
                                         Toast.LENGTH_LONG).show();
 
+                                //Delay so that we have time to generate list
                                 final ProgressDialog dialog = new ProgressDialog(PreferenceActivity.this);
                                 dialog.setTitle("Loading...");
                                 dialog.setMessage("Please wait. We are generating your recommended activities list. :)");
                                 dialog.setIndeterminate(true);
                                 dialog.setCancelable(false);
                                 dialog.show();
-
                                 final Handler handler = new Handler();
                                 handler.postDelayed(new Runnable() {
                                     @Override
@@ -208,7 +202,9 @@ public class PreferenceActivity extends AppCompatActivity implements View.OnClic
         }
         super.onStop();
     }
-
+    /*
+    Get longitude and latitude
+     */
     @Override
     public void onConnected(@Nullable Bundle bundle) {
 
