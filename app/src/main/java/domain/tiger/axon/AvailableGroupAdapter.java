@@ -23,16 +23,24 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+/*
+Adapter used to fill the GroupAvailableActivity ListView.
+The ListView contains a list of groups that are available for users to join.
+Each item in the ListView has a group name and a join button, which they can use to join the group.
+ */
 public class AvailableGroupAdapter extends BaseAdapter implements ListAdapter {
+
+    //AvailableGroupAdapter Vars
     private ArrayList<String> list;
     private Context context;
+
+    //Firebase vars
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseAuth auth = FirebaseAuth.getInstance();
     private FirebaseUser user = auth.getCurrentUser();
-    private Button btnJoin;
-    private TextView groupName;
-    private int i;
-    private boolean done;
+
+    //Other
+    private int i; //Used to keep track of which preference. Needs to be global because used inside of another method.
 
     public AvailableGroupAdapter(ArrayList<String> list, Context context){
         this.list = list;
@@ -61,11 +69,15 @@ public class AvailableGroupAdapter extends BaseAdapter implements ListAdapter {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = inflater.inflate(R.layout.custom_listview_item, null);
         }
-        groupName = (TextView) view.findViewById(R.id.list_item_groupName);
+
+        //Connect the TextView and Button
+        TextView groupName = (TextView) view.findViewById(R.id.list_item_groupName);
+        Button btnJoin = (Button) view.findViewById(R.id.btnJoin);
+
+        //Set the ListView text to the group name
         groupName.setText(list.get(position));
 
-        btnJoin = (Button) view.findViewById(R.id.btnJoin);
-
+        //Functionality for joining the group
         btnJoin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -74,33 +86,36 @@ public class AvailableGroupAdapter extends BaseAdapter implements ListAdapter {
                     @Override
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                         if (task.isSuccessful()){
+                            //Get document snapshot of group the user wants to group
                             DocumentSnapshot doc = task.getResult();
-                            String size_str = doc.get("size").toString();
-                            int size = Integer.parseInt(size_str);
 
-                            //Add personal preference
-                            done = false;
+                            //Get size of the group and update
+                            String size_str = doc.get("size").toString();
+                            int size = Integer.parseInt(size_str) + 1;
+                            db.collection("groups").document(list.get(position)).update("size", size);
+
+                            //Update user information to include group
+                            DocumentReference groupRef = db.collection("groups").document(list.get(position));
+                            UserGroup userGroup = new UserGroup(groupRef, list.get(position));
+                            db.collection("users/" + user.getUid()+ "/groups").document(list.get(position)).set(userGroup);
+
+                            //Update group information to include user
                             db.collection("groups").document(list.get(position)).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                 @Override
                                 public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                    //Check smallest pref available
+
+                                    //Check for the smallest available preference
                                     for (i = 1; i < 9; i++){
-                                        System.out.println("i is" + i);
-                                        System.out.println("debug " + Boolean.valueOf(documentSnapshot.get("pref"+i).toString()));
-                                        if (!((boolean) documentSnapshot.get("pref" + i)) && done == false){
+                                        if (!((boolean) documentSnapshot.get("pref" + i))){
                                             Preferences pref = new Preferences();
                                             db.collection("groups/" + list.get(position) + "/prefs").document("pref"+i).set(pref);
                                             db.collection("groups").document(list.get(position)).update("pref"+i,  true);
-
-                                            done = true;
                                             break;
                                         }
                                     }
 
-                                    //Create reference to newly created reference
+                                    //Create reference to newly created preference and store it in the database
                                     String prefRefStr = "groups/" + list.get(position) + "/prefs/pref" + i;
-
-                                    //Store preference reference
                                     Map<String, String> prefRefMap = new HashMap<>();
                                     prefRefMap.put("prefRef", prefRefStr);
                                     db.collection("groups/" + list.get(position) + "/prefrefs").document(user.getUid()).set(prefRefMap);
@@ -115,15 +130,6 @@ public class AvailableGroupAdapter extends BaseAdapter implements ListAdapter {
                                     AvailableGroupAdapter.this.notifyDataSetChanged();
                                 }
                             });
-
-                            //Update group size
-                            size++;
-                            db.collection("groups").document(list.get(position)).update("size", size);
-
-                            //Update user information to include group
-                            DocumentReference groupRef = db.collection("groups").document(list.get(position));
-                            UserGroup userGroup = new UserGroup(groupRef, list.get(position));
-                            db.collection("users/" + user.getUid()+ "/groups").document(list.get(position)).set(userGroup);
                         }
                     }
                 });
