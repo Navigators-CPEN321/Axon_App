@@ -21,11 +21,14 @@ import java.util.List;
 
 public class ResetPasswordActivity extends AppCompatActivity implements View.OnClickListener {
 
+    //Firebase vars
     private FirebaseAuth auth = FirebaseAuth.getInstance();
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+    //Input vars
     private String emailAddress;
-    private TextView emailTV;
     private Button buttonEmailChange;
+    private TextView emailTV;
     public boolean emailFound;
 
     @Override
@@ -54,6 +57,9 @@ public class ResetPasswordActivity extends AppCompatActivity implements View.OnC
 
     }
 
+    /*
+    Check if email is empty, a valid email, and registered Axon
+     */
     public void validateEmail(final String emailAddress) {
 
         if(emailAddress.isEmpty()){
@@ -68,12 +74,12 @@ public class ResetPasswordActivity extends AppCompatActivity implements View.OnC
             return;
         }
 
+        //Get all the Axon emails and check if the email entered is registered with Axon
         db.collection("users").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 List<DocumentSnapshot> qsList = queryDocumentSnapshots.getDocuments();
                 emailFound = false;
-
                 for (int k = 0; k < qsList.size(); k++) {
                     if (qsList.get(k).get("email").equals(emailAddress)) {
                         emailFound = true;
@@ -98,18 +104,6 @@ public class ResetPasswordActivity extends AppCompatActivity implements View.OnC
                             "The email you entered is not registered with Axon",
                             Toast.LENGTH_LONG).show();
                 }
-
-                /*if (emailFound){
-                    Toast.makeText(ResetPasswordActivity.this,
-                            "email found in db",
-                            Toast.LENGTH_LONG).show();
-                }
-                else{
-                    Toast.makeText(ResetPasswordActivity.this,
-                            "email NOT FOUND in db",
-                            Toast.LENGTH_LONG).show();
-
-                }*/
             }
         });
     }
