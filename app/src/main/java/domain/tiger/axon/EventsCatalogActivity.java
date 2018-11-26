@@ -90,18 +90,11 @@ public class EventsCatalogActivity extends AppCompatActivity {
         adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, eventsArrayList);
         lvEvents.setAdapter(adapter);
 
-        eventsArrayList.add("Music");
-        eventsArrayList.add("Visual Arts");
-        eventsArrayList.add("Performing Arts");
-        eventsArrayList.add("Film");
-        eventsArrayList.add("Lectures & Books");
-        eventsArrayList.add("Fashion");
-        eventsArrayList.add("Festivals & Fairs");
-        eventsArrayList.add("Charities");
+        eventsArrayList.add("Food & Drink");
         eventsArrayList.add("Sports & Active Life");
         eventsArrayList.add("Nightlife");
-        eventsArrayList.add("Kids & Family");
-        eventsArrayList.add("Other");
+        eventsArrayList.add("Festivals & Fairs");
+        eventsArrayList.add("Arts");
 
         Collections.sort(eventsArrayList, String.CASE_INSENSITIVE_ORDER);
         adapter.notifyDataSetChanged();

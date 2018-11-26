@@ -5,6 +5,7 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#7699DE"
     tools:context=".SettingsActivity">
 
     <android.support.design.widget.BottomNavigationView
@@ -62,6 +63,7 @@
         android:ems="10"
         android:hint="Change your display name"
         android:inputType="textPersonName"
+        android:background="#ffffff"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.1"

@@ -1,6 +1,7 @@
 package domain.tiger.axon;
 
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -10,6 +11,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -76,110 +78,107 @@ public class EventListActivity extends AppCompatActivity {
                         Toast.LENGTH_LONG).show();*/
                 categoryName.setText(category);
                 switch (category){
-                    case "Music":
-                        FillEventList("music");
-                        break;
-                    case "Visual Arts ":
-                        FillEventList("visual-arts");
-                        break;
-                    case "Performing Arts":
-                        FillEventList("performing-arts");
-                        break;
-                    case "Film":
-                        FillEventList("film");
-                        break;
-                    case "Lectures & Books":
-                        FillEventList("lectures-books");
-                        break;
-                    case "Fashion":
-                        FillEventList("fashion");
+                    case "Arts":
+                        events.clear();
+                        FillEventList("arts");
                         break;
                     case "Food & Drink":
+                        events.clear();
                         FillEventList("food-and-drink");
                         break;
                     case "Festivals & Fairs":
+                        events.clear();
                         FillEventList("festivals-fairs");
                         break;
-                    case "Charities":
-                        FillEventList("charities");
-                        break;
                     case "Sports & Active Life":
+                        events.clear();
                         FillEventList("sports-active-life");
                         break;
                     case "Nightlife":
+                        events.clear();
                         FillEventList("nightlife");
-                        break;
-                    case "Kids & Family":
-                        FillEventList("kids-family");
-                        break;
-                    case "Other":
-                        FillEventList("other");
                         break;
                     default:
                         break;
                 }
             }
         });
-
-        /*switch (category){
-            case "Music":
-                FillEventList("music");
-                break;
-            case "Visual Arts ":
-                FillEventList("visual-arts");
-                break;
-            case "Performing Arts":
-                FillEventList("performing-arts");
-                break;
-            case "Film":
-                FillEventList("film");
-                break;
-            case "Lectures & Books":
-                FillEventList("lectures-books");
-                break;
-            case "Fashion":
-                FillEventList("fashion");
-                break;
-            case "Food & Drink":
-                FillEventList("food-and-drink");
-                break;
-            case "Festivals & Fairs":
-                FillEventList("festivals-fairs");
-                break;
-            case "Charities":
-                FillEventList("charities");
-                break;
-            case "Sports & Active Life":
-                FillEventList("sports-active-life");
-                break;
-            case "Nightlife":
-                FillEventList("nightlife");
-                break;
-            case "Kids & Family":
-                FillEventList("kids-family");
-                break;
-            case "Other":
-                FillEventList("other");
-                break;
-            default:
-                break;
-        }*/
     }
 
     public void FillEventList(String category){
-        /*Toast.makeText(EventListActivity.this,
-                "Checkpoint1",
-                Toast.LENGTH_LONG).show();*/
-        db.collection(category).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+        //Price level 1
+        db.collection(category).document("events").collection("1").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 List<DocumentSnapshot> qsList = queryDocumentSnapshots.getDocuments();
-                events.clear();
                 for (int i = 0; i < qsList.size(); i++){
                     events.add(qsList.get(i).get("name").toString());
                 }
-                Collections.sort(events, String.CASE_INSENSITIVE_ORDER);
                 adapter.notifyDataSetChanged();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                /*Toast.makeText(EventListActivity.this,
+                        "Price level 1 not found",
+                        Toast.LENGTH_LONG).show();*/
+            }
+        });
+
+        //Price level 2
+        db.collection(category).document("events").collection("2").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                List<DocumentSnapshot> qsList = queryDocumentSnapshots.getDocuments();
+                for (int i = 0; i < qsList.size(); i++){
+                    events.add(qsList.get(i).get("name").toString());
+                }
+                adapter.notifyDataSetChanged();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                /*Toast.makeText(EventListActivity.this,
+                        "Price level 2 not found",
+                        Toast.LENGTH_LONG).show();*/
+            }
+        });
+
+        //Price level 3
+        db.collection(category).document("events").collection("3").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                List<DocumentSnapshot> qsList = queryDocumentSnapshots.getDocuments();
+                for (int i = 0; i < qsList.size(); i++){
+                    events.add(qsList.get(i).get("name").toString());
+                }
+                adapter.notifyDataSetChanged();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                /*Toast.makeText(EventListActivity.this,
+                "Price level 3 not found",
+                Toast.LENGTH_LONG).show();*/
+            }
+        });
+
+        //Price level 4
+        db.collection(category).document("events").collection("4").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                List<DocumentSnapshot> qsList = queryDocumentSnapshots.getDocuments();
+                for (int i = 0; i < qsList.size(); i++){
+                    events.add(qsList.get(i).get("name").toString());
+                }
+                adapter.notifyDataSetChanged();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                /*Toast.makeText(EventListActivity.this,
+                        "Price level 4 not found",
+                        Toast.LENGTH_LONG).show();*/
             }
         });
     }

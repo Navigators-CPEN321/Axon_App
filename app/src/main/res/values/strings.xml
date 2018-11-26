@@ -177,8 +177,11 @@
     </string-array>
 
     <string-array name="categories">
+        <item>arts</item>
+        <item>festivals-fairs</item>
         <item>food-and-drink</item>
-        <item>performing-arts</item>
+        <item>nightlife</item>
+        <item>sports-active-life</item>
     </string-array>
     <string name="title_activity_event_catalog">EventCatalogActivity</string>
     <string name="title_activity_base">BaseActivity</string>
