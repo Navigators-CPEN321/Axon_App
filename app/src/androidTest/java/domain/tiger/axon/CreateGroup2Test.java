@@ -45,7 +45,7 @@ public class CreateGroup2Test {
                                         0),
                                 1),
                         isDisplayed()));
-        appCompatEditText.perform(replaceText("bob@ubc.ca"), closeSoftKeyboard());
+        appCompatEditText.perform(replaceText("brian.trieu7@gmail.com"), closeSoftKeyboard());
 
         // Added a sleep statement to match the app's execution delay.
         // The recommended way to handle such scenarios is to use Espresso idling resources:
