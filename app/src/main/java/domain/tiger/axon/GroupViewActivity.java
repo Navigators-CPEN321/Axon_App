@@ -32,45 +32,50 @@ Group View Page:
  */
 public class GroupViewActivity extends AppCompatActivity {
 
+    //Firebase vars
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseAuth auth = FirebaseAuth.getInstance();
     private FirebaseUser user = auth.getCurrentUser();
+
+    //ListView vars
     private ListView groupMembersListView;
-    private String currentGroup;
-    private ArrayList<String> usidList = new ArrayList<>();
-    private ArrayList<String> displayNameList = new ArrayList<>();
-    private ArrayList<String> deleteUsersList = new ArrayList<>();
     private GroupViewAdapter adapter;
+    private ArrayList<String> displayNameList = new ArrayList<>();
+
+    //List vars
+    private ArrayList<String> usidList = new ArrayList<>();
+    private ArrayList<String> deleteUsersList = new ArrayList<>();
+    
+    //Group and user info
     private TextView group_name;
+    private String currentGroup;
+    private int size;
     private boolean admin;
     private String userPref;
-    private int size;
 
+
+    /*
+    Displays drop-down menu on actionbar
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.group_menu, menu);
         return true;
     }
 
+    /*
+    Provides functionality to drop-down menu on actionbar
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.invite_friends:
-                /*Toast.makeText(GroupViewActivity.this,
-                        "INVITE FRIENDS",
-                        Toast.LENGTH_LONG).show();*/
                 startActivity(new Intent(GroupViewActivity.this, GroupInviteActivity.class));
                 break;
             case R.id.leave_delete_group:
-                /*Toast.makeText(GroupViewActivity.this,
-                        "LEAVE/DELETE GROUP",
-                        Toast.LENGTH_LONG).show();*/
                 LeaveOrDeleteGroup();
                 break;
             case R.id.hide_group:
-                /*Toast.makeText(GroupViewActivity.this,
-                        "HIDE GROUP",
-                        Toast.LENGTH_LONG).show();*/
                 ChangeHidden();
                 break;
             case R.id.invitations:
@@ -80,9 +85,6 @@ public class GroupViewActivity extends AppCompatActivity {
                 Intent intent = new Intent(GroupViewActivity.this, MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 auth.signOut();
-                /*Toast.makeText(GroupViewActivity.this,
-                        "LOG OUT",
-                        Toast.LENGTH_LONG).show();*/
                 startActivity(intent);
                 break;
             default:
@@ -106,9 +108,6 @@ public class GroupViewActivity extends AppCompatActivity {
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 group_name = (TextView) findViewById(R.id.tvGroupViewGroupNameTitle);
                 currentGroup = documentSnapshot.get("currentGroup").toString();
-                /*Toast.makeText(GroupViewActivity.this,
-                        currentGroup,
-                        Toast.LENGTH_LONG).show();*/
                 group_name.setText(currentGroup);
                 AddUsidToUsidList();
 
@@ -120,7 +119,9 @@ public class GroupViewActivity extends AppCompatActivity {
         goToRecActivitiesList();
     }
 
-
+    /*
+    Helper function for getting all the users' display names
+     */
     public void AddUsidToUsidList(){
         //Go to groups/currentGroup/users
         //Get all the documents in users
@@ -130,14 +131,8 @@ public class GroupViewActivity extends AppCompatActivity {
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 List<DocumentSnapshot> qsList = queryDocumentSnapshots.getDocuments();
                 usidList.clear();
-                /*Toast.makeText(GroupViewActivity.this,
-                        String.valueOf(queryDocumentSnapshots.getDocuments().size()),
-                        Toast.LENGTH_LONG).show();*/
                 for(int i = 0; i < qsList.size(); i++){
                     usidList.add(qsList.get(i).get("usid").toString());
-                    /*Toast.makeText(GroupViewActivity.this,
-                            usidList.get(i),
-                            Toast.LENGTH_LONG).show();*/
                 }
                 AddDisplayNameToDisplayNameList();
             }
@@ -146,20 +141,11 @@ public class GroupViewActivity extends AppCompatActivity {
 
     public void AddDisplayNameToDisplayNameList(){
         displayNameList.clear();
-        /*Toast.makeText(GroupViewActivity.this,
-                "Checkpoint 1",
-                Toast.LENGTH_LONG).show();*/
         for(int i = 0; i < usidList.size(); i++){
-            /*Toast.makeText(GroupViewActivity.this,
-                    "Checkpoint 2",
-                    Toast.LENGTH_LONG).show();*/
             db.collection("users").document(usidList.get(i)).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                 @Override
                 public void onSuccess(DocumentSnapshot documentSnapshot) {
                     displayNameList.add(documentSnapshot.get("displayName").toString());
-                    /*Toast.makeText(GroupViewActivity.this,
-                            documentSnapshot.get("displayName").toString(),
-                            Toast.LENGTH_LONG).show();*/
                     Collections.sort(displayNameList, String.CASE_INSENSITIVE_ORDER);
                     adapter.notifyDataSetChanged();
                 }
@@ -167,20 +153,16 @@ public class GroupViewActivity extends AppCompatActivity {
         }
     }
 
+    /*
+    Leaves or deletes the group depending on the user is an admin or not
+     */
     public void LeaveOrDeleteGroup(){
-        //Button btnLeaveDeleteGroup = (Button) findViewById(R.id.btnLeaveOrDeleteGroup);
-
-        //btnLeaveDeleteGroup.setOnClickListener(new View.OnClickListener() {
-            //@Override
-            //public void onClick(View v) {
                 db.collection("groups").document(currentGroup)
                         .collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
-                       admin = (boolean) (documentSnapshot.get("admin"));
-                       /*Toast.makeText(GroupViewActivity.this,
-                       String.valueOf(admin),
-                       Toast.LENGTH_LONG).show();*/
+                       //Get user information to check if they are admin or not
+                        admin = (boolean) (documentSnapshot.get("admin"));
                        if (!admin){
                             db.collection("groups").document(currentGroup)
                                     .collection("prefrefs").document(user.getUid())
@@ -205,8 +187,6 @@ public class GroupViewActivity extends AppCompatActivity {
                                     //Delete user from group information
                                     db.collection("groups").document(currentGroup)
                                             .collection("users").document(user.getUid()).delete();
-
-
 
                                     //Delete group from user information
                                     db.collection("users").document(user.getUid()).collection("groups").document(currentGroup).delete();
@@ -252,24 +232,30 @@ public class GroupViewActivity extends AppCompatActivity {
                        }
                     }
                 });
-            //}
-        //});
     }
 
+    /*
+    Changes whether the group is public or private
+    Procedure:
+    1. Check if the user is an admin
+       Admin: Update the group information to be public or private
+       Group member: Tell the user they can't change this setting
+     */
     public void ChangeHidden(){
         //Get current group information
         db.collection("groups").document(currentGroup).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
-                //Get user information to check if admin
-                final boolean hidden = Boolean.valueOf(documentSnapshot.get("hidden").toString());
+                final boolean hidden = Boolean.valueOf(documentSnapshot.get("hidden").toString()); //Get group hidden value
                 db.collection("groups").document(currentGroup)
                         .collection("users").document(user.getUid())
                         .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
+
                         //Check if admin
                         admin = Boolean.valueOf(documentSnapshot.get("admin").toString());
+
                         if (admin){
                             if (hidden){
                                 //Make public
@@ -284,7 +270,6 @@ public class GroupViewActivity extends AppCompatActivity {
                                         "Your group is now private. Other can't see your group under available groups.",
                                         Toast.LENGTH_LONG).show();
                             }
-
                         } else {
                             Toast.makeText(GroupViewActivity.this,
                                     "Sorry only the group creator(admin) has the ability to do this",
