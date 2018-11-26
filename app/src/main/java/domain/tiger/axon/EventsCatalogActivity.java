@@ -21,16 +21,27 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 import java.util.Collections;
 
+/*
+Displays a ListView of the categories that the user can browse in the events catalog
+ */
 public class EventsCatalogActivity extends AppCompatActivity {
 
+    //Bottom navigation vars
     private TextView mTextMessage;
-    private ListView lvEvents;
-    private ArrayList<String> eventsArrayList = new ArrayList<>();
-    private ArrayAdapter adapter;
+
+    //Firebase vars
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseAuth auth = FirebaseAuth.getInstance();
     private FirebaseUser user = auth.getCurrentUser();
 
+    //ListView vars
+    private ListView lvEvents;
+    private ArrayList<String> eventsArrayList = new ArrayList<>();
+    private ArrayAdapter adapter;
+
+    /*
+    Bottom navigation bar functionality
+     */
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -53,12 +64,18 @@ public class EventsCatalogActivity extends AppCompatActivity {
         }
     };
 
+    /*
+    Displays drop-down menu on actionbar
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
         return true;
     }
 
+    /*
+    Provides functionality to drop-down menu on actionbar
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
@@ -82,30 +99,33 @@ public class EventsCatalogActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_events_catalog);
 
+        //Display bottom navigation bar
         mTextMessage = (TextView) findViewById(R.id.message);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
+        //Set up ListView
         lvEvents = (ListView) findViewById(R.id.lvEventsList);
         adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, eventsArrayList);
         lvEvents.setAdapter(adapter);
 
+        //Add the categories for user to view
         eventsArrayList.add("Food & Drink");
         eventsArrayList.add("Sports & Active Life");
         eventsArrayList.add("Nightlife");
         eventsArrayList.add("Festivals & Fairs");
         eventsArrayList.add("Arts");
 
+        //Sort and notify adapter of the categories we added
         Collections.sort(eventsArrayList, String.CASE_INSENSITIVE_ORDER);
         adapter.notifyDataSetChanged();
 
+        //Update the user information to contain the category they want to view and go to EventListActivity
         lvEvents.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                db.collection("users").document(user.getUid()).update("mostRecentEventsList", eventsArrayList.get(position));
-                /*Toast.makeText(EventsCatalogActivity.this,
-                        eventsArrayList.get(position),
-                        Toast.LENGTH_LONG).show();*/
+                db.collection("users").document(user.getUid())
+                        .update("mostRecentEventsList", eventsArrayList.get(position));
                 startActivity(new Intent(EventsCatalogActivity.this, EventListActivity.class));
             }
         });
