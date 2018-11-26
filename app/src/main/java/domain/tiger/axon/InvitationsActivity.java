@@ -21,19 +21,28 @@ import java.util.List;
 
 public class InvitationsActivity extends AppCompatActivity {
 
+    //Firebase vars
     private FirebaseAuth auth = FirebaseAuth.getInstance();
     private FirebaseUser user = auth.getCurrentUser();
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+    //ListView vars
     private ArrayList<String> invitationsList = new ArrayList<String>();
     private InvitationsAdapter adapter = new InvitationsAdapter(invitationsList, this);
     private ListView lvInvitations;
 
+    /*
+    Displays drop-down menu on actionbar
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.invitations_menu, menu);
         return true;
     }
 
+    /*
+    Provides functionality to drop-down menu on actionbar
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
@@ -57,13 +66,13 @@ public class InvitationsActivity extends AppCompatActivity {
         lvInvitations = (ListView) findViewById(R.id.lvInvitations);
         lvInvitations.setAdapter(adapter);
 
+        //Display invites
         db.collection("users").document(user.getUid()).collection("invitations").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 List<DocumentSnapshot> qsList = queryDocumentSnapshots.getDocuments();
                 invitationsList.clear();
                 for (int i = 0; i <qsList.size(); i++){
-                    //String email = qsList.get(i).get("friendEmail").toString();
                     String group = qsList.get(i).get("group_name").toString();
                     invitationsList.add(group);
                 }

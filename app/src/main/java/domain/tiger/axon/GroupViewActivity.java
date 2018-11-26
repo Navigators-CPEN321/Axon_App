@@ -45,7 +45,7 @@ public class GroupViewActivity extends AppCompatActivity {
     //List vars
     private ArrayList<String> usidList = new ArrayList<>();
     private ArrayList<String> deleteUsersList = new ArrayList<>();
-    
+
     //Group and user info
     private TextView group_name;
     private String currentGroup;
