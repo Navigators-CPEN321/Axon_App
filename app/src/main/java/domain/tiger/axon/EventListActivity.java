@@ -24,21 +24,32 @@ import java.util.List;
 
 public class EventListActivity extends AppCompatActivity {
 
+    //Firebase vars
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseAuth auth = FirebaseAuth.getInstance();
     private FirebaseUser user = auth.getCurrentUser();
-    private String category;
-    private TextView categoryName;
-    private ArrayList<String> events = new ArrayList<>();
-    private ArrayAdapter<String> adapter;
-    private ListView lvEvents;
 
+    //ListView vars
+    private ArrayList<String> events = new ArrayList<>();
+    private ListView lvEvents;
+    private ArrayAdapter<String> adapter;
+
+    //Category vars
+    private TextView categoryName;
+    private String category;
+
+    /*
+    Displays drop-down menu on actionbar
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
         return true;
     }
 
+    /*
+    Provides functionality to drop-down menu on actionbar
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
@@ -68,13 +79,11 @@ public class EventListActivity extends AppCompatActivity {
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, events);
         lvEvents.setAdapter(adapter);
 
+        //Determine what category the user wants to view and call FillEventList passing in the category
         db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 category = documentSnapshot.get("mostRecentEventsList").toString();
-                /*Toast.makeText(EventListActivity.this,
-                        category,
-                        Toast.LENGTH_LONG).show();*/
                 categoryName.setText(category);
                 switch (category){
                     case "Arts":
@@ -104,6 +113,17 @@ public class EventListActivity extends AppCompatActivity {
         });
     }
 
+    /*
+    Function: Accesses the events of type category from Firebase database.
+    The events in the database are stored based on their price.
+    The cheapest is in level 1 and the most expensive is level 4.
+    We need to access each level separately.
+    We start with the cheapest and make our way to the most expensive.
+    We store the events we find and we update the adapter to reflect that change to the user.
+
+    Input:
+    String category: the category the user wants to view
+     */
     public void FillEventList(String category){
         //Price level 1
         db.collection(category).document("events").collection("1").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -118,9 +138,7 @@ public class EventListActivity extends AppCompatActivity {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                /*Toast.makeText(EventListActivity.this,
-                        "Price level 1 not found",
-                        Toast.LENGTH_LONG).show();*/
+
             }
         });
 
@@ -137,9 +155,7 @@ public class EventListActivity extends AppCompatActivity {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                /*Toast.makeText(EventListActivity.this,
-                        "Price level 2 not found",
-                        Toast.LENGTH_LONG).show();*/
+
             }
         });
 
@@ -156,9 +172,7 @@ public class EventListActivity extends AppCompatActivity {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                /*Toast.makeText(EventListActivity.this,
-                "Price level 3 not found",
-                Toast.LENGTH_LONG).show();*/
+
             }
         });
 
@@ -175,9 +189,7 @@ public class EventListActivity extends AppCompatActivity {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                /*Toast.makeText(EventListActivity.this,
-                        "Price level 4 not found",
-                        Toast.LENGTH_LONG).show();*/
+
             }
         });
     }
