@@ -30,8 +30,7 @@
             android:label="group" />
         <activity
             android:name=".GroupCreateActivity"
-            android:theme="@style/AppTheme.popup"
-            android:noHistory="true"/>
+            android:theme="@style/AppTheme.popup" />
         <activity android:name=".GroupViewActivity" />
         <activity
             android:name=".PreferenceActivity"

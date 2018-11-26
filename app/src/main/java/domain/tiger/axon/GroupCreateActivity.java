@@ -132,6 +132,7 @@ public class GroupCreateActivity extends AppCompatActivity{
 
                                         //Add the creator of the group to the group
                                         newGroup.addCreator(user.getUid(), user.getEmail());
+                                        finish();
                                         startActivity(new Intent(GroupCreateActivity.this, GroupViewActivity.class));
                                     } else {
                                         Toast.makeText( GroupCreateActivity.this,
