@@ -214,13 +214,13 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                                 Toast.makeText(SettingsActivity.this,
                                         "Password change successful.",
                                         Toast.LENGTH_LONG).show();
-                            } else {
-                                Toast.makeText(SettingsActivity.this,
-                                        "Password change unsuccessful.",
-                                        Toast.LENGTH_LONG).show();
                             }
                         }
                     });
+                } else {
+                    Toast.makeText(SettingsActivity.this,
+                            "Password change unsuccessful.",
+                            Toast.LENGTH_LONG).show();
                 }
             }
         });
