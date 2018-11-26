@@ -26,8 +26,8 @@ Lets user enter email, password, date of birth, and address to create an account
 public class SignUpActivity extends AppCompatActivity implements View.OnClickListener {
 
     //Constant
-    private final int passwordLength = 6;
-    private final int displayNameLength = 15;
+    private final int minPasswordLength = 6;
+    private final int minDisplayNameLength = 15;
 
     //Buttons, EditText, Spinners
     private Button signUp ;
@@ -158,8 +158,8 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
             return false;
         }
 
-        if (displayName.length() > displayNameLength){
-            displayNameInput.setError("Display name can only be " + String.valueOf(displayNameLength) + " characters long");
+        if (displayName.length() > minDisplayNameLength){
+            displayNameInput.setError("Display name can only be " + String.valueOf(minDisplayNameLength) + " characters long");
             displayNameInput.requestFocus();
             return false;
         }
@@ -170,7 +170,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
             return false;
         }
 
-        if (password.length()< passwordLength){
+        if (password.length()< minPasswordLength){
             passwordInput.setError("Password needs to be longer than 6 characters");
             passwordInput.requestFocus();
             return false;

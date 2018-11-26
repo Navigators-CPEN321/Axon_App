@@ -30,6 +30,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 public class SettingsActivity extends AppCompatActivity implements View.OnClickListener{
 
     private int displayNameLength = 15;
+    private int minPasswordLength = 6;
     private TextView mTextMessage;
     private TextView userIdTextview;
     private EditText etDisplayName;
@@ -162,6 +163,12 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
         if (etNewPassword.getText().toString().isEmpty()){
             etNewPassword.setError("Password is empty");
+            etNewPassword.requestFocus();
+            return;
+        }
+
+        if (etNewPassword.getText().toString().length() < minPasswordLength){
+            etNewPassword.setError("Password is too short. Needs to be longer than 6 letters");
             etNewPassword.requestFocus();
             return;
         }
