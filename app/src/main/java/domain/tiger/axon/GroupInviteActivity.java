@@ -125,9 +125,10 @@ public class GroupInviteActivity extends AppCompatActivity implements View.OnCli
                                 Toast.LENGTH_LONG).show();
                     }
                 } else {
-                    /*Toast.makeText(GroupInviteActivity.this,
-                            "Sorry your group is full!",
-                            Toast.LENGTH_LONG).show();*/
+                    Toast.makeText(GroupInviteActivity.this,
+                            "Sorry your group is full! You can't invite anymore people.",
+                            Toast.LENGTH_LONG).show();
+
                 }
             }
         });

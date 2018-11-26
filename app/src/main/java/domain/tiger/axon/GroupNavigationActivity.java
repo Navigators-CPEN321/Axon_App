@@ -23,11 +23,7 @@ Allows users to navigate to the different group pages to use that group function
  */
 public class GroupNavigationActivity extends AppCompatActivity implements View.OnClickListener {
 
-
-
-
-
-    private Button btnGroupView, btnGroupCreate, btnLogOut, btnGroupAvailable;
+    private Button btnGroupView, btnGroupCreate, btnGroupAvailable;
     private TextView usernameTextView;
     private String userDisplayName;
 
@@ -113,7 +109,6 @@ public class GroupNavigationActivity extends AppCompatActivity implements View.O
         //Connecting buttons
         btnGroupCreate = (Button) findViewById(R.id.btnGroupCreate);
         btnGroupView = (Button) findViewById(R.id.btnGroupView);
-        btnLogOut = (Button) findViewById(R.id.btnLogOut);
         btnGroupAvailable = (Button) findViewById(R.id.btnGroupJoin);
         usernameTextView = (TextView) findViewById(R.id.usernameTV);
 
@@ -121,7 +116,6 @@ public class GroupNavigationActivity extends AppCompatActivity implements View.O
         btnGroupCreate.setOnClickListener(this);
         btnGroupAvailable.setOnClickListener(this);
         btnGroupView.setOnClickListener(this);
-        btnLogOut.setOnClickListener(this);
 
         //set username in the text box
         db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -152,10 +146,6 @@ public class GroupNavigationActivity extends AppCompatActivity implements View.O
         }
         if (view.equals(btnGroupView)){
             startActivity(new Intent(GroupNavigationActivity.this, UsersGroupsActivity.class));
-        }
-        if (view.equals(btnLogOut)){
-            //auth.signOut();
-            //startActivity(new Intent(GroupNavigationActivity.this, MainActivity.class));
         }
     }
 }
