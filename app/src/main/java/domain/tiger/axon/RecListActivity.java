@@ -66,7 +66,7 @@ public class RecListActivity extends AppCompatActivity {
                             for (int i = 0; i < qsList.size(); i++){
                                 selEventsList.add(qsList.get(i).get("name").toString());
                             }
-                            Collections.sort(selEventsList, String.CASE_INSENSITIVE_ORDER);
+                            //Collections.sort(selEventsList, String.CASE_INSENSITIVE_ORDER);
                             adapter.notifyDataSetChanged();
                         } else{
                             Toast.makeText(RecListActivity.this,
