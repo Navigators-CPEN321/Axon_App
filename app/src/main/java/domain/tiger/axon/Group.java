@@ -6,6 +6,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.HashMap;
 import java.util.Map;
 
+/*
+Group information
+ */
 public class Group {
     public int size;
     public String group_name;
