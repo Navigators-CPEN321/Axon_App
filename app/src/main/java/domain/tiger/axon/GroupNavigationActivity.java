@@ -23,20 +23,28 @@ Allows users to navigate to the different group pages to use that group function
  */
 public class GroupNavigationActivity extends AppCompatActivity implements View.OnClickListener {
 
+    //Widgets
     private Button btnGroupView, btnGroupCreate, btnGroupAvailable;
     private TextView usernameTextView;
     private String userDisplayName;
 
+    //Firebase vars
     private FirebaseAuth auth = FirebaseAuth.getInstance();
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseUser user = auth.getCurrentUser();
 
+    /*
+    Displays drop-down menu on actionbar
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
         return true;
     }
 
+    /*
+    Provides functionality to drop-down menu on actionbar
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
@@ -99,8 +107,6 @@ public class GroupNavigationActivity extends AppCompatActivity implements View.O
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         //Check if a user is logged in. If not redirect them to login page
-        auth = FirebaseAuth.getInstance();
-
         if (auth.getCurrentUser() == null){
             finish();
             startActivity(new Intent(GroupNavigationActivity.this, MainActivity.class));
@@ -134,7 +140,7 @@ public class GroupNavigationActivity extends AppCompatActivity implements View.O
 
     /*
     App navigation:
-        Redirects the user to the GroupCreateActivity, GroupAvailableActivity, GroupViewActivity, or the login page
+        Redirects the user to the GroupCreateActivity, GroupAvailableActivity or UserGroupsActivity
      */
     public void onClick(View view){
         if (view.equals(btnGroupCreate)){
