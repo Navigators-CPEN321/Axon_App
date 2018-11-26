@@ -23,17 +23,27 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
+/*
+Adapter for InvitationsActivity ListView
+ */
 public class InvitationsAdapter extends BaseAdapter implements ListAdapter {
+
+    //Adapter vars
     private ArrayList<String> list = new ArrayList<String>();
     private Context context;
+
+    //Constants
+    private int numPrefs = 9;
+
+    //Firebase vars
     private FirebaseAuth auth = FirebaseAuth.getInstance();
     private FirebaseUser user = auth.getCurrentUser();
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+    //Other vars
     private boolean partOfGroup;
     private int i;
     private boolean done;
-    private int numPrefs = 9;
     private int size;
 
     public InvitationsAdapter(ArrayList<String> list, Context context) {
@@ -69,7 +79,7 @@ public class InvitationsAdapter extends BaseAdapter implements ListAdapter {
         Button join = (Button) view.findViewById(R.id.btnJoinGroup);
         Button reject = (Button) view.findViewById(R.id.btnReject);
 
-
+        //Accepts invitation
         join.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -108,7 +118,7 @@ public class InvitationsAdapter extends BaseAdapter implements ListAdapter {
                 });
             }
         });
-
+        //Reject invitation
         reject.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
