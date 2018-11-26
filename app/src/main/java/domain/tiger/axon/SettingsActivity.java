@@ -1,11 +1,13 @@
 package domain.tiger.axon;
 
 import android.content.Intent;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,7 +16,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.EmailAuthCredential;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -32,6 +39,9 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     private FirebaseAuth auth = FirebaseAuth.getInstance();
     private FirebaseUser user = auth.getCurrentUser();
     private String userID;
+    private Button btnChangePassword;
+    private EditText etOldPassword;
+    private EditText etNewPassword;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -89,7 +99,9 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         submitBtn = (Button) findViewById(R.id.btnDisplayNameChange);
         userIdTextview = (TextView) findViewById(R.id.userIdTV);
-
+        btnChangePassword = (Button) findViewById(R.id.btnPasswordChangeSubmit);
+        etOldPassword = (EditText) findViewById(R.id.etOldPassword);
+        etNewPassword = (EditText) findViewById(R.id.etNewPassword);
 
 
         db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -101,11 +113,15 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         });
 
         submitBtn.setOnClickListener(this);
+        btnChangePassword.setOnClickListener(this);
     }
 
     public void onClick(View view){
         if (view.equals(submitBtn)){
             changeDisplayName();
+        }
+        if (view.equals(btnChangePassword)){
+            changePassword();
         }
     }
 
@@ -135,6 +151,43 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         Toast.makeText(SettingsActivity.this,
                 "Display name updated!",
                 Toast.LENGTH_LONG).show();
+    }
+
+    public void changePassword(){
+        if (etOldPassword.getText().toString().isEmpty()){
+            etOldPassword.setError("Password is empty");
+            etOldPassword.requestFocus();
+            return;
+        }
+
+        if (etNewPassword.getText().toString().isEmpty()){
+            etNewPassword.setError("Password is empty");
+            etNewPassword.requestFocus();
+            return;
+        }
+
+        AuthCredential credential = EmailAuthProvider.getCredential(user.getEmail(), etOldPassword.getText().toString());
+        user.reauthenticate(credential).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()){
+                    user.updatePassword(etNewPassword.getText().toString()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(SettingsActivity.this,
+                                        "Password change successful.",
+                                        Toast.LENGTH_LONG).show();
+                            } else {
+                                Toast.makeText(SettingsActivity.this,
+                                        "Password change unsuccessful.",
+                                        Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    });
+                }
+            }
+        });
     }
 
 }
