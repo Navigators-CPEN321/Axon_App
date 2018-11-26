@@ -114,9 +114,9 @@ public class GroupCreateActivity extends AppCompatActivity{
                                             @Override
                                             public void onSuccess(Void aVoid) {
 
-                                                Toast.makeText( GroupCreateActivity.this,
+                                                /*Toast.makeText( GroupCreateActivity.this,
                                                         "Group created.",
-                                                        Toast.LENGTH_LONG).show();
+                                                        Toast.LENGTH_LONG).show();*/
 
                                             }
                                         }).addOnFailureListener(new OnFailureListener() {
