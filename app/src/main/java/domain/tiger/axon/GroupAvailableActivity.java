@@ -21,23 +21,34 @@ import java.util.List;
 
 public class GroupAvailableActivity extends AppCompatActivity {
 
+    //Firebase vars
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private ListView listViewAvailableGroups;
-    private ArrayList<String> availableGroupsList = new ArrayList<>();
     private FirebaseAuth auth = FirebaseAuth.getInstance();
     private FirebaseUser user = auth.getCurrentUser();
+
+    //ListView vars
+    private ListView listViewAvailableGroups;
+    private ArrayList<String> availableGroupsList = new ArrayList<>();
+    private AvailableGroupAdapter adapter = new AvailableGroupAdapter(availableGroupsList,this);
+
+    //Users' groups and database groups vars
     private List<String> db_group_names = new ArrayList<String>();
     private List<String> user_group_names = new ArrayList<String>();
-    private AvailableGroupAdapter adapter = new AvailableGroupAdapter(availableGroupsList,this);
     private boolean userListObtained;
     private boolean groupListObtained;
 
+    /*
+    Displays drop-down menu on actionbar
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
         return true;
     }
 
+    /*
+    Provides functionality to drop-down menu on actionbar
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
@@ -61,13 +72,14 @@ public class GroupAvailableActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_available);
 
+        //Set up ListView
         listViewAvailableGroups = (ListView) findViewById(R.id.listAvailableGroups);
-
         listViewAvailableGroups.setAdapter(adapter);
 
         userListObtained = false;
         groupListObtained = false;
 
+        //Get database groups
         db.collection("groups").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
@@ -80,15 +92,13 @@ public class GroupAvailableActivity extends AppCompatActivity {
                     }
                 }
                 groupListObtained = true;
-                /*Toast.makeText(GroupAvailableActivity.this,
-                        String.valueOf(db_group_names.size()),
-                        Toast.LENGTH_LONG).show();*/
                 if (userListObtained){
                     compareAndDisplayList();
                 }
             }
         });
 
+        //Get user groups
         db.collection("users/" + user.getUid() + "/groups").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
@@ -98,9 +108,6 @@ public class GroupAvailableActivity extends AppCompatActivity {
                     user_group_names.add(qsList.get(i).get("group_name").toString());
                 }
                 userListObtained = true;
-                /*Toast.makeText(GroupAvailableActivity.this,
-                        String.valueOf(user_group_names.size()),
-                        Toast.LENGTH_LONG).show();*/
                 if (groupListObtained) {
                     compareAndDisplayList();
                 }
@@ -110,34 +117,30 @@ public class GroupAvailableActivity extends AppCompatActivity {
 
     }
 
+    /*
+    Compares the users' groups and the database groups
+    If the database group is not apart of the user's groups, then add to the availableGroupsList
+     */
     public void compareAndDisplayList(){
-
-        /*Toast.makeText(GroupAvailableActivity.this,
-                "TEST",
-                Toast.LENGTH_LONG).show();*/
 
         availableGroupsList.clear();
         for (int dbIt = 0; dbIt < db_group_names.size(); dbIt++){
             boolean userIsPartOfGroup = false;
-            /*Toast.makeText(GroupAvailableActivity.this,
-                    "DB:" + db_group_names.get(dbIt),
-                    Toast.LENGTH_LONG).show();*/
             for (int userIt = 0; userIt < user_group_names.size(); userIt++){
-                /*Toast.makeText(GroupAvailableActivity.this,
-                        "USER:" + user_group_names.get(userIt),
-                        Toast.LENGTH_LONG).show();*/
+                //Check to see if that user is in the group -> if they are then set userIsPartOfGroup flag to reflect it
                 if (db_group_names.get(dbIt).equals(user_group_names.get(userIt))){
                     userIsPartOfGroup = true;
                 }
-                /*Toast.makeText(GroupAvailableActivity.this,
-                        String.valueOf(userIsPartOfGroup),
-                        Toast.LENGTH_LONG).show();*/
+
             }
 
+            //Check flag to see if they are part of the group -> if not then add them to availableGroupsList
             if (userIsPartOfGroup == false){
                 availableGroupsList.add(db_group_names.get(dbIt));
             }
         }
+
+        //Sort and notify adapter of the changes
         Collections.sort(availableGroupsList, String.CASE_INSENSITIVE_ORDER);
         adapter.notifyDataSetChanged();
     }
