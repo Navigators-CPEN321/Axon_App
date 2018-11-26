@@ -12,7 +12,9 @@ import android.widget.TextView;
 
 
 import java.util.ArrayList;
-
+/*
+Adapter for GroupViewActivity ListView
+ */
 public class GroupViewAdapter extends BaseAdapter implements ListAdapter {
     private ArrayList<String> list;
     private Context context;
@@ -58,7 +60,6 @@ public class GroupViewAdapter extends BaseAdapter implements ListAdapter {
                 parent.getContext().startActivity(intent);
             }
         });
-
 
         return view;
     }
