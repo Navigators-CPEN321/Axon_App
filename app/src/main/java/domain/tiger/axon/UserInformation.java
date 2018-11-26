@@ -1,6 +1,5 @@
 package domain.tiger.axon;
 
-import com.google.firebase.firestore.DocumentReference;
 
 public class UserInformation {
 
