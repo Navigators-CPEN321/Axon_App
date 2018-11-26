@@ -165,11 +165,11 @@ public class PreferenceActivity extends AppCompatActivity implements View.OnClic
                                 handler.postDelayed(new Runnable() {
                                     @Override
                                     public void run() {
-                                        // Do something after 5s = 5000ms
+
                                         dialog.dismiss();
                                         startActivity(new Intent(PreferenceActivity.this, RecListActivity.class));
                                     }
-                                }, 10000);
+                                }, 120000); //120 ms (2minutes)
 
                             }
                         });
