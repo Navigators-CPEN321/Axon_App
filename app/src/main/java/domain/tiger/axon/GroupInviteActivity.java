@@ -26,9 +26,12 @@ public class GroupInviteActivity extends AppCompatActivity implements View.OnCli
     private final double screenWidthFactor = 0.85;
     private final double screenHeightFactor = 0.50;
 
+    //Firebase vars;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseAuth auth = FirebaseAuth.getInstance();
     private FirebaseUser user = auth.getCurrentUser();
+
+    //Activity widgets
     private EditText etInviteFriend;
     private Button btnSubmit;
     private boolean emailFound;
@@ -64,11 +67,24 @@ public class GroupInviteActivity extends AppCompatActivity implements View.OnCli
         if (view.equals(btnSubmit)) {
             //sendInvite();
             email = etInviteFriend.getText().toString();
-            validateEmail(email);
+            inviteFriend(email);
         }
     }
 
-    public boolean validateEmail(final String email){
+    /*
+    Invites friend to the group
+    Procedure:
+    1. Check if email is valid
+        -empty
+        -valid email
+    2. Check if the group is full or not
+        -Full: Don't send invite
+        -Not full: Go step 3
+    3. Check if user is registered with Axon
+        -Registered: send email
+        -Not registered: don't send
+     */
+    public boolean inviteFriend(final String email){
         if(email.isEmpty()){
             etInviteFriend.setError("Email is required");
             etInviteFriend.requestFocus();
@@ -87,9 +103,6 @@ public class GroupInviteActivity extends AppCompatActivity implements View.OnCli
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 full = false;
                 if (Integer.valueOf(documentSnapshot.get("size").toString()) >= 8){
-                    /*Toast.makeText(GroupInviteActivity.this,
-                            "Size: " + documentSnapshot.get("size").toString(),
-                            Toast.LENGTH_LONG).show();*/
                     full = true;
                 }
             }
@@ -114,11 +127,9 @@ public class GroupInviteActivity extends AppCompatActivity implements View.OnCli
 
                     }
 
+                    //Send email if registered. If not tell them the account is not a registered account.
                     if (emailFound) {
-                       /*Toast.makeText(GroupInviteActivity.this,
-                                "Checkpoint 1: Email is a verified user.",
-                                Toast.LENGTH_LONG).show();*/
-                        checkIfPartOfGroup();
+                        sendInvite();
                     } else {
                         Toast.makeText(GroupInviteActivity.this,
                                 "Sorry that account isn't registered with Axon!",
@@ -135,7 +146,11 @@ public class GroupInviteActivity extends AppCompatActivity implements View.OnCli
         return emailFound;
     }
 
-    public void checkIfPartOfGroup(){
+    /*
+    Sends invite
+    Invitations is stored in the users information
+     */
+    public void sendInvite(){
         db.collection("groups/" + currentGroup+ "/users").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
@@ -150,8 +165,8 @@ public class GroupInviteActivity extends AppCompatActivity implements View.OnCli
                                 "Invitation sent!",
                                 Toast.LENGTH_LONG).show();
 
+                        //Store invitation
                         Map<String, Object> invMap = new HashMap<>();
-                        //invMap.put("friendEmail", (String) user.getEmail());
                         invMap.put("group_name", (String) currentGroup);
                         db.collection("users").document(friendUSID)
                                 .collection("invitations").document(currentGroup).set(invMap);
@@ -163,7 +178,9 @@ public class GroupInviteActivity extends AppCompatActivity implements View.OnCli
         });
     }
 
-
+    /*
+    Display as pop up window
+     */
     public void popUpWindow(){
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
