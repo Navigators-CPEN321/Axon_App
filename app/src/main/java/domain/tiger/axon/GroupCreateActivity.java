@@ -29,6 +29,7 @@ It allows users to enter a group name, which then creates a group on FireBase.
  */
 public class GroupCreateActivity extends AppCompatActivity{
 
+    //Constants
     private final double screenWidthFactor = 0.75;
     private final double screenHeightFactor = 0.75;
 
@@ -36,6 +37,7 @@ public class GroupCreateActivity extends AppCompatActivity{
     private FirebaseAuth auth;
     private FirebaseFirestore db;
 
+    //Other
     private boolean dup;
 
     @Override
@@ -96,18 +98,21 @@ public class GroupCreateActivity extends AppCompatActivity{
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()){
 
-                            //Check if group is already created
                             db.collection("groups").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                                 @Override
                                 public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                                     List<DocumentSnapshot> qsList = queryDocumentSnapshots.getDocuments();
+
+                                    //Check if group is already created
                                     dup = false;
                                     for (int i = 0; i < qsList.size(); i++){
                                         if (qsList.get(i).get("group_name").toString().equalsIgnoreCase(groupName)){
                                             dup = true;
                                         }
                                     }
+                                    //If not duplicated then create group
                                     if (!dup){
+
                                         //Create group and store on Firebase
                                         Group newGroup = new Group(groupName);
                                         db.collection("groups").document(groupName).set(newGroup).addOnSuccessListener(new OnSuccessListener<Void>() {
