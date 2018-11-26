@@ -205,11 +205,21 @@ public class GroupViewActivity extends AppCompatActivity {
                                 }
                             });
                        } else {
+                           db.collection("groups").document(currentGroup).collection("sel_events").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                               @Override
+                               public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                   List<DocumentSnapshot> qsList = queryDocumentSnapshots.getDocuments();
+                                   for (int i = 0; i < qsList.size(); i++){
+                                       db.collection("groups").document(currentGroup).collection("sel_events").document("event" + i).delete();
+                                   }
+                               }
+                           });
                            db.collection("groups").document(currentGroup)
                                    .collection("users").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                                @Override
                                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                                    List<DocumentSnapshot> qsList = queryDocumentSnapshots.getDocuments();
+                                   db.collection("groups").document(currentGroup).collection("groupprefs").document("groupprefs").delete();
                                    deleteUsersList.clear();
                                    for (int i = 0; i < qsList.size(); i++){
                                        //Update all the users' information
